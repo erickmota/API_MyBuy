@@ -1,10 +1,12 @@
 <?php
 
-class Retornos{
+include "conexao.class.php";
+
+class Retornos extends conexao{
 
     public function retornarAll($tabela){
 
-        include 'conexao.class.php';
+        $conn = $this->conn();
 
         $sql = mysqli_query($conn, "SELECT * FROM $tabela") or die("Erro mostrar");
         $qtd = mysqli_num_rows($sql);
@@ -43,7 +45,7 @@ class Retornos{
 
     public function retornaDado($tabela, $coluna, $dado){
 
-        include 'conexao.class.php';
+        $conn = $this->conn();
 
         $sql = mysqli_query($conn, "SELECT * FROM $tabela WHERE $coluna='$dado'") or die ("Erro BD");
         $qtd = mysqli_num_rows($sql);

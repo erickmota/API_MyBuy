@@ -16,17 +16,7 @@ if(isset($_GET["url"])){
     e é válido. */
     if(API_IS_ACTIVE == true){
 
-        if($explode[0]){
-
-
-
-        }else{
-
-
-
-        }
-
-        /* switch($explode[0]){
+        switch($explode[0]){
 
             case "listas";
 
@@ -40,7 +30,7 @@ if(isset($_GET["url"])){
 
             break;
 
-        } */
+        }
 
     }else{
 
