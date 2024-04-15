@@ -14,9 +14,25 @@ if(isset($_GET["url"])){
 
     /* Verificando se a API está ativada, e se o token de verificação existe
     e é válido. */
-    if(API_IS_ACTIVE == true && isset($headers["API_TOKEN"]) && $headers['API_TOKEN'] == API_TOKEN){
+    if(API_IS_ACTIVE == true){
 
-        switch($explode[0]){
+        if($explode[0]){
+
+
+
+        }else{
+
+
+
+        }
+
+        /* switch($explode[0]){
+
+            case "listas";
+
+                echo $classeRetorno->retornarDado();
+
+            break;
 
             case "produtos";
 
@@ -24,7 +40,7 @@ if(isset($_GET["url"])){
 
             break;
 
-        }
+        } */
 
     }else{
 

@@ -73,4 +73,10 @@ class Retornos{
 
     }
 
+    private function verificaDado($dado){
+
+        
+
+    }
+
 }
