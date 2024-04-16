@@ -16,44 +16,49 @@ if(isset($_GET["url"])){
     e é válido. */
     if(API_IS_ACTIVE == true){
 
-        switch($explode[0]){
+        /* Id do usuário buscado */
+        $classeRetorno->id_usuario = $explode[0];
 
-            case "listas";
+        /* Verificando a existência do usuario informado. */
+        if($classeRetorno->verifica_usuario() == true){
 
-                echo $classeRetorno->retornarDado();
+            /* Exemplo de rota: API/id_usuario/listas */
+            switch($explode[1]){
 
-            break;
+                /* Retorna todas as listas do usuário */
+                case "listas":
+    
+                    echo $classeRetorno->retorna_listas();
+    
+                break;
+    
+                case "produtos":
+    
+                    /* Em desenvolvimento */
+                    echo $classeRetorno->retornaErro("Rota em desenvolvimento.");
+    
+                break;
 
-            case "produtos";
+                default:
 
-                echo $classeRetorno->retornarAll("produtos");
+                    echo $classeRetorno->retornaErro("A rota definida não existe");
 
-            break;
+            }
+
+        }else{
+
+            echo $classeRetorno->retornaErro("Usuário não existe");
 
         }
 
     }else{
 
-        echo json_encode([
-    
-            "status" => API_IS_ACTIVE,
-            "Versao" => API_VERSION,
-            "msg" => "Dados de verificação não conferem, ou existe algum erro interno",
-            "data" => false
-    
-        ]);
+        echo $classeRetorno->retornaErro("Dados de verificação não conferem, ou existe algum erro interno");
 
     }
 
 }else{
 
-    echo json_encode([
-    
-        "status" => API_IS_ACTIVE,
-        "Versao" => API_VERSION,
-        "msg" => "URL da API não existente",
-        "data" => false
-
-    ]);
+    echo $classeRetorno->retornaErro("API não localizada.");
 
 }
