@@ -22,26 +22,52 @@ if(isset($_GET["url"])){
         /* Verificando a existência do usuario informado. */
         if($classeRetorno->verifica_usuario() == true){
 
-            /* Exemplo de rota: API/id_usuario/listas */
-            switch($explode[1]){
+            if(isset($explode[1])){
 
-                /* Retorna todas as listas do usuário */
-                case "listas":
-    
-                    echo $classeRetorno->retorna_listas();
-    
-                break;
-    
-                case "produtos":
-    
-                    /* Em desenvolvimento */
-                    echo $classeRetorno->retornaErro("Rota em desenvolvimento.");
-    
-                break;
+                /* Exemplo de rota: API/id_usuario/listas */
+                switch($explode[1]){
 
-                default:
+                    /* Retorna todas as listas do usuário */
+                    case "listas":
+        
+                        echo $classeRetorno->retorna_listas();
+        
+                    break;
+        
+                    case "produtos":                    
+        
+                        if(isset($explode[2])){
 
-                    echo $classeRetorno->retornaErro("A rota definida não existe");
+                            if(isset($explode[3])){
+
+                                $classeRetorno->id_lista = $explode[2];
+
+                                /* echo $classeRetorno->retorna_categoria(); */
+                                echo $classeRetorno->retorna_produtos($explode[3]);
+
+                            }else{
+
+                                echo $classeRetorno->retornaErro("Insira um id de categoria na rota");
+
+                            }
+
+                        }else{
+
+                            echo $classeRetorno->retornaErro("Insira um id de lista na rota");
+
+                        }                    
+        
+                    break;
+
+                    default:
+
+                        echo $classeRetorno->retornaErro("A rota definida não existe");
+
+                }
+
+            }else{
+
+                echo $classeRetorno->retornaErro("Defina um destino ao usuário, na rota");
 
             }
 
