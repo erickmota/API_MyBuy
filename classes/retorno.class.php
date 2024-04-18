@@ -82,7 +82,7 @@ class Retornos extends conexao{
 
     }
 
-    /* Retornando todos os produtos, com suas respectivas categorias, de uma lista */
+    /* Retornando todos os produtos, dentro de uma categorias determinada, de uma lista */
     public function retorna_produtos($categoria){
 
         $conn = $this->conn();
@@ -90,12 +90,9 @@ class Retornos extends conexao{
         $sql = mysqli_query(
             
             $conn, "SELECT produtos.id, produtos.nome FROM produtos
-            INNER JOIN produtos_listas ON produtos_listas.id_produtos=produtos.id
-            INNER JOIN categorias ON produtos.id_categorias=categorias.id
-            INNER JOIN listas ON produtos_listas.id_listas=listas.id
+            INNER JOIN listas ON listas.id=produtos.id_listas
             INNER JOIN usuarios_listas ON usuarios_listas.id_listas=listas.id
-            WHERE produtos_listas.id_listas='$this->id_lista'
-            AND usuarios_listas.id_usuarios='$this->id_usuario'
+            WHERE usuarios_listas.id_usuarios='$this->id_usuario'
             AND produtos.id_categorias='$categoria'"
         
         ) or die("Erro BD");
@@ -126,19 +123,19 @@ class Retornos extends conexao{
 
     }
 
-    /* Retorna todas as categorias que um usuário tem em determinada lista */
+    /* Retorna todas as categorias que um usuário tem na conta */
     public function retorna_categoria(){
 
         $conn = $this->conn();
 
         $sql = mysqli_query(
             
-            $conn, "SELECT categorias.id, categorias.nome FROM categorias 
-            INNER JOIN produtos ON categorias.id=produtos.id_categorias
-            INNER JOIN produtos_listas ON produtos_listas.id_produtos=produtos.id
-            INNER JOIN listas ON listas.id=produtos_listas.id_listas
+            $conn, "SELECT DISTINCT categorias.id, categorias.nome FROM categorias
+            INNER JOIN produtos ON produtos.id_categorias=categorias.id
+            INNER JOIN listas ON listas.id=produtos.id_listas
             INNER JOIN usuarios_listas ON usuarios_listas.id_listas=listas.id
-            WHERE produtos_listas.id_listas='$this->id_lista' AND usuarios_listas.id_usuarios='$this->id_usuario'"
+            WHERE usuarios_listas.id_usuarios='$this->id_usuario'
+            ORDER BY categorias.id ASC"
         
         ) or die("Erro BD");
         $qtd = mysqli_num_rows($sql);

@@ -24,10 +24,10 @@ if(isset($_GET["url"])){
 
             if(isset($explode[1])){
 
-                /* Exemplo de rota: API/id_usuario/listas */
                 switch($explode[1]){
 
                     /* Retorna todas as listas do usuário */
+                    /* Exemplo de rota: API/id_usuario/listas */
                     case "listas":
         
                         echo $classeRetorno->retorna_listas();
@@ -42,7 +42,6 @@ if(isset($_GET["url"])){
 
                                 $classeRetorno->id_lista = $explode[2];
 
-                                /* echo $classeRetorno->retorna_categoria(); */
                                 echo $classeRetorno->retorna_produtos($explode[3]);
 
                             }else{
@@ -57,6 +56,12 @@ if(isset($_GET["url"])){
 
                         }                    
         
+                    break;
+
+                    case "categorias":
+
+                        echo $classeRetorno->retorna_categoria();
+
                     break;
 
                     default:
