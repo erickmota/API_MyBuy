@@ -89,7 +89,8 @@ class Retornos extends conexao{
 
         $sql = mysqli_query(
             
-            $conn, "SELECT produtos.id, produtos.nome FROM produtos
+            $conn, "SELECT produtos.id, produtos.nome, fotos.url FROM produtos
+            LEFT JOIN fotos ON fotos.id=produtos.id_fotos
             INNER JOIN listas ON listas.id=produtos.id_listas
             INNER JOIN usuarios_listas ON usuarios_listas.id_listas=listas.id
             WHERE usuarios_listas.id_usuarios='$this->id_usuario'
