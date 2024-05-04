@@ -34,10 +34,13 @@ if(isset($_GET["url"])){
         
                     break;
         
+                    /* Retorna a lista de produtos */
+                    /* Exemplo: API/id_usuario/produtos/id_listas/id_categoria */
                     case "produtos":                    
         
                         if(isset($explode[2])){
 
+                            /* Verificando se o id da categoria foi passado na rota. */
                             if(isset($explode[3])){
 
                                 $classeRetorno->id_lista = $explode[2];
@@ -58,6 +61,7 @@ if(isset($_GET["url"])){
         
                     break;
 
+                    /* Retorna as categorias do usuário */
                     case "categorias":
 
                         echo $classeRetorno->retorna_categoria();
@@ -78,7 +82,38 @@ if(isset($_GET["url"])){
 
         }else{
 
-            echo $classeRetorno->retornaErro("Usuário não existe");
+            switch($explode[0]){
+
+                case "login":
+
+                    if($_SERVER["REQUEST_METHOD"] === "POST"){
+
+                        if(isset($_POST["email"]) && isset($_POST["senha"])){
+
+                            $email = $_POST["email"];
+                            $senha = $_POST["senha"];
+    
+                            echo $classeRetorno->verificar_email_senha_usuario($email, $senha);
+
+                        }else{
+
+                            echo $classeRetorno->retornaErro("Você precisa informar um email e uma senha como POST");
+
+                        }
+
+                    }else{
+
+                        echo $classeRetorno->retornaErro("Nessa rota você precisa informar o login e senha como POST");
+
+                    }
+
+                break;
+
+                default:
+
+                    echo $classeRetorno->retornaErro("Usuário não existe ou rota incorreta");
+
+            }
 
         }
 

@@ -21,12 +21,31 @@ class Retornos extends conexao{
 
     }
 
+    /* Método de retorno com sucesso de json. */
+    private function retorna_json($data){
+
+        return json_encode([
+    
+            "status" => API_IS_ACTIVE,
+            "Versao" => API_VERSION,
+            "msg" => "Sucesso",
+            "data" => $data
+    
+        ]);
+
+    }
+
     /* Verifica se o id do usuário passado na URL, é válido */
     public function verifica_usuario(){
 
         $conn = $this->conn();
 
-        $sql = mysqli_query($conn, "SELECT * FROM usuarios WHERE id='$this->id_usuario'") or die("Erro BD");
+        $sql = mysqli_query(
+            
+            $conn, "SELECT * FROM usuarios
+            WHERE id='$this->id_usuario'"
+        
+        ) or die("Erro BD");
         $num = mysqli_num_rows($sql);
 
         if($num > 0){
@@ -69,14 +88,7 @@ class Retornos extends conexao{
 
         }else{
 
-            return json_encode([
-
-                "status" => API_IS_ACTIVE,
-                "Versao" => API_VERSION,
-                "msg" => "Sucesso",
-                "data" => $array
-        
-            ]);
+            return $this->retorna_json($array);
 
         }
 
@@ -111,14 +123,7 @@ class Retornos extends conexao{
 
         }else{
 
-            return json_encode([
-
-                "status" => API_IS_ACTIVE,
-                "Versao" => API_VERSION,
-                "msg" => "Sucesso",
-                "data" => $array
-        
-            ]);
+            return $this->retorna_json($array);
 
         }
 
@@ -153,14 +158,38 @@ class Retornos extends conexao{
 
         }else{
 
-            return json_encode([
+            return $this->retorna_json($array);
 
-                "status" => API_IS_ACTIVE,
-                "Versao" => API_VERSION,
-                "msg" => "Sucesso",
-                "data" => $array
+        }
+
+    }
+
+    /* Método de verificação do login de um usuário. */
+    public function verificar_email_senha_usuario($email, $senha){
+
+        $conn = $this->conn();
+
+        $sql = mysqli_query(
+            
+            $conn, "SELECT id, nome, token FROM usuarios
+            WHERE email='$email'
+            AND senha='$senha'"
         
-            ]);
+        ) or die("Erro ao verificar o usuário");
+        $qtd = mysqli_num_rows($sql);
+        while ($row = mysqli_fetch_assoc($sql)){
+                
+            $array[] = $row;
+            
+        }
+
+        if($qtd > 0){
+
+            return $this->retorna_json($array);
+
+        }else{
+
+            return $this->retornaErro("Usuário não localizado");
 
         }
 
