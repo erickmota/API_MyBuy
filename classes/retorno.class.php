@@ -95,20 +95,44 @@ class Retornos extends conexao{
     }
 
     /* Retornando todos os produtos, dentro de uma categorias determinada, de uma lista */
-    public function retorna_produtos($categoria){
+    public function retorna_produtos($categoria, $carrinho){
 
         $conn = $this->conn();
 
-        $sql = mysqli_query(
+        switch($carrinho){
+
+            case true:
+
+                $sql = mysqli_query(
             
-            $conn, "SELECT produtos.id, produtos.nome, produtos.carrinho, fotos.url FROM produtos
-            LEFT JOIN fotos ON fotos.id=produtos.id_fotos
-            INNER JOIN listas ON listas.id=produtos.id_listas
-            INNER JOIN usuarios_listas ON usuarios_listas.id_listas=listas.id
-            WHERE usuarios_listas.id_usuarios='$this->id_usuario'
-            AND produtos.id_categorias='$categoria'"
-        
-        ) or die("Erro BD");
+                    $conn, "SELECT produtos.id, produtos.nome, produtos.carrinho, fotos.url FROM produtos
+                    LEFT JOIN fotos ON fotos.id=produtos.id_fotos
+                    INNER JOIN listas ON listas.id=produtos.id_listas
+                    INNER JOIN usuarios_listas ON usuarios_listas.id_listas=listas.id
+                    WHERE usuarios_listas.id_usuarios='$this->id_usuario'
+                    AND produtos.carrinho=1"
+                
+                ) or die("Erro BD");
+
+            break;
+
+            case false:
+
+                $sql = mysqli_query(
+            
+                    $conn, "SELECT produtos.id, produtos.nome, produtos.carrinho, fotos.url FROM produtos
+                    LEFT JOIN fotos ON fotos.id=produtos.id_fotos
+                    INNER JOIN listas ON listas.id=produtos.id_listas
+                    INNER JOIN usuarios_listas ON usuarios_listas.id_listas=listas.id
+                    WHERE usuarios_listas.id_usuarios='$this->id_usuario'
+                    AND produtos.id_categorias='$categoria'
+                    AND produtos.carrinho=0"
+                
+                ) or die("Erro BD");
+
+            break;
+
+        }
         $qtd = mysqli_num_rows($sql);
         while ($row = mysqli_fetch_assoc($sql)){
                 

@@ -45,7 +45,7 @@ if(isset($_GET["url"])){
 
                                 $classeRetorno->id_lista = $explode[2];
 
-                                echo $classeRetorno->retorna_produtos($explode[3]);
+                                echo $classeRetorno->retorna_produtos($explode[3], false);
 
                             }else{
 
@@ -59,6 +59,22 @@ if(isset($_GET["url"])){
 
                         }                    
         
+                    break;
+
+                    case "produtos_carrinho":
+
+                        if(isset($explode[2])){
+
+                            $classeRetorno->id_lista = $explode[2];
+
+                            echo $classeRetorno->retorna_produtos(false, true);
+
+                        }else{
+
+                            echo $classeRetorno->retornaErro("Insira um id de lista na rota");
+
+                        }
+
                     break;
 
                     /* Retorna as categorias do usuário */
