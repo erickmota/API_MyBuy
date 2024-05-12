@@ -110,6 +110,7 @@ class Retornos extends conexao{
                     INNER JOIN listas ON listas.id=produtos.id_listas
                     INNER JOIN usuarios_listas ON usuarios_listas.id_listas=listas.id
                     WHERE usuarios_listas.id_usuarios='$this->id_usuario'
+                    AND listas.id='$this->id_lista'
                     AND produtos.carrinho=1"
                 
                 ) or die("Erro BD");
@@ -126,6 +127,7 @@ class Retornos extends conexao{
                     INNER JOIN usuarios_listas ON usuarios_listas.id_listas=listas.id
                     WHERE usuarios_listas.id_usuarios='$this->id_usuario'
                     AND produtos.id_categorias='$categoria'
+                    AND listas.id='$this->id_lista'
                     AND produtos.carrinho=0"
                 
                 ) or die("Erro BD");
