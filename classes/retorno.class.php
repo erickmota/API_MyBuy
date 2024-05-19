@@ -81,6 +81,20 @@ class Retornos extends conexao{
             
         }
 
+        /* Percorrendo o array e inserindo um novo item
+        com a quantidade de produtos que existem na lista */
+        foreach($array as &$navegacao){
+
+            $id_list = $navegacao["id"];
+
+            $sql = mysqli_query($conn, "SELECT * FROM produtos
+            WHERE id_listas='$id_list'") or die("Erro na consulta do array");
+            $qtd_prod = mysqli_num_rows($sql);
+
+            $navegacao["qtd_produtos"] = $qtd_prod;
+
+        }
+
         if($qtd < 1){
 
             return $this->retornaErro("Nenhuma lista disponível para esse usuário");
