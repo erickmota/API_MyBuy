@@ -162,12 +162,8 @@ class Retornos extends conexao{
 
         $sql = mysqli_query(
             
-            $conn, "SELECT DISTINCT categorias.id, categorias.nome FROM categorias
-            INNER JOIN produtos ON produtos.id_categorias=categorias.id
-            INNER JOIN listas ON listas.id=produtos.id_listas
-            INNER JOIN usuarios_listas ON usuarios_listas.id_listas=listas.id
-            WHERE usuarios_listas.id_usuarios='$this->id_usuario'
-            ORDER BY categorias.id ASC"
+            $conn, "SELECT * FROM categorias
+            WHERE id_usuarios='$this->id_usuario'"
         
         ) or die("Erro BD");
         $qtd = mysqli_num_rows($sql);
