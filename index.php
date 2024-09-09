@@ -26,6 +26,8 @@ if(isset($_GET["url"])){
 
                 switch($explode[1]){
 
+                    /* *** GET *** */
+
                     /* Retorna todas as listas do usuário */
                     /* Exemplo de rota: API/id_usuario/listas */
                     case "listas":
@@ -82,6 +84,34 @@ if(isset($_GET["url"])){
 
                         echo $classeRetorno->retorna_categoria();
 
+                    break;
+
+                    /* *** POST *** */
+
+                    /* Atualiza o nome da lista individualmente. */
+                    case "atualiza_lista":
+
+                        if($_SERVER["REQUEST_METHOD"] === "POST"){
+    
+                            if(isset($_POST["id_lista"]) && isset($_POST["novo_nome"])){
+    
+                                $id_lista = $_POST["id_lista"];
+                                $novo_nome = $_POST["novo_nome"];
+    
+                                echo $classeRetorno->atualiza_nome_lista($id_lista, $novo_nome);
+    
+                            }else{
+    
+                                echo $classeRetorno->retornaErro("Você precisa informar o id e o novo nome da lista que quer alterar.");
+    
+                            }
+    
+                        }else{
+    
+                            echo $classeRetorno->retornaErro("Você precisa informar o id e o novo nome da lista como POST.");
+    
+                        }
+    
                     break;
 
                     default:

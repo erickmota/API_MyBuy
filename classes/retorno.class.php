@@ -231,4 +231,20 @@ class Retornos extends conexao{
 
     }
 
+    public function atualiza_nome_lista($id_lista, $novo_nome){
+
+        $conn = $this->conn();
+
+        $sql = mysqli_query(
+            
+            $conn, "UPDATE listas
+            SET nome='$novo_nome'
+            WHERE id='$id_lista'"
+            
+        ) or die("Erro conexão");
+
+        return $this->retorna_json(false);
+
+    }
+
 }
