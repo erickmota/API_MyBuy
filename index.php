@@ -114,6 +114,30 @@ if(isset($_GET["url"])){
     
                     break;
 
+                    case "adiciona_lista":
+
+                        if($_SERVER["REQUEST_METHOD"] === "POST"){
+    
+                            if(isset($_POST["nome_lista"])){
+    
+                                $nome_lista = $_POST["nome_lista"];
+    
+                                echo $classeRetorno->adicionar_lista($nome_lista);
+    
+                            }else{
+    
+                                echo $classeRetorno->retornaErro("Você precisa inserir o nome da lista que quer inserir.");
+    
+                            }
+    
+                        }else{
+    
+                            echo $classeRetorno->retornaErro("Você precisa inserir o nome da lista como POST.");
+    
+                        }
+
+                    break;
+
                     default:
 
                         echo $classeRetorno->retornaErro("A rota definida não existe");

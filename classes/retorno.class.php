@@ -247,4 +247,19 @@ class Retornos extends conexao{
 
     }
 
+    public function adicionar_lista($nome_lista){
+
+        $conn = $this->conn();
+
+        $sql = mysqli_query(
+
+            $conn, "INSERT INTO listas (nome)
+            VALUES ('$nome_lista')"
+
+        ) or die("Erro conexão");
+
+        return $this->retorna_json(false);
+
+    }
+
 }
