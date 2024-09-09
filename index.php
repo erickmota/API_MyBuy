@@ -122,7 +122,7 @@ if(isset($_GET["url"])){
     
                                 $nome_lista = $_POST["nome_lista"];
     
-                                echo $classeRetorno->adicionar_lista($nome_lista);
+                                echo $classeRetorno->criar_lista($nome_lista);
     
                             }else{
     

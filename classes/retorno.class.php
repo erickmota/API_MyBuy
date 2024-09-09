@@ -247,7 +247,7 @@ class Retornos extends conexao{
 
     }
 
-    public function adicionar_lista($nome_lista){
+    public function criar_lista($nome_lista){
 
         $conn = $this->conn();
 
@@ -255,6 +255,15 @@ class Retornos extends conexao{
 
             $conn, "INSERT INTO listas (nome)
             VALUES ('$nome_lista')"
+
+        ) or die("Erro conexão");
+
+        $ultimo_id = mysqli_insert_id($conn);
+
+        $sql2 = mysqli_query(
+
+            $conn, "INSERT INTO usuarios_listas (id_usuarios, id_listas)
+            VALUES ('$this->id_usuario', '$ultimo_id')"
 
         ) or die("Erro conexão");
 
