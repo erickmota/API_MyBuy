@@ -114,6 +114,7 @@ if(isset($_GET["url"])){
     
                     break;
 
+                    /* Adiciona uma nova lista */
                     case "adiciona_lista":
 
                         if($_SERVER["REQUEST_METHOD"] === "POST"){
@@ -133,6 +134,31 @@ if(isset($_GET["url"])){
                         }else{
     
                             echo $classeRetorno->retornaErro("Você precisa inserir o nome da lista como POST.");
+    
+                        }
+
+                    break;
+
+                    /* Deleta uma lista existente */
+                    case "deletar_lista":
+
+                        if($_SERVER["REQUEST_METHOD"] === "POST"){
+    
+                            if(isset($_POST["id_lista"])){
+    
+                                $id_lista = $_POST["id_lista"];
+    
+                                echo $classeRetorno->deletar_lista($id_lista);
+    
+                            }else{
+    
+                                echo $classeRetorno->retornaErro("Você precisa inserir o id da lista que quer deletar.");
+    
+                            }
+    
+                        }else{
+    
+                            echo $classeRetorno->retornaErro("Você precisa inserir o id da lista como POST.");
     
                         }
 

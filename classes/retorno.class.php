@@ -231,6 +231,7 @@ class Retornos extends conexao{
 
     }
 
+    /* Atualiza o nome de uma lista */
     public function atualiza_nome_lista($id_lista, $novo_nome){
 
         $conn = $this->conn();
@@ -247,6 +248,7 @@ class Retornos extends conexao{
 
     }
 
+    /* Cria uma nova lista */
     public function criar_lista($nome_lista){
 
         $conn = $this->conn();
@@ -264,6 +266,25 @@ class Retornos extends conexao{
 
             $conn, "INSERT INTO usuarios_listas (id_usuarios, id_listas)
             VALUES ('$this->id_usuario', '$ultimo_id')"
+
+        ) or die("Erro conexão");
+
+        return $this->retorna_json(false);
+
+    }
+
+    /* Deleta uma lista */
+    public function deletar_lista($id_lista){
+
+        /* Como os produtos e a tabela usuarios_produtos foram criados com o
+        ON DELETE CASCADE, produtos e dados na tabela acima, serão exluídos
+        com esse msm método. */
+
+        $conn = $this->conn();
+
+        $sql = mysqli_query(
+
+            $conn, "DELETE FROM listas WHERE id='$id_lista'"
 
         ) or die("Erro conexão");
 
