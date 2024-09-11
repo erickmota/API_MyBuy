@@ -6,8 +6,11 @@ include "config.php";
 /* include "classes/retorno.class.php";
 $classeRetorno = new Retornos(); */
 
-include "classes/Usuarios.class.php";
+require_once "classes/Usuarios.class.php";
 $classeUsuarios = new Usuarios();
+
+require_once "classes/RetornosJson.class.php";
+$classeRetornosJson = new RetornosJson();
 
 if(isset($_GET["url"])){
 
@@ -24,8 +27,6 @@ if(isset($_GET["url"])){
 
         /* Verificando a existência do usuario informado. */
         if($classeUsuarios->verifica_usuario() == true){
-
-            echo "existe";
 
             if(isset($explode[1])){
 
@@ -183,8 +184,6 @@ if(isset($_GET["url"])){
 
         }else{
 
-            echo "não existe";
-
             switch($explode[0]){
 
                 case "login":
@@ -214,7 +213,7 @@ if(isset($_GET["url"])){
 
                 default:
 
-                    /* echo $classeRetorno->retornaErro("Usuário não existe ou rota incorreta"); */
+                    echo $classeRetornosJson->retornaErro("Usuário não existe ou rota incorreta");
 
             }
 
