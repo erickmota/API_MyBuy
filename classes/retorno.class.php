@@ -1,6 +1,6 @@
 <?php
 
-include "conexao.class.php";
+include "Conexao.class.php";
 
 class Retornos extends conexao{
 
