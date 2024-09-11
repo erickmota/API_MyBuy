@@ -3,8 +3,11 @@ header('Content-Type: application/json');
 
 include "config.php";
 
-include "classes/retorno.class.php";
-$classeRetorno = new Retornos();
+/* include "classes/retorno.class.php";
+$classeRetorno = new Retornos(); */
+
+include "classes/Usuarios.class.php";
+$classeUsuarios = new Usuarios();
 
 if(isset($_GET["url"])){
 
@@ -17,10 +20,12 @@ if(isset($_GET["url"])){
     if(API_IS_ACTIVE == true){
 
         /* Id do usuário buscado */
-        $classeRetorno->id_usuario = $explode[0];
+        $classeUsuarios->id = $explode[0];
 
         /* Verificando a existência do usuario informado. */
-        if($classeRetorno->verifica_usuario() == true){
+        if($classeUsuarios->verifica_usuario() == true){
+
+            echo "existe";
 
             if(isset($explode[1])){
 
@@ -32,7 +37,7 @@ if(isset($_GET["url"])){
                     /* Exemplo de rota: API/id_usuario/listas */
                     case "listas":
         
-                        echo $classeRetorno->retorna_listas();
+                       /*  echo $classeRetorno->retorna_listas(); */
         
                     break;
         
@@ -45,19 +50,19 @@ if(isset($_GET["url"])){
                             /* Verificando se o id da categoria foi passado na rota. */
                             if(isset($explode[3])){
 
-                                $classeRetorno->id_lista = $explode[2];
+                                /* $classeRetorno->id_lista = $explode[2]; */
 
-                                echo $classeRetorno->retorna_produtos($explode[3], false);
+                                /* echo $classeRetorno->retorna_produtos($explode[3], false); */
 
                             }else{
 
-                                echo $classeRetorno->retornaErro("Insira um id de categoria na rota");
+                                /* echo $classeRetorno->retornaErro("Insira um id de categoria na rota"); */
 
                             }
 
                         }else{
 
-                            echo $classeRetorno->retornaErro("Insira um id de lista na rota");
+                            /* echo $classeRetorno->retornaErro("Insira um id de lista na rota"); */
 
                         }                    
         
@@ -67,13 +72,13 @@ if(isset($_GET["url"])){
 
                         if(isset($explode[2])){
 
-                            $classeRetorno->id_lista = $explode[2];
+                            /* $classeRetorno->id_lista = $explode[2]; */
 
-                            echo $classeRetorno->retorna_produtos(false, true);
+                            /* echo $classeRetorno->retorna_produtos(false, true); */
 
                         }else{
 
-                            echo $classeRetorno->retornaErro("Insira um id de lista na rota");
+                            /* echo $classeRetorno->retornaErro("Insira um id de lista na rota"); */
 
                         }
 
@@ -82,7 +87,7 @@ if(isset($_GET["url"])){
                     /* Retorna as categorias do usuário */
                     case "categorias":
 
-                        echo $classeRetorno->retorna_categoria();
+                        /* echo $classeRetorno->retorna_categoria(); */
 
                     break;
 
@@ -98,17 +103,17 @@ if(isset($_GET["url"])){
                                 $id_lista = $_POST["id_lista"];
                                 $novo_nome = $_POST["novo_nome"];
     
-                                echo $classeRetorno->atualiza_nome_lista($id_lista, $novo_nome);
+                                /* echo $classeRetorno->atualiza_nome_lista($id_lista, $novo_nome); */
     
                             }else{
     
-                                echo $classeRetorno->retornaErro("Você precisa informar o id e o novo nome da lista que quer alterar.");
+                                /* echo $classeRetorno->retornaErro("Você precisa informar o id e o novo nome da lista que quer alterar."); */
     
                             }
     
                         }else{
     
-                            echo $classeRetorno->retornaErro("Você precisa informar o id e o novo nome da lista como POST.");
+                            /* echo $classeRetorno->retornaErro("Você precisa informar o id e o novo nome da lista como POST."); */
     
                         }
     
@@ -123,17 +128,17 @@ if(isset($_GET["url"])){
     
                                 $nome_lista = $_POST["nome_lista"];
     
-                                echo $classeRetorno->criar_lista($nome_lista);
+                                /* echo $classeRetorno->criar_lista($nome_lista); */
     
                             }else{
     
-                                echo $classeRetorno->retornaErro("Você precisa inserir o nome da lista que quer inserir.");
+                                /* echo $classeRetorno->retornaErro("Você precisa inserir o nome da lista que quer inserir."); */
     
                             }
     
                         }else{
     
-                            echo $classeRetorno->retornaErro("Você precisa inserir o nome da lista como POST.");
+                            /* echo $classeRetorno->retornaErro("Você precisa inserir o nome da lista como POST."); */
     
                         }
 
@@ -148,17 +153,17 @@ if(isset($_GET["url"])){
     
                                 $id_lista = $_POST["id_lista"];
     
-                                echo $classeRetorno->deletar_lista($id_lista);
+                                /* echo $classeRetorno->deletar_lista($id_lista); */
     
                             }else{
     
-                                echo $classeRetorno->retornaErro("Você precisa inserir o id da lista que quer deletar.");
+                                /* echo $classeRetorno->retornaErro("Você precisa inserir o id da lista que quer deletar."); */
     
                             }
     
                         }else{
     
-                            echo $classeRetorno->retornaErro("Você precisa inserir o id da lista como POST.");
+                           /*  echo $classeRetorno->retornaErro("Você precisa inserir o id da lista como POST."); */
     
                         }
 
@@ -166,17 +171,19 @@ if(isset($_GET["url"])){
 
                     default:
 
-                        echo $classeRetorno->retornaErro("A rota definida não existe");
+                        /* echo $classeRetorno->retornaErro("A rota definida não existe"); */
 
                 }
 
             }else{
 
-                echo $classeRetorno->retornaErro("Defina um destino ao usuário, na rota");
+               /*  echo $classeRetorno->retornaErro("Defina um destino ao usuário, na rota"); */
 
             }
 
         }else{
+
+            echo "não existe";
 
             switch($explode[0]){
 
@@ -189,17 +196,17 @@ if(isset($_GET["url"])){
                             $email = $_POST["email"];
                             $senha = $_POST["senha"];
     
-                            echo $classeRetorno->verificar_email_senha_usuario($email, $senha);
+                            /* echo $classeRetorno->verificar_email_senha_usuario($email, $senha); */
 
                         }else{
 
-                            echo $classeRetorno->retornaErro("Você precisa informar um email e uma senha como POST");
+                           /*  echo $classeRetorno->retornaErro("Você precisa informar um email e uma senha como POST"); */
 
                         }
 
                     }else{
 
-                        echo $classeRetorno->retornaErro("Nessa rota você precisa informar o login e senha como POST");
+                        /* echo $classeRetorno->retornaErro("Nessa rota você precisa informar o login e senha como POST"); */
 
                     }
 
@@ -207,7 +214,7 @@ if(isset($_GET["url"])){
 
                 default:
 
-                    echo $classeRetorno->retornaErro("Usuário não existe ou rota incorreta");
+                    /* echo $classeRetorno->retornaErro("Usuário não existe ou rota incorreta"); */
 
             }
 
@@ -215,12 +222,12 @@ if(isset($_GET["url"])){
 
     }else{
 
-        echo $classeRetorno->retornaErro("Dados de verificação não conferem, ou existe algum erro interno");
+        /* echo $classeRetorno->retornaErro("Dados de verificação não conferem, ou existe algum erro interno"); */
 
     }
 
 }else{
 
-    echo $classeRetorno->retornaErro("API não localizada.");
+    /* echo $classeRetorno->retornaErro("API não localizada."); */
 
 }
