@@ -1,7 +1,5 @@
 <?php
 
-require_once "Conexao.class.php";
-
 class Usuarios{
 
     private $conn;
@@ -10,15 +8,21 @@ class Usuarios{
     public $email;
     public $senha;
 
-    public function __construct(){
+    public function __construct($classeConexao){
 
-        $this->conn = (new Conexao())->getConexao();
+        $this->conn = $classeConexao->getConexao();
 
     }
 
     protected function getId(){
 
         return $this->id;
+
+    }
+
+    public function setId($id){
+
+        $this->id = $id;
 
     }
 

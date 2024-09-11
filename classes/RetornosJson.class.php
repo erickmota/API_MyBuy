@@ -17,7 +17,7 @@ class RetornosJson{
     }
 
     /* Método de retorno com sucesso de json. */
-    private function retorna_json($data){
+    public function retorna_json($data){
 
         return json_encode([
 

@@ -1,19 +1,17 @@
 <?php
 
-require_once "Conexao.class.php";
-require_once "Usuarios.class.php";
-
 class Listas extends Usuarios{
 
     private $conn;
-    private $retorno_json;
+    private $retorna_json;
     public $id;
     public $nome;
 
-    public function __construct(){
+    public function __construct($classeRetornosJson, $classeConexao){
 
-        $this->conn = (new Conexao())->getConexao();
-        /* $this->retorno_json = (new RetornosJson())->retorna_json(); */
+        $this->conn = $classeConexao->getConexao();
+        $this->retorna_json = $classeRetornosJson;
+        parent::__construct($classeConexao);
 
     }
 
@@ -33,38 +31,36 @@ class Listas extends Usuarios{
             
         ) or die("Erro BD");
         $qtd = mysqli_num_rows($sql);
+
+        $array = [];
+
         while ($row = mysqli_fetch_assoc($sql)){
                 
             $array[] = $row;
             
         }
 
-        /* Percorrendo o array e inserindo um novo item
-        com a quantidade de produtos que existem na lista */
-        foreach($array as &$navegacao){
-
-            $id_list = $navegacao["id"];
-
-            $sql = mysqli_query($conn, "SELECT * FROM produtos
-            WHERE id_listas='$id_list'") or die("Erro na consulta do array");
-            $qtd_prod = mysqli_num_rows($sql);
-
-            $navegacao["qtd_produtos"] = $qtd_prod;
-
-        }
-
         if($qtd < 1){
 
-            /* return $this->retornaErro("Nenhuma lista disponível para esse usuário"); */
-
-            echo "Não existe lista";
-        
+            return $this->retorna_json->retornaErro("Nenhuma lista disponível para esse usuário");
 
         }else{
 
-            /* return $this->retorna_json($array); */
+            /* Percorrendo o array e inserindo um novo item
+            com a quantidade de produtos que existem na lista */
+            foreach($array as &$navegacao){
 
-            echo "Existe lista";
+                $id_list = $navegacao["id"];
+
+                $sql = mysqli_query($conn, "SELECT * FROM produtos
+                WHERE id_listas='$id_list'") or die("Erro na consulta do array");
+                $qtd_prod = mysqli_num_rows($sql);
+
+                $navegacao["qtd_produtos"] = $qtd_prod;
+
+            }
+
+            return $this->retorna_json->retorna_json($array);
 
         }
 

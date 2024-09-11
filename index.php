@@ -3,17 +3,17 @@ header('Content-Type: application/json');
 
 include "config.php";
 
-/* include "classes/retorno.class.php";
-$classeRetorno = new Retornos(); */
-
-require_once "classes/Usuarios.class.php";
-$classeUsuarios = new Usuarios();
+require_once "classes/Conexao.class.php";
+$classeConexao = new Conexao();
 
 require_once "classes/RetornosJson.class.php";
 $classeRetornosJson = new RetornosJson();
 
+require_once "classes/Usuarios.class.php";
+$classeUsuarios = new Usuarios($classeConexao);
+
 require_once "classes/Listas.class.php";
-$classeListas = new Listas();
+$classeListas = new Listas($classeRetornosJson, $classeConexao);
 
 if(isset($_GET["url"])){
 
@@ -26,7 +26,7 @@ if(isset($_GET["url"])){
     if(API_IS_ACTIVE == true){
 
         /* Id do usuário buscado */
-        $classeUsuarios->id = $explode[0];
+        $classeUsuarios->setId($explode[0]);
 
         /* Verificando a existência do usuario informado. */
         if($classeUsuarios->verifica_usuario() == true){
@@ -41,7 +41,7 @@ if(isset($_GET["url"])){
                     /* Exemplo de rota: API/id_usuario/listas */
                     case "listas":
 
-                        $classeListas->id = $explode[0];
+                        $classeListas->setId($explode[0]);
         
                         echo $classeListas->retorna_listas();
         
