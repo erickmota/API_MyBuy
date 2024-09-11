@@ -13,7 +13,7 @@ class Listas extends Usuarios{
     public function __construct(){
 
         $this->conn = (new Conexao())->getConexao();
-        $this->retorno_json = (new RetornosJson())->retorna_json();
+        /* $this->retorno_json = (new RetornosJson())->retorna_json(); */
 
     }
 
@@ -22,12 +22,13 @@ class Listas extends Usuarios{
     public function retorna_listas(){
 
         $conn = $this->conn;
+        $id_usuario = $this->getId();
 
         $sql = mysqli_query(
 
             $conn, "SELECT * FROM usuarios_listas
             INNER JOIN listas
-            WHERE usuarios_listas.id_usuarios='$this->id_usuario'
+            WHERE usuarios_listas.id_usuarios='$id_usuario'
             AND usuarios_listas.id_listas=listas.id"
             
         ) or die("Erro BD");
@@ -54,12 +55,16 @@ class Listas extends Usuarios{
 
         if($qtd < 1){
 
-            return $this->retornaErro("Nenhuma lista disponível para esse usuário");
+            /* return $this->retornaErro("Nenhuma lista disponível para esse usuário"); */
+
+            echo "Não existe lista";
         
 
         }else{
 
-            return $this->retorna_json($array);
+            /* return $this->retorna_json($array); */
+
+            echo "Existe lista";
 
         }
 

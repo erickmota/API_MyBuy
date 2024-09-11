@@ -12,6 +12,9 @@ $classeUsuarios = new Usuarios();
 require_once "classes/RetornosJson.class.php";
 $classeRetornosJson = new RetornosJson();
 
+require_once "classes/Listas.class.php";
+$classeListas = new Listas();
+
 if(isset($_GET["url"])){
 
     $explode = explode("/", $_GET["url"]);
@@ -37,8 +40,10 @@ if(isset($_GET["url"])){
                     /* Retorna todas as listas do usuário */
                     /* Exemplo de rota: API/id_usuario/listas */
                     case "listas":
+
+                        $classeListas->id = $explode[0];
         
-                       /*  echo $classeRetorno->retorna_listas(); */
+                        echo $classeListas->retorna_listas();
         
                     break;
         

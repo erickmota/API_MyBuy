@@ -1,6 +1,6 @@
 <?php
 
-include "Conexao.class.php";
+require_once "Conexao.class.php";
 
 class Usuarios{
 
@@ -13,6 +13,12 @@ class Usuarios{
     public function __construct(){
 
         $this->conn = (new Conexao())->getConexao();
+
+    }
+
+    protected function getId(){
+
+        return $this->id;
 
     }
 
