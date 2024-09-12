@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
 
-include "config.php";
+require_once "config.php";
 
 require_once "classes/Conexao.class.php";
 $classeConexao = new Conexao();
@@ -10,7 +10,7 @@ require_once "classes/RetornosJson.class.php";
 $classeRetornosJson = new RetornosJson();
 
 require_once "classes/Usuarios.class.php";
-$classeUsuarios = new Usuarios($classeConexao);
+$classeUsuarios = new Usuarios($classeRetornosJson, $classeConexao);
 
 require_once "classes/Listas.class.php";
 $classeListas = new Listas($classeRetornosJson, $classeConexao);
@@ -206,13 +206,13 @@ if(isset($_GET["url"])){
 
                     default:
 
-                        /* echo $classeRetorno->retornaErro("A rota definida não existe"); */
+                        echo $classeRetornosJson->retornaErro("A rota definida não existe");
 
                 }
 
             }else{
 
-               /*  echo $classeRetorno->retornaErro("Defina um destino ao usuário, na rota"); */
+                echo $classeRetornosJson->retornaErro("Defina um destino ao usuário, na rota");
 
             }
 
@@ -228,18 +228,21 @@ if(isset($_GET["url"])){
 
                             $email = $_POST["email"];
                             $senha = $_POST["senha"];
+
+                            $classeUsuarios->setEmailUsuarios($email);
+                            $classeUsuarios->setSenhaUsuarios($senha);
     
-                            /* echo $classeRetorno->verificar_email_senha_usuario($email, $senha); */
+                            echo $classeUsuarios->login();
 
                         }else{
 
-                           /*  echo $classeRetorno->retornaErro("Você precisa informar um email e uma senha como POST"); */
+                            echo $classeRetornosJson->retornaErro("Você precisa informar um email e uma senha como POST");
 
                         }
 
                     }else{
 
-                        /* echo $classeRetorno->retornaErro("Nessa rota você precisa informar o login e senha como POST"); */
+                        echo $classeRetornosJson->retornaErro("Nessa rota você precisa informar o login e senha como POST");
 
                     }
 
@@ -255,12 +258,12 @@ if(isset($_GET["url"])){
 
     }else{
 
-        /* echo $classeRetorno->retornaErro("Dados de verificação não conferem, ou existe algum erro interno"); */
+        echo $classeRetornosJson->retornaErro("Dados de verificação não conferem, ou existe algum erro interno");
 
     }
 
 }else{
 
-    /* echo $classeRetorno->retornaErro("API não localizada."); */
+    echo $classeRetornosJson->retornaErro("API não localizada.");
 
 }

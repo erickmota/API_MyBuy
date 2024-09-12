@@ -18,7 +18,7 @@ class Produtos extends Usuarios{
 
         $this->conn = $classeConexao->getConexao();
         $this->retorna_json = $classeRetornosJson;
-        parent::__construct($classeConexao);
+        parent::__construct($classeRetornosJson, $classeConexao);
 
     }
 
