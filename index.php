@@ -18,6 +18,9 @@ $classeListas = new Listas($classeRetornosJson, $classeConexao);
 require_once "classes/Produtos.class.php";
 $classeProdutos = new Produtos($classeRetornosJson, $classeConexao);
 
+require_once "classes/Categorias.class.php";
+$classeCategorias = new Categorias($classeRetornosJson, $classeConexao);
+
 if(isset($_GET["url"])){
 
     $explode = explode("/", $_GET["url"]);
@@ -104,7 +107,9 @@ if(isset($_GET["url"])){
                     /* Retorna as categorias do usuário */
                     case "categorias":
 
-                        /* echo $classeRetorno->retorna_categoria(); */
+                        $classeCategorias->setIdUsuarios($explode[0]);
+
+                        echo $classeCategorias->retorna_categoria();
 
                     break;
 
@@ -119,18 +124,23 @@ if(isset($_GET["url"])){
     
                                 $id_lista = $_POST["id_lista"];
                                 $novo_nome = $_POST["novo_nome"];
+
+                                $classeCategorias->setIdUsuarios($explode[0]);
+
+                                $classeListas->setIdLista($id_lista);
+                                $classeListas->setNomeLista($novo_nome);
     
-                                /* echo $classeRetorno->atualiza_nome_lista($id_lista, $novo_nome); */
+                                echo $classeListas->atualiza_nome_lista($id_lista, $novo_nome);
     
                             }else{
     
-                                /* echo $classeRetorno->retornaErro("Você precisa informar o id e o novo nome da lista que quer alterar."); */
+                                echo $classeRetornosJson->retornaErro("Você precisa informar o id e o novo nome da lista que quer alterar.");
     
                             }
     
                         }else{
     
-                            /* echo $classeRetorno->retornaErro("Você precisa informar o id e o novo nome da lista como POST."); */
+                            echo $classeRetornosJson->retornaErro("Você precisa informar o id e o novo nome da lista como POST.");
     
                         }
     
@@ -144,18 +154,22 @@ if(isset($_GET["url"])){
                             if(isset($_POST["nome_lista"])){
     
                                 $nome_lista = $_POST["nome_lista"];
+
+                                $classeListas->setIdUsuarios($explode[0]);
+
+                                $classeListas->setNomeLista($nome_lista);
     
-                                /* echo $classeRetorno->criar_lista($nome_lista); */
+                                echo $classeListas->criar_lista();
     
                             }else{
     
-                                /* echo $classeRetorno->retornaErro("Você precisa inserir o nome da lista que quer inserir."); */
+                                echo $classeRetornosJson->retornaErro("Você precisa inserir o nome da lista que quer inserir.");
     
                             }
     
                         }else{
     
-                            /* echo $classeRetorno->retornaErro("Você precisa inserir o nome da lista como POST."); */
+                            echo $classeRetornosJson->retornaErro("Você precisa inserir o nome da lista como POST.");
     
                         }
 
@@ -169,18 +183,22 @@ if(isset($_GET["url"])){
                             if(isset($_POST["id_lista"])){
     
                                 $id_lista = $_POST["id_lista"];
+
+                                $classeListas->setIdUsuarios($explode[0]);
+
+                                $classeListas->setIdLista($id_lista);
     
-                                /* echo $classeRetorno->deletar_lista($id_lista); */
+                                echo $classeListas->deletar_lista();
     
                             }else{
     
-                                /* echo $classeRetorno->retornaErro("Você precisa inserir o id da lista que quer deletar."); */
+                                echo $classeRetornosJson->retornaErro("Você precisa inserir o id da lista que quer deletar.");
     
                             }
     
                         }else{
     
-                           /*  echo $classeRetorno->retornaErro("Você precisa inserir o id da lista como POST."); */
+                            echo $classeRetornosJson->retornaErro("Você precisa inserir o id da lista como POST.");
     
                         }
 
