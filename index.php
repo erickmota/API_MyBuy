@@ -94,11 +94,11 @@ if(isset($_GET["url"])){
 
                             $classeProdutos->setCarrinho(true);
 
-                            echo $classeProdutos->retorna_produtos($explode[3]);
+                            echo $classeProdutos->retorna_produtos(false);
 
                         }else{
 
-                            echo $classeRetorno->retornaErro("Insira um id de lista na rota");
+                            echo $classeRetornosJson->retornaErro("Insira um id de lista na rota");
 
                         }
 
