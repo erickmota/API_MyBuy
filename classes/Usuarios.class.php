@@ -14,13 +14,13 @@ class Usuarios{
 
     }
 
-    protected function getId(){
+    protected function getIdUsuarios(){
 
         return $this->id;
 
     }
 
-    public function setId($id){
+    public function setIdUsuarios($id){
 
         $this->id = $id;
 

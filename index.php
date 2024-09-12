@@ -15,6 +15,9 @@ $classeUsuarios = new Usuarios($classeConexao);
 require_once "classes/Listas.class.php";
 $classeListas = new Listas($classeRetornosJson, $classeConexao);
 
+require_once "classes/Produtos.class.php";
+$classeProdutos = new Produtos($classeRetornosJson, $classeConexao);
+
 if(isset($_GET["url"])){
 
     $explode = explode("/", $_GET["url"]);
@@ -26,7 +29,7 @@ if(isset($_GET["url"])){
     if(API_IS_ACTIVE == true){
 
         /* Id do usuário buscado */
-        $classeUsuarios->setId($explode[0]);
+        $classeUsuarios->setIdUsuarios($explode[0]);
 
         /* Verificando a existência do usuario informado. */
         if($classeUsuarios->verifica_usuario() == true){
@@ -41,7 +44,7 @@ if(isset($_GET["url"])){
                     /* Exemplo de rota: API/id_usuario/listas */
                     case "listas":
 
-                        $classeListas->setId($explode[0]);
+                        $classeListas->setIdUsuarios($explode[0]);
         
                         echo $classeListas->retorna_listas();
         
@@ -56,19 +59,23 @@ if(isset($_GET["url"])){
                             /* Verificando se o id da categoria foi passado na rota. */
                             if(isset($explode[3])){
 
-                                /* $classeRetorno->id_lista = $explode[2]; */
+                                $classeProdutos->setIdUsuarios($explode[0]);
 
-                                /* echo $classeRetorno->retorna_produtos($explode[3], false); */
+                                $classeProdutos->setIdLista($explode[2]);
+
+                                $classeProdutos->setCarrinho(false);
+
+                                echo $classeProdutos->retorna_produtos($explode[3]);
 
                             }else{
 
-                                /* echo $classeRetorno->retornaErro("Insira um id de categoria na rota"); */
+                                echo $classeRetornosJson->retornaErro("Insira um id de categoria na rota");
 
                             }
 
                         }else{
 
-                            /* echo $classeRetorno->retornaErro("Insira um id de lista na rota"); */
+                            echo $classeRetornosJson->retornaErro("Insira um id de lista na rota");
 
                         }                    
         
@@ -78,13 +85,17 @@ if(isset($_GET["url"])){
 
                         if(isset($explode[2])){
 
-                            /* $classeRetorno->id_lista = $explode[2]; */
+                            $classeProdutos->setIdUsuarios($explode[0]);
 
-                            /* echo $classeRetorno->retorna_produtos(false, true); */
+                            $classeProdutos->setIdLista($explode[2]);
+
+                            $classeProdutos->setCarrinho(true);
+
+                            echo $classeProdutos->retorna_produtos($explode[3]);
 
                         }else{
 
-                            /* echo $classeRetorno->retornaErro("Insira um id de lista na rota"); */
+                            echo $classeRetorno->retornaErro("Insira um id de lista na rota");
 
                         }
 
