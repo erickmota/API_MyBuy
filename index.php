@@ -204,6 +204,47 @@ if(isset($_GET["url"])){
 
                     break;
 
+                    /* Adiciona um novo produto */
+                    case "adiciona_produto":
+
+                        if($_SERVER["REQUEST_METHOD"] === "POST"){
+    
+                            if(isset($_POST["nome_produto"]) && isset($_POST["tipo_exibicao"]) && isset($_POST["qtd"]) && isset($_POST["categoria"]) && isset($_POST["lista"]) && isset($_POST["foto"])){
+
+                                $classeProdutos->setIdUsuarios($explode[0]);
+    
+                                $nome_produto = $_POST["nome_produto"];
+                                $tipo_exibicao = $_POST["tipo_exibicao"];
+                                $qtd = $_POST["qtd"];
+                                $categoria = $_POST["categoria"];
+                                $lista = $_POST["lista"];
+                                $foto = $_POST["foto"];
+
+                                $classeProdutos->setNome($nome_produto);
+                                $classeProdutos->setTipoExibicao($tipo_exibicao);
+                                $classeProdutos->setQtd($qtd);
+                                $classeProdutos->setIdCategorias($categoria);
+                                $classeProdutos->setIdLista($lista);
+                                $classeProdutos->setIdFotos($foto);
+                                $classeProdutos->setCarrinho(0); // O carrinho sempre é 0 (null) no cadastro do produto
+                                
+    
+                                echo $classeProdutos->adicionar_produto();
+    
+                            }else{
+    
+                                echo $classeRetornosJson->retornaErro("Você precisa inserir os dados do produto.");
+    
+                            }
+    
+                        }else{
+    
+                            echo $classeRetornosJson->retornaErro("Você precisa inserir os dados do produto como POST.");
+    
+                        }
+
+                    break;
+
                     default:
 
                         echo $classeRetornosJson->retornaErro("A rota definida não existe");

@@ -28,6 +28,36 @@ class Produtos extends Usuarios{
 
     }
 
+    public function setNome($nome){
+
+        $this->nome = $nome;
+
+    }
+
+    public function setTipoExibicao($tipo_exibicao){
+
+        $this->tipo_exibicao = $tipo_exibicao;
+
+    }
+
+    public function setQtd($qtd){
+
+        $this->qtd = $qtd;
+
+    }
+
+    public function setIdCategorias($id_categorias){
+
+        $this->id_categorias = $id_categorias;
+
+    }
+
+    public function setIdFotos($id_fotos){
+
+        $this->id_fotos = $id_fotos;
+
+    }
+
     public function setCarrinho($carrinho){
 
         $this->carrinho = $carrinho;
@@ -93,6 +123,21 @@ class Produtos extends Usuarios{
             return $this->retorna_json->retorna_json($array);
 
         }
+
+    }
+
+    public function adicionar_produto(){
+
+        $conn = $this->conn;
+
+        $sql = mysqli_query(
+            
+            $conn, "INSERT INTO produtos (nome, tipo_exibicao, qtd, id_categorias, id_listas, id_fotos, carrinho)
+            VALUES ('$this->nome', '$this->tipo_exibicao', '$this->qtd', '$this->id_categorias', '$this->id_listas', '$this->id_fotos', '$this->carrinho')"
+            
+        ) or die("Erro conexão");
+
+        return $this->retorna_json->retorna_json(false);
 
     }
 
