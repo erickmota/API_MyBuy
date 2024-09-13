@@ -22,9 +22,17 @@ class Produtos extends Usuarios{
 
     }
 
+    /* Setters */
+
     public function setIdLista($id_listas){
 
         $this->id_listas = $id_listas;
+
+    }
+
+    public function setIdProduto($id_produto){
+
+        $this->id = $id_produto;
 
     }
 
@@ -126,6 +134,7 @@ class Produtos extends Usuarios{
 
     }
 
+    /* Adiciona um novo produto na lista */
     public function adicionar_produto(){
 
         $conn = $this->conn;
@@ -135,6 +144,22 @@ class Produtos extends Usuarios{
             $conn, "INSERT INTO produtos (nome, tipo_exibicao, qtd, id_categorias, id_listas, id_fotos, carrinho)
             VALUES ('$this->nome', '$this->tipo_exibicao', '$this->qtd', '$this->id_categorias', '$this->id_listas', '$this->id_fotos', '$this->carrinho')"
             
+        ) or die("Erro conexão");
+
+        return $this->retorna_json->retorna_json(false);
+
+    }
+
+    /* Apaga um produto da lista */
+    public function deletar_produto(){
+
+        $conn = $this->conn;
+
+        $sql = mysqli_query(
+
+            $conn, "DELETE FROM produtos
+            WHERE id='$this->id'"
+
         ) or die("Erro conexão");
 
         return $this->retorna_json->retorna_json(false);

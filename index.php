@@ -245,6 +245,35 @@ if(isset($_GET["url"])){
 
                     break;
 
+                    /* Deleta um produto */
+                    case "deleta_produto":
+
+                        if($_SERVER["REQUEST_METHOD"] === "POST"){
+    
+                            if(isset($_POST["id_produto"])){
+    
+                                $id_produto = $_POST["id_produto"];
+
+                                $classeProdutos->setIdUsuarios($explode[0]);
+
+                                $classeProdutos->setIdProduto($id_produto);
+    
+                                echo $classeProdutos->deletar_produto();
+    
+                            }else{
+    
+                                echo $classeRetornosJson->retornaErro("Você precisa inserir o id do produto que quer deletar.");
+    
+                            }
+    
+                        }else{
+    
+                            echo $classeRetornosJson->retornaErro("Você precisa inserir o id do produto como POST.");
+    
+                        }
+
+                    break;
+
                     default:
 
                         echo $classeRetornosJson->retornaErro("A rota definida não existe");
