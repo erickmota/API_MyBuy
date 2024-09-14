@@ -274,6 +274,38 @@ if(isset($_GET["url"])){
 
                     break;
 
+                    case "edita_produto":
+
+                        if($_SERVER["REQUEST_METHOD"] === "POST"){
+    
+                            if(isset($_POST["id_produto"]) && isset($_POST["nome_produto"]) && isset($_POST["qtd_produto"])){
+    
+                                $id_produto = $_POST["id_produto"];
+                                $nome_produto = $_POST["nome_produto"];
+                                $qtd_produto = $_POST["qtd_produto"];
+
+                                $classeProdutos->setIdUsuarios($explode[0]);
+
+                                $classeProdutos->setIdProduto($id_produto);
+                                $classeProdutos->setQtd($qtd_produto);
+                                $classeProdutos->setNome($nome_produto);
+    
+                                echo $classeProdutos->editar_produto();
+    
+                            }else{
+    
+                                echo $classeRetornosJson->retornaErro("Você precisa inserir os dados do produto que quer editar.");
+    
+                            }
+    
+                        }else{
+    
+                            echo $classeRetornosJson->retornaErro("Você precisa inserir os dados do produto como POST.");
+    
+                        }
+
+                    break;
+
                     default:
 
                         echo $classeRetornosJson->retornaErro("A rota definida não existe");

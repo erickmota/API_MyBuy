@@ -166,6 +166,24 @@ class Produtos extends Usuarios{
 
     }
 
+    /* Editar dados de um produto */
+    public function editar_produto(){
+
+        $conn = $this->conn;
+
+        $sql = mysqli_query(
+
+            $conn, "UPDATE produtos
+            SET nome='$this->nome',
+            qtd='$this->qtd'
+            WHERE id='$this->id'"
+
+        ) or die("Erro conexão");
+
+        return $this->retorna_json->retorna_json(false);
+
+    }
+
 }
 
 ?>
