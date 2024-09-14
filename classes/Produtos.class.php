@@ -12,7 +12,8 @@ class Produtos extends Usuarios{
     public $id_listas;
     public $id_fotos;
     public $carrinho;
-
+    public $valor;
+    public $obs;
 
     public function __construct($classeRetornosJson, $classeConexao){
 
