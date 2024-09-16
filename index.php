@@ -209,7 +209,7 @@ if(isset($_GET["url"])){
 
                         if($_SERVER["REQUEST_METHOD"] === "POST"){
     
-                            if(isset($_POST["nome_produto"]) && isset($_POST["tipo_exibicao"]) && isset($_POST["qtd"]) && isset($_POST["categoria"]) && isset($_POST["lista"]) && isset($_POST["foto"])){
+                            if(isset($_POST["nome_produto"]) && isset($_POST["tipo_exibicao"]) && isset($_POST["qtd"]) && isset($_POST["categoria"]) && isset($_POST["lista"]) && isset($_POST["foto"]) && isset($_POST["carrinho"])){
 
                                 $classeProdutos->setIdUsuarios($explode[0]);
     
@@ -219,6 +219,9 @@ if(isset($_GET["url"])){
                                 $categoria = $_POST["categoria"];
                                 $lista = $_POST["lista"];
                                 $foto = $_POST["foto"];
+                                $carrinho = $_POST["carrinho"];
+                                $valor = $_POST["valor"];
+                                $obs = $_POST["obs"];
 
                                 $classeProdutos->setNome($nome_produto);
                                 $classeProdutos->setTipoExibicao($tipo_exibicao);
@@ -226,7 +229,9 @@ if(isset($_GET["url"])){
                                 $classeProdutos->setIdCategorias($categoria);
                                 $classeProdutos->setIdLista($lista);
                                 $classeProdutos->setIdFotos($foto);
-                                $classeProdutos->setCarrinho(0); // O carrinho sempre é 0 (null) no cadastro do produto
+                                $classeProdutos->setCarrinho($carrinho);
+                                $classeProdutos->setValor($valor);
+                                $classeProdutos->setObs($obs);
                                 
     
                                 echo $classeProdutos->adicionar_produto();

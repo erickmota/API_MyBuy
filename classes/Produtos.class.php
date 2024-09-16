@@ -73,6 +73,18 @@ class Produtos extends Usuarios{
 
     }
 
+    public function setValor($valor){
+
+        $this->valor = $valor;
+
+    }
+
+    public function setObs($obs){
+
+        $this->obs = $obs;
+
+    }
+
     /* Retornando todos os produtos, dentro de uma categorias determinada, de uma lista */
     public function retorna_produtos($categoria){
 
@@ -142,8 +154,8 @@ class Produtos extends Usuarios{
 
         $sql = mysqli_query(
             
-            $conn, "INSERT INTO produtos (nome, tipo_exibicao, qtd, id_categorias, id_listas, id_fotos, carrinho)
-            VALUES ('$this->nome', '$this->tipo_exibicao', '$this->qtd', '$this->id_categorias', '$this->id_listas', '$this->id_fotos', '$this->carrinho')"
+            $conn, "INSERT INTO produtos (nome, tipo_exibicao, qtd, id_categorias, id_listas, id_fotos, carrinho, valor, obs)
+            VALUES ('$this->nome', '$this->tipo_exibicao', '$this->qtd', '$this->id_categorias', '$this->id_listas', '$this->id_fotos', '$this->carrinho', '$this->valor', '$this->obs')"
             
         ) or die("Erro conexão");
 
