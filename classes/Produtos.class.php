@@ -97,7 +97,7 @@ class Produtos extends Usuarios{
 
                 $sql = mysqli_query(
             
-                    $conn, "SELECT produtos.id, produtos.nome, produtos.carrinho, produtos.qtd, fotos.url FROM produtos
+                    $conn, "SELECT produtos.id, produtos.nome, produtos.tipo_exibicao, produtos.carrinho, produtos.qtd, fotos.url FROM produtos
                     LEFT JOIN fotos ON fotos.id=produtos.id_fotos
                     INNER JOIN listas ON listas.id=produtos.id_listas
                     INNER JOIN usuarios_listas ON usuarios_listas.id_listas=listas.id
@@ -113,7 +113,7 @@ class Produtos extends Usuarios{
 
                 $sql = mysqli_query(
             
-                    $conn, "SELECT produtos.id, produtos.nome, produtos.carrinho, produtos.qtd, fotos.url FROM produtos
+                    $conn, "SELECT produtos.id, produtos.nome, produtos.tipo_exibicao, produtos.carrinho, produtos.qtd, fotos.url FROM produtos
                     LEFT JOIN fotos ON fotos.id=produtos.id_fotos
                     INNER JOIN listas ON listas.id=produtos.id_listas
                     INNER JOIN usuarios_listas ON usuarios_listas.id_listas=listas.id
