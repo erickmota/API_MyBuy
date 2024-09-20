@@ -197,6 +197,40 @@ class Produtos extends Usuarios{
 
     }
 
+    public function add_produto_carrinho(){
+
+        $conn = $this->conn;
+
+        $sql = mysqli_query(
+
+            $conn, "UPDATE produtos
+            SET carrinho='$this->carrinho',
+            qtd='$this->qtd',
+            valor='$this->valor'
+            WHERE id='$this->id'"
+
+        ) or die("Erro conexão");
+
+        return $this->retorna_json->retorna_json(false);
+
+    }
+
+    public function remove_produto_carrinho(){
+
+        $conn = $this->conn;
+
+        $sql = mysqli_query(
+
+            $conn, "UPDATE produtos
+            SET carrinho='$this->carrinho'
+            WHERE id='$this->id'"
+
+        ) or die("Erro conexão");
+
+        return $this->retorna_json->retorna_json(false);
+
+    }
+
 }
 
 ?>

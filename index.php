@@ -311,6 +311,68 @@ if(isset($_GET["url"])){
 
                     break;
 
+                    case "adicionar_produto_carrinho":
+
+                        if($_SERVER["REQUEST_METHOD"] === "POST"){
+    
+                            if(isset($_POST["id_produto"]) && isset($_POST["qtd"]) && isset($_POST["valor"])){
+    
+                                $id_produto = $_POST["id_produto"];
+                                $qtd = $_POST["qtd"];
+                                $valor = $_POST["valor"];
+
+                                $classeProdutos->setIdUsuarios($explode[0]);
+
+                                $classeProdutos->setIdProduto($id_produto);
+                                $classeProdutos->setQtd($qtd);
+                                $classeProdutos->setValor($valor);
+                                $classeProdutos->setCarrinho(1);
+    
+                                echo $classeProdutos->add_produto_carrinho();
+    
+                            }else{
+    
+                                echo $classeRetornosJson->retornaErro("Você precisa inserir o id do produto, qtd e valor que quer inserir no carrinho.");
+    
+                            }
+    
+                        }else{
+    
+                            echo $classeRetornosJson->retornaErro("Você precisa inserir o id do produto, qtd e valor como POST.");
+    
+                        }
+
+                    break;
+
+                    case "remover_produto_carrinho":
+
+                        if($_SERVER["REQUEST_METHOD"] === "POST"){
+    
+                            if(isset($_POST["id_produto"])){
+    
+                                $id_produto = $_POST["id_produto"];
+
+                                $classeProdutos->setIdUsuarios($explode[0]);
+
+                                $classeProdutos->setIdProduto($id_produto);
+                                $classeProdutos->setCarrinho(0);
+    
+                                echo $classeProdutos->remove_produto_carrinho();
+    
+                            }else{
+    
+                                echo $classeRetornosJson->retornaErro("Você precisa inserir o id do produto que quer remover do carrinho.");
+    
+                            }
+    
+                        }else{
+    
+                            echo $classeRetornosJson->retornaErro("Você precisa inserir o id do produto como POST.");
+    
+                        }
+
+                    break;
+
                     default:
 
                         echo $classeRetornosJson->retornaErro("A rota definida não existe");
