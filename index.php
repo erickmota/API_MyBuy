@@ -21,6 +21,9 @@ $classeProdutos = new Produtos($classeRetornosJson, $classeConexao);
 require_once "classes/Categorias.class.php";
 $classeCategorias = new Categorias($classeRetornosJson, $classeConexao);
 
+require_once "classes/ProdutosExemplo.class.php";
+$classeProdutosExemplo = new ProdutosExemplo($classeRetornosJson, $classeConexao);
+
 if(isset($_GET["url"])){
 
     $explode = explode("/", $_GET["url"]);
@@ -412,6 +415,22 @@ if(isset($_GET["url"])){
                     }else{
 
                         echo $classeRetornosJson->retornaErro("Nessa rota você precisa informar o login e senha como POST");
+
+                    }
+
+                break;
+
+                case "produtos_exemplo":
+
+                    if(isset($explode[1])){
+
+                        $classeProdutosExemplo->setNome($explode[1]);
+
+                        echo $classeProdutosExemplo->busca_produto();
+
+                    }else{
+
+                        echo $classeRetornosJson->retornaErro("Insira o nome do produto (busca) como segundo parâmetro na URL");
 
                     }
 
