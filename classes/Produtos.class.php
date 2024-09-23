@@ -63,7 +63,15 @@ class Produtos extends Usuarios{
 
     public function setIdFotos($id_fotos){
 
-        $this->id_fotos = $id_fotos;
+        if($id_fotos == 0){
+
+            $this->id_fotos = NULL;
+
+        }else{
+
+            $this->id_fotos = $id_fotos;
+
+        }
 
     }
 
@@ -152,12 +160,25 @@ class Produtos extends Usuarios{
 
         $conn = $this->conn;
 
-        $sql = mysqli_query(
+        if($this->id_fotos == NULL){
+
+            $sql = mysqli_query(
             
-            $conn, "INSERT INTO produtos (nome, tipo_exibicao, qtd, id_categorias, id_listas, id_fotos, carrinho, valor, obs)
-            VALUES ('$this->nome', '$this->tipo_exibicao', '$this->qtd', '$this->id_categorias', '$this->id_listas', '$this->id_fotos', '$this->carrinho', '$this->valor', '$this->obs')"
+                $conn, "INSERT INTO produtos (nome, tipo_exibicao, qtd, id_categorias, id_listas, id_fotos, carrinho, valor, obs)
+                VALUES ('$this->nome', '$this->tipo_exibicao', '$this->qtd', '$this->id_categorias', '$this->id_listas', NULL, '$this->carrinho', '$this->valor', '$this->obs')"
+                
+            ) or die("Erro conexão");
+
+        }else{
+
+            $sql = mysqli_query(
             
-        ) or die("Erro conexão");
+                $conn, "INSERT INTO produtos (nome, tipo_exibicao, qtd, id_categorias, id_listas, id_fotos, carrinho, valor, obs)
+                VALUES ('$this->nome', '$this->tipo_exibicao', '$this->qtd', '$this->id_categorias', '$this->id_listas', '$this->id_fotos', '$this->carrinho', '$this->valor', '$this->obs')"
+                
+            ) or die("Erro conexão");
+
+        }
 
         return $this->retorna_json->retorna_json(false);
 

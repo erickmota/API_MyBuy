@@ -422,17 +422,7 @@ if(isset($_GET["url"])){
 
                 case "produtos_exemplo":
 
-                    if(isset($explode[1])){
-
-                        $classeProdutosExemplo->setNome($explode[1]);
-
-                        echo $classeProdutosExemplo->busca_produto();
-
-                    }else{
-
-                        echo $classeRetornosJson->retornaErro("Insira o nome do produto (busca) como segundo parâmetro na URL");
-
-                    }
+                    echo $classeProdutosExemplo->busca_produto();
 
                 break;
 

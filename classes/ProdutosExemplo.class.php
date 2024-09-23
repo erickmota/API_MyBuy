@@ -29,9 +29,8 @@ class ProdutosExemplo{
         $sql = mysqli_query(
 
             $conn,
-            "SELECT produtos.nome, produtos.tipo_exibicao, fotos.url FROM produtos
-            LEFT JOIN fotos ON fotos.id=produtos.id_fotos
-            WHERE produtos.nome LIKE '%$this->nome%'"
+            "SELECT produtos_exemplo.id, produtos_exemplo.nome, produtos_exemplo.tipo_exibicao, fotos.id AS id_foto, fotos.url FROM produtos_exemplo
+            LEFT JOIN fotos ON fotos.id=produtos_exemplo.id_fotos"
 
         ) or die("Erro conexão");
 
