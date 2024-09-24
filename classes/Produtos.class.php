@@ -205,14 +205,41 @@ class Produtos extends Usuarios{
 
         $conn = $this->conn;
 
-        $sql = mysqli_query(
+        if($this->id_fotos == NULL){
 
-            $conn, "UPDATE produtos
-            SET nome='$this->nome',
-            qtd='$this->qtd'
-            WHERE id='$this->id'"
+            $sql = mysqli_query(
 
-        ) or die("Erro conexão");
+                $conn, "UPDATE produtos
+                SET nome='$this->nome',
+                tipo_exibicao='$this->tipo_exibicao',
+                qtd='$this->qtd',
+                id_categorias='$this->id_categorias',
+                id_fotos=NULL,
+                carrinho='$this->carrinho',
+                valor='$this->valor',
+                obs='$this->obs'
+                WHERE id='$this->id'"
+    
+            ) or die("Erro conexão");
+
+        }else{
+
+            $sql = mysqli_query(
+
+                $conn, "UPDATE produtos
+                SET nome='$this->nome',
+                tipo_exibicao='$this->tipo_exibicao',
+                qtd='$this->qtd',
+                id_categorias='$this->id_categorias',
+                id_fotos='$this->id_fotos',
+                carrinho='$this->carrinho',
+                valor='$this->valor',
+                obs='$this->obs'
+                WHERE id='$this->id'"
+    
+            ) or die("Erro conexão");
+
+        }
 
         return $this->retorna_json->retorna_json(false);
 

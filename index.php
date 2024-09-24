@@ -286,17 +286,29 @@ if(isset($_GET["url"])){
 
                         if($_SERVER["REQUEST_METHOD"] === "POST"){
     
-                            if(isset($_POST["id_produto"]) && isset($_POST["nome_produto"]) && isset($_POST["qtd_produto"])){
+                            if(isset($_POST["id_produto"]) && isset($_POST["nome_produto"])){
     
                                 $id_produto = $_POST["id_produto"];
                                 $nome_produto = $_POST["nome_produto"];
-                                $qtd_produto = $_POST["qtd_produto"];
+                                $tipo_exibicao = $_POST["tipo_exibicao"];
+                                $qtd = $_POST["qtd"];
+                                $id_categorias = $_POST["id_categorias"];
+                                $id_fotos = $_POST["id_fotos"];
+                                $carrinho = $_POST["carrinho"];
+                                $valor = $_POST["valor"];
+                                $obs = $_POST["obs"];
 
                                 $classeProdutos->setIdUsuarios($explode[0]);
 
                                 $classeProdutos->setIdProduto($id_produto);
-                                $classeProdutos->setQtd($qtd_produto);
-                                $classeProdutos->setNome($nome_produto);
+                                $classeProdutos->setNome($nome_produto );
+                                $classeProdutos->setTipoExibicao($tipo_exibicao);
+                                $classeProdutos->setQtd($qtd);
+                                $classeProdutos->setIdCategorias($id_categorias);
+                                $classeProdutos->setIdFotos($id_fotos);
+                                $classeProdutos->setCarrinho($carrinho);
+                                $classeProdutos->setValor($valor);
+                                $classeProdutos->setObs($obs);
     
                                 echo $classeProdutos->editar_produto();
     
