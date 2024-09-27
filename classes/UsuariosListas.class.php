@@ -56,6 +56,27 @@ class UsuariosListas extends Usuarios{
 
     }
 
+    /* Verifica se o usuário é o dono da lista.
+    Se a o id do usuário atual, for o mesmo que o id
+    do dono da lista, a função retorna true */
+
+    private function verifica_titularidade_lista($id_dono){
+
+        $conn = $this->conn;
+        $id_usuario_atual = $this->getIdUsuarios();
+
+        if($id_dono == $id_usuario_atual){
+
+            return true;
+
+        }else{
+
+            return false;
+
+        }
+
+    }
+
     /* Retorna os membros de uma determinada lista */
 
     public function retorna_membros_lista(){
@@ -100,8 +121,19 @@ class UsuariosListas extends Usuarios{
             
         }
 
+        $confirmacoes = [];
+
+        $confirmacoes = [
+
+            /* Incluindo a informação se o usuário atual é ou
+            não dono da lista */
+            "dono_lista"=>$this->verifica_titularidade_lista($id_dono)
+
+        ];
+
         $result = [
 
+            "Confirmacoes"=>$confirmacoes,
             "Dono"=>$obj_dono,
             "Membros"=>$array_membros
 

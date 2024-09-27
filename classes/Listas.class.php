@@ -110,8 +110,8 @@ class Listas extends Usuarios{
 
         $sql = mysqli_query(
 
-            $conn, "INSERT INTO listas (nome)
-            VALUES ('$this->nome')"
+            $conn, "INSERT INTO listas (nome, id_usuarios_dono)
+            VALUES ('$this->nome', '$id_usuario')"
 
         ) or die("Erro conexão");
 
