@@ -6,6 +6,7 @@ class Listas extends Usuarios{
     private $retorna_json;
     public $id;
     public $nome;
+    public $id_usuarios_dono;
 
     public function __construct($classeRetornosJson, $classeConexao){
 
@@ -24,6 +25,12 @@ class Listas extends Usuarios{
     public function setNomeLista($novo_nome){
 
         $this->nome = $novo_nome;
+
+    }
+
+    public function setIdUsuariosDono($id_usuarios_dono){
+
+        $this->id_usuarios_dono = $id_usuarios_dono;
 
     }
 
@@ -137,6 +144,31 @@ class Listas extends Usuarios{
         ) or die("Erro conexão");
 
         return $this->retorna_json->retorna_json(false);
+
+    }
+
+    /* Retorna os dados do dono da lista */
+    public function retorna_dono_lista(){
+
+        $conn = $this->conn;
+
+        $sql = mysqli_query(
+
+            $conn,
+            "SELECT usuarios.id, usuarios.nome, usuarios.foto_url FROM usuarios
+            INNER JOIN listas ON listas.id_usuarios_dono=usuarios.id"
+
+        ) or die("Erro conexão");
+
+        $array = [];
+
+        while ($row = mysqli_fetch_assoc($sql)){
+                
+            $array[] = $row;
+            
+        }
+
+        return $this->retorna_json->retorna_json($array);
 
     }
 
