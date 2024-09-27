@@ -147,7 +147,7 @@ class Listas extends Usuarios{
 
     }
 
-    /* Retorna os dados do dono da lista */
+    /* Retorna o id do dono da lista */
     public function retorna_dono_lista(){
 
         $conn = $this->conn;
@@ -155,20 +155,15 @@ class Listas extends Usuarios{
         $sql = mysqli_query(
 
             $conn,
-            "SELECT usuarios.id, usuarios.nome, usuarios.foto_url FROM usuarios
-            INNER JOIN listas ON listas.id_usuarios_dono=usuarios.id"
+            "SELECT usuarios.id FROM usuarios
+            INNER JOIN listas ON listas.id_usuarios_dono=usuarios.id
+            WHERE listas.id='$this->id'"
 
         ) or die("Erro conexão");
 
-        $array = [];
+        $result = mysqli_fetch_assoc($sql);
 
-        while ($row = mysqli_fetch_assoc($sql)){
-                
-            $array[] = $row;
-            
-        }
-
-        return $this->retorna_json->retorna_json($array);
+        return $result["id"];
 
     }
 

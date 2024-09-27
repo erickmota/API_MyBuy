@@ -24,6 +24,9 @@ $classeCategorias = new Categorias($classeRetornosJson, $classeConexao);
 require_once "classes/ProdutosExemplo.class.php";
 $classeProdutosExemplo = new ProdutosExemplo($classeRetornosJson, $classeConexao);
 
+require_once "classes/UsuariosListas.class.php";
+$classeUsuariosListas = new UsuariosListas($classeListas ,$classeRetornosJson, $classeConexao);
+
 if(isset($_GET["url"])){
 
     $explode = explode("/", $_GET["url"]);
@@ -113,6 +116,34 @@ if(isset($_GET["url"])){
                         $classeCategorias->setIdUsuarios($explode[0]);
 
                         echo $classeCategorias->retorna_categoria();
+
+                    break;
+
+                    case "usuarios_lista":
+
+                        if(isset($explode[2])){
+
+                            $classeUsuariosListas->setIdUsuarios($explode[0]);
+                            $classeUsuariosListas->setIdListas($explode[2]);
+
+                            if($classeUsuariosListas->verifica_usuario_lista() == true){
+
+                                $classeListas->setIdUsuarios($explode[0]);
+                                $classeListas->setIdLista($explode[2]);
+
+                                echo $classeUsuariosListas->retorna_membros_lista();
+
+                            }else{
+
+                                echo $classeRetornosJson->retornaErro("O usuário informado, não tem acesso a essa lista");
+
+                            }
+
+                        }else{
+
+                            echo $classeRetornosJson->retornaErro("Insira o id da lista, na rota");
+
+                        }
 
                     break;
 
