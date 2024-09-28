@@ -127,6 +127,7 @@ class UsuariosListas extends Usuarios{
 
             /* Incluindo a informação se o usuário atual é ou
             não dono da lista */
+            
             "dono_lista"=>$this->verifica_titularidade_lista($id_dono)
 
         ];
