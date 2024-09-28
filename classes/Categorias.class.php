@@ -38,14 +38,6 @@ class Categorias{
             
         }
 
-        /* array_unshift($array, [
-
-            "id"=>null,
-            "nome"=>"Sem categoria",
-            "id_usuarios"=>null
-
-        ]); */
-
         if($qtd < 1){
 
             return $this->retorna_json->retornaErro("Nenhuma categoria disponível para essa lista");

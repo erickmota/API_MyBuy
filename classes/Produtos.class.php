@@ -94,10 +94,13 @@ class Produtos extends Usuarios{
     }
 
     /* Retornando todos os produtos, dentro de uma categorias determinada, de uma lista */
+
     public function retorna_produtos($categoria, $all_products){
 
         $conn = $this->conn;
         $id_usuario = $this->getIdUsuarios();
+
+        /* Verificando se é para mostrar todos os produtos, ou por categorias */
 
         if($all_products == true){
 
@@ -114,6 +117,8 @@ class Produtos extends Usuarios{
             ) or die("Erro BD");
 
         }else{
+
+            /* Verificando se é para mostrar o carrinho ou a lista com categorias */
 
             switch($this->carrinho){
 
