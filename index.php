@@ -63,6 +63,7 @@ if(isset($_GET["url"])){
                     /* Exemplo: API/id_usuario/produtos/id_listas/id_categoria */
                     case "produtos":                    
         
+                        /* Verificando se o id da lista foi passado */
                         if(isset($explode[2])){
 
                             /* Verificando se o id da categoria foi passado na rota. */
@@ -74,11 +75,17 @@ if(isset($_GET["url"])){
 
                                 $classeProdutos->setCarrinho(false);
 
-                                echo $classeProdutos->retorna_produtos($explode[3]);
+                                echo $classeProdutos->retorna_produtos($explode[3], false);
 
                             }else{
 
-                                echo $classeRetornosJson->retornaErro("Insira um id de categoria na rota");
+                                $classeProdutos->setIdUsuarios($explode[0]);
+
+                                $classeProdutos->setIdLista($explode[2]);
+
+                                $classeProdutos->setCarrinho(false);
+
+                                echo $classeProdutos->retorna_produtos(false, true);
 
                             }
 
@@ -100,7 +107,7 @@ if(isset($_GET["url"])){
 
                             $classeProdutos->setCarrinho(true);
 
-                            echo $classeProdutos->retorna_produtos(false);
+                            echo $classeProdutos->retorna_produtos(false, false);
 
                         }else{
 

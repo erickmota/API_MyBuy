@@ -94,47 +94,66 @@ class Produtos extends Usuarios{
     }
 
     /* Retornando todos os produtos, dentro de uma categorias determinada, de uma lista */
-    public function retorna_produtos($categoria){
+    public function retorna_produtos($categoria, $all_products){
 
         $conn = $this->conn;
         $id_usuario = $this->getIdUsuarios();
 
-        switch($this->carrinho){
+        if($all_products == true){
 
-            case true:
-
-                $sql = mysqli_query(
-            
-                    $conn, "SELECT produtos.id, produtos.nome, produtos.tipo_exibicao, produtos.carrinho, produtos.qtd, produtos.valor, produtos.obs, id_categorias, fotos.id AS id_foto, fotos.url FROM produtos
-                    LEFT JOIN fotos ON fotos.id=produtos.id_fotos
-                    INNER JOIN listas ON listas.id=produtos.id_listas
-                    INNER JOIN usuarios_listas ON usuarios_listas.id_listas=listas.id
-                    WHERE usuarios_listas.id_usuarios='$id_usuario'
-                    AND listas.id='$this->id_listas'
-                    AND produtos.carrinho=1"
+            $sql = mysqli_query(
                 
-                ) or die("Erro BD");
-
-            break;
-
-            case false:
-
-                $sql = mysqli_query(
+                $conn, "SELECT produtos.id, produtos.nome, produtos.tipo_exibicao, produtos.carrinho, produtos.qtd, produtos.valor, produtos.obs, id_categorias, fotos.id AS id_foto, fotos.url FROM produtos
+                LEFT JOIN fotos ON fotos.id=produtos.id_fotos
+                INNER JOIN listas ON listas.id=produtos.id_listas
+                INNER JOIN usuarios_listas ON usuarios_listas.id_listas=listas.id
+                WHERE usuarios_listas.id_usuarios='$id_usuario'
+                AND listas.id='$this->id_listas'
+                AND produtos.carrinho=0"
             
-                    $conn, "SELECT produtos.id, produtos.nome, produtos.tipo_exibicao, produtos.carrinho, produtos.qtd, produtos.valor, produtos.obs, id_categorias, fotos.id AS id_foto, fotos.url FROM produtos
-                    LEFT JOIN fotos ON fotos.id=produtos.id_fotos
-                    INNER JOIN listas ON listas.id=produtos.id_listas
-                    INNER JOIN usuarios_listas ON usuarios_listas.id_listas=listas.id
-                    WHERE usuarios_listas.id_usuarios='$id_usuario'
-                    AND produtos.id_categorias='$categoria'
-                    AND listas.id='$this->id_listas'
-                    AND produtos.carrinho=0"
-                
-                ) or die("Erro BD");
+            ) or die("Erro BD");
 
-            break;
+        }else{
+
+            switch($this->carrinho){
+
+                case true:
+    
+                    $sql = mysqli_query(
+                
+                        $conn, "SELECT produtos.id, produtos.nome, produtos.tipo_exibicao, produtos.carrinho, produtos.qtd, produtos.valor, produtos.obs, id_categorias, fotos.id AS id_foto, fotos.url FROM produtos
+                        LEFT JOIN fotos ON fotos.id=produtos.id_fotos
+                        INNER JOIN listas ON listas.id=produtos.id_listas
+                        INNER JOIN usuarios_listas ON usuarios_listas.id_listas=listas.id
+                        WHERE usuarios_listas.id_usuarios='$id_usuario'
+                        AND listas.id='$this->id_listas'
+                        AND produtos.carrinho=1"
+                    
+                    ) or die("Erro BD");
+    
+                break;
+    
+                case false:
+    
+                    $sql = mysqli_query(
+                
+                        $conn, "SELECT produtos.id, produtos.nome, produtos.tipo_exibicao, produtos.carrinho, produtos.qtd, produtos.valor, produtos.obs, id_categorias, fotos.id AS id_foto, fotos.url FROM produtos
+                        LEFT JOIN fotos ON fotos.id=produtos.id_fotos
+                        INNER JOIN listas ON listas.id=produtos.id_listas
+                        INNER JOIN usuarios_listas ON usuarios_listas.id_listas=listas.id
+                        WHERE usuarios_listas.id_usuarios='$id_usuario'
+                        AND produtos.id_categorias='$categoria'
+                        AND listas.id='$this->id_listas'
+                        AND produtos.carrinho=0"
+                    
+                    ) or die("Erro BD");
+    
+                break;
+    
+            }
 
         }
+
         $qtd = mysqli_num_rows($sql);
         while ($row = mysqli_fetch_assoc($sql)){
                 
@@ -159,13 +178,14 @@ class Produtos extends Usuarios{
     public function adicionar_produto(){
 
         $conn = $this->conn;
+        $id_usuario = $this->getIdUsuarios();
 
         if($this->id_fotos == NULL){
 
             $sql = mysqli_query(
             
-                $conn, "INSERT INTO produtos (nome, tipo_exibicao, qtd, id_categorias, id_listas, id_fotos, carrinho, valor, obs)
-                VALUES ('$this->nome', '$this->tipo_exibicao', '$this->qtd', '$this->id_categorias', '$this->id_listas', NULL, '$this->carrinho', '$this->valor', '$this->obs')"
+                $conn, "INSERT INTO produtos (nome, tipo_exibicao, qtd, id_categorias, id_listas, id_fotos, carrinho, valor, obs, id_usuarios_dono)
+                VALUES ('$this->nome', '$this->tipo_exibicao', '$this->qtd', '$this->id_categorias', '$this->id_listas', NULL, '$this->carrinho', '$this->valor', '$this->obs', $id_usuario)"
                 
             ) or die("Erro conexão");
 
@@ -173,8 +193,8 @@ class Produtos extends Usuarios{
 
             $sql = mysqli_query(
             
-                $conn, "INSERT INTO produtos (nome, tipo_exibicao, qtd, id_categorias, id_listas, id_fotos, carrinho, valor, obs)
-                VALUES ('$this->nome', '$this->tipo_exibicao', '$this->qtd', '$this->id_categorias', '$this->id_listas', '$this->id_fotos', '$this->carrinho', '$this->valor', '$this->obs')"
+                $conn, "INSERT INTO produtos (nome, tipo_exibicao, qtd, id_categorias, id_listas, id_fotos, carrinho, valor, obs, id_usuarios_dono)
+                VALUES ('$this->nome', '$this->tipo_exibicao', '$this->qtd', '$this->id_categorias', '$this->id_listas', '$this->id_fotos', '$this->carrinho', '$this->valor', '$this->obs', $id_usuario)"
                 
             ) or die("Erro conexão");
 
