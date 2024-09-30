@@ -106,10 +106,13 @@ class Produtos extends Usuarios{
 
             $sql = mysqli_query(
                 
-                $conn, "SELECT produtos.id, produtos.nome, produtos.tipo_exibicao, produtos.carrinho, produtos.qtd, produtos.valor, produtos.obs, id_categorias, fotos.id AS id_foto, fotos.url FROM produtos
+                $conn, "SELECT produtos.id, produtos.nome, produtos.tipo_exibicao, produtos.carrinho,
+                produtos.qtd, produtos.valor, produtos.obs, id_categorias, fotos.id AS id_foto, fotos.url,
+                usuarios.id AS id_dono, usuarios.nome AS nome_dono, usuarios.foto_url AS foto_dono FROM produtos
                 LEFT JOIN fotos ON fotos.id=produtos.id_fotos
                 INNER JOIN listas ON listas.id=produtos.id_listas
                 INNER JOIN usuarios_listas ON usuarios_listas.id_listas=listas.id
+                LEFT JOIN usuarios ON produtos.id_usuarios_dono=usuarios.id
                 WHERE usuarios_listas.id_usuarios='$id_usuario'
                 AND listas.id='$this->id_listas'
                 AND produtos.carrinho=0"
@@ -126,10 +129,13 @@ class Produtos extends Usuarios{
     
                     $sql = mysqli_query(
                 
-                        $conn, "SELECT produtos.id, produtos.nome, produtos.tipo_exibicao, produtos.carrinho, produtos.qtd, produtos.valor, produtos.obs, id_categorias, fotos.id AS id_foto, fotos.url FROM produtos
+                        $conn, "SELECT produtos.id, produtos.nome, produtos.tipo_exibicao, produtos.carrinho,
+                        produtos.qtd, produtos.valor, produtos.obs, id_categorias, fotos.id AS id_foto, fotos.url,
+                        usuarios.id AS id_dono, usuarios.nome AS nome_dono, usuarios.foto_url AS foto_dono FROM produtos
                         LEFT JOIN fotos ON fotos.id=produtos.id_fotos
                         INNER JOIN listas ON listas.id=produtos.id_listas
                         INNER JOIN usuarios_listas ON usuarios_listas.id_listas=listas.id
+                        LEFT JOIN usuarios ON produtos.id_usuarios_dono=usuarios.id
                         WHERE usuarios_listas.id_usuarios='$id_usuario'
                         AND listas.id='$this->id_listas'
                         AND produtos.carrinho=1"
