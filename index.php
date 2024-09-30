@@ -452,6 +452,36 @@ if(isset($_GET["url"])){
 
                     break;
 
+                    case "remover_usuario_lista":
+
+                        if($_SERVER["REQUEST_METHOD"] === "POST"){
+
+                            if(isset($_POST["id_lista"]) && isset($_POST["id_usuario"])){
+
+                                $id_lista = $_POST["id_lista"];
+                                $id_usuario = $_POST["id_usuario"];
+
+                                $classeUsuariosListas->setIdUsuarios($explode[0]);
+
+                                $classeUsuariosListas->setIdUsuariosLista($id_usuario);
+                                $classeUsuariosListas->setIdListas($id_lista);
+
+                                echo $classeUsuariosListas->remover_usuario_lista();
+
+                            }else{
+
+                                echo $classeRetornosJson->retornaErro("Você precisa inserir o id da lista e o id do usuário.");
+
+                            }
+
+                        }else{
+
+                            echo $classeRetornosJson->retornaErro("Você precisa inserir o id da lista e o id do usuário como POST.");
+
+                        }
+
+                    break;
+
                     default:
 
                         echo $classeRetornosJson->retornaErro("A rota definida não existe");

@@ -24,6 +24,12 @@ class UsuariosListas extends Usuarios{
 
     }
 
+    public function setIdUsuariosLista($id_usuarios){
+
+        $this->id_usuarios = $id_usuarios;
+
+    }
+
     /* Verifica se um usuário existe na lista de membros de uma
     determinada lista. */
 
@@ -189,6 +195,25 @@ class UsuariosListas extends Usuarios{
             $conn,
             "INSERT INTO usuarios_listas (id_usuarios, id_listas)
             VALUES ('$id_novo_usuario', '$id_lista')"
+
+        ) or die("Erro conexão");
+
+        return $this->retorna_json->retorna_json(false);
+
+    }
+
+    /* Remove um usuário da lista */
+
+    public function remover_usuario_lista(){
+
+        $conn = $this->conn;
+
+        $sql = mysqli_query(
+
+            $conn,
+            "DELETE FROM usuarios_listas
+            WHERE id_usuarios='$this->id_usuarios'
+            AND id_listas='$this->id_listas'"
 
         ) or die("Erro conexão");
 
