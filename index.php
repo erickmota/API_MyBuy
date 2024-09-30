@@ -426,6 +426,32 @@ if(isset($_GET["url"])){
 
                     break;
 
+                    case "adicionar_usuario_lista":
+
+                        if($_SERVER["REQUEST_METHOD"] === "POST"){
+
+                            if(isset($_POST["id_lista"]) && isset($_POST["email_usuario"])){
+
+                                $id_lista = $_POST["id_lista"];
+                                $email_usuario = $_POST["email_usuario"];
+
+                                $classeUsuariosListas->setIdUsuarios($explode[0]);
+                                echo $classeUsuariosListas->adiciona_usuario_lista($email_usuario, $id_lista);
+
+                            }else{
+
+                                echo $classeRetornosJson->retornaErro("Você precisa inserir o id da lista e o email do usuário.");
+
+                            }
+
+                        }else{
+
+                            echo $classeRetornosJson->retornaErro("Você precisa inserir o id da lista e o email do usuário como POST.");
+
+                        }
+
+                    break;
+
                     default:
 
                         echo $classeRetornosJson->retornaErro("A rota definida não existe");

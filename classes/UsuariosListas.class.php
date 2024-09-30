@@ -144,6 +144,58 @@ class UsuariosListas extends Usuarios{
 
     }
 
+    /* private function envia_email($texto, $assunto, $email_origem, $email_destino){
+
+        $corpo = $texto;
+
+        $header = "MIME-Version: 1.0\r\n";
+        $header .= "Content-type: text/html; charset=utf-8\r\n";
+        $header .= "From: $email_origem\r\n";
+
+        mail ($email_destino,  $assunto, $corpo, $header);
+
+    } */
+
+    /* Retorna o ID do usuário via email. */
+
+    private function retorna_id_usario_via_email($email_usuario){
+
+        $conn = $this->conn;
+
+        $sql = mysqli_query(
+
+            $conn,
+            "SELECT id FROM usuarios
+            WHERE email='$email_usuario'"
+
+        ) or die("Erro conexão");
+
+        $result = mysqli_fetch_assoc($sql);
+
+        return $result["id"];
+
+    }
+
+    /* Adiciona um novo usuário a uma lista. */
+
+    public function adiciona_usuario_lista($email_usuario, $id_lista){
+
+        $conn = $this->conn;
+
+        $id_novo_usuario = $this->retorna_id_usario_via_email($email_usuario);
+
+        $sql = mysqli_query(
+
+            $conn,
+            "INSERT INTO usuarios_listas (id_usuarios, id_listas)
+            VALUES ('$id_novo_usuario', '$id_lista')"
+
+        ) or die("Erro conexão");
+
+        return $this->retorna_json->retorna_json(false);
+
+    }
+
 }
 
 ?>
