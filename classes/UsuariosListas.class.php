@@ -202,7 +202,8 @@ class UsuariosListas extends Usuarios{
 
     }
 
-    /* Remove um usuário da lista */
+    /* Método é chamado, quando o dono remove um usuário da lista, ou
+    quando um usuário sair da lista compartilhada. */
 
     public function remover_usuario_lista(){
 
