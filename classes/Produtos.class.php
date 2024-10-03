@@ -258,37 +258,77 @@ class Produtos extends Usuarios{
 
         if($this->id_fotos == NULL){
 
-            $sql = mysqli_query(
+            if($this->id_categorias == "nulo"){
 
-                $conn, "UPDATE produtos
-                SET nome='$this->nome',
-                tipo_exibicao='$this->tipo_exibicao',
-                qtd='$this->qtd',
-                id_categorias='$this->id_categorias',
-                id_fotos=NULL,
-                carrinho='$this->carrinho',
-                valor='$this->valor',
-                obs='$this->obs'
-                WHERE id='$this->id'"
-    
-            ) or die("Erro conexão");
+                $sql = mysqli_query(
+
+                    $conn, "UPDATE produtos
+                    SET nome='$this->nome',
+                    tipo_exibicao='$this->tipo_exibicao',
+                    qtd='$this->qtd',
+                    id_fotos=NULL,
+                    carrinho='$this->carrinho',
+                    valor='$this->valor',
+                    obs='$this->obs'
+                    WHERE id='$this->id'"
+        
+                ) or die("Erro conexão");
+
+            }else{
+
+                $sql = mysqli_query(
+
+                    $conn, "UPDATE produtos
+                    SET nome='$this->nome',
+                    tipo_exibicao='$this->tipo_exibicao',
+                    qtd='$this->qtd',
+                    id_categorias='$this->id_categorias',
+                    id_fotos=NULL,
+                    carrinho='$this->carrinho',
+                    valor='$this->valor',
+                    obs='$this->obs'
+                    WHERE id='$this->id'"
+        
+                ) or die("Erro conexão");
+
+            }
 
         }else{
 
-            $sql = mysqli_query(
+            if($this->id_categorias == "nulo"){
 
-                $conn, "UPDATE produtos
-                SET nome='$this->nome',
-                tipo_exibicao='$this->tipo_exibicao',
-                qtd='$this->qtd',
-                id_categorias='$this->id_categorias',
-                id_fotos='$this->id_fotos',
-                carrinho='$this->carrinho',
-                valor='$this->valor',
-                obs='$this->obs'
-                WHERE id='$this->id'"
-    
-            ) or die("Erro conexão");
+                $sql = mysqli_query(
+
+                    $conn, "UPDATE produtos
+                    SET nome='$this->nome',
+                    tipo_exibicao='$this->tipo_exibicao',
+                    qtd='$this->qtd',
+                    id_fotos='$this->id_fotos',
+                    carrinho='$this->carrinho',
+                    valor='$this->valor',
+                    obs='$this->obs'
+                    WHERE id='$this->id'"
+        
+                ) or die("Erro conexão");
+
+            }else{
+
+                $sql = mysqli_query(
+
+                    $conn, "UPDATE produtos
+                    SET nome='$this->nome',
+                    tipo_exibicao='$this->tipo_exibicao',
+                    qtd='$this->qtd',
+                    id_categorias='$this->id_categorias',
+                    id_fotos='$this->id_fotos',
+                    carrinho='$this->carrinho',
+                    valor='$this->valor',
+                    obs='$this->obs'
+                    WHERE id='$this->id'"
+        
+                ) or die("Erro conexão");
+
+            }
 
         }
 
