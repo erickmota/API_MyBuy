@@ -70,12 +70,14 @@ if(isset($_GET["url"])){
                             if(isset($explode[3])){
 
                                 $classeProdutos->setIdUsuarios($explode[0]);
+                                $classeUsuariosListas->setIdUsuarios($explode[0]);
 
                                 $classeProdutos->setIdLista($explode[2]);
+                                $classeListas->setIdLista($explode[2]);
 
                                 $classeProdutos->setCarrinho(false);
 
-                                echo $classeProdutos->retorna_produtos($explode[3], false);
+                                echo $classeProdutos->retorna_produtos($explode[3], false, $classeListas->retorna_dono_lista());
 
                             }else{
 
@@ -104,12 +106,14 @@ if(isset($_GET["url"])){
                         if(isset($explode[2])){
 
                             $classeProdutos->setIdUsuarios($explode[0]);
+                            $classeUsuariosListas->setIdUsuarios($explode[0]);
 
                             $classeProdutos->setIdLista($explode[2]);
+                            $classeListas->setIdLista($explode[2]);
 
                             $classeProdutos->setCarrinho(true);
 
-                            echo $classeProdutos->retorna_produtos(false, false);
+                            echo $classeProdutos->retorna_produtos(false, false, $classeListas->retorna_dono_lista());
 
                         }else{
 
