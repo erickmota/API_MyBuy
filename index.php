@@ -15,17 +15,17 @@ $classeUsuarios = new Usuarios($classeRetornosJson, $classeConexao);
 require_once "classes/Listas.class.php";
 $classeListas = new Listas($classeRetornosJson, $classeConexao);
 
+require_once "classes/UsuariosListas.class.php";
+$classeUsuariosListas = new UsuariosListas($classeListas ,$classeRetornosJson, $classeConexao);
+
 require_once "classes/Produtos.class.php";
-$classeProdutos = new Produtos($classeRetornosJson, $classeConexao);
+$classeProdutos = new Produtos($classeUsuariosListas, $classeRetornosJson, $classeConexao);
 
 require_once "classes/Categorias.class.php";
 $classeCategorias = new Categorias($classeRetornosJson, $classeConexao);
 
 require_once "classes/ProdutosExemplo.class.php";
 $classeProdutosExemplo = new ProdutosExemplo($classeRetornosJson, $classeConexao);
-
-require_once "classes/UsuariosListas.class.php";
-$classeUsuariosListas = new UsuariosListas($classeListas ,$classeRetornosJson, $classeConexao);
 
 if(isset($_GET["url"])){
 
@@ -80,12 +80,14 @@ if(isset($_GET["url"])){
                             }else{
 
                                 $classeProdutos->setIdUsuarios($explode[0]);
+                                $classeUsuariosListas->setIdUsuarios($explode[0]);
 
                                 $classeProdutos->setIdLista($explode[2]);
+                                $classeListas->setIdLista($explode[2]);
 
                                 $classeProdutos->setCarrinho(false);
 
-                                echo $classeProdutos->retorna_produtos(false, true);
+                                echo $classeProdutos->retorna_produtos(false, true, $classeListas->retorna_dono_lista());
 
                             }
 

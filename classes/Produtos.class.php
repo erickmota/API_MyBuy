@@ -4,6 +4,7 @@ class Produtos extends Usuarios{
 
     private $conn;
     private $retorna_json;
+    private $verifica_titularidade_lista;
     public $id;
     public $nome;
     public $tipo_exibicao;
@@ -15,10 +16,11 @@ class Produtos extends Usuarios{
     public $valor;
     public $obs;
 
-    public function __construct($classeRetornosJson, $classeConexao){
+    public function __construct($classeUsuariosListas, $classeRetornosJson, $classeConexao){
 
         $this->conn = $classeConexao->getConexao();
         $this->retorna_json = $classeRetornosJson;
+        $this->verifica_titularidade_lista = $classeUsuariosListas;
         parent::__construct($classeRetornosJson, $classeConexao);
 
     }
@@ -95,7 +97,7 @@ class Produtos extends Usuarios{
 
     /* Retornando todos os produtos, dentro de uma categorias determinada, de uma lista */
 
-    public function retorna_produtos($categoria, $all_products){
+    public function retorna_produtos($categoria, $all_products, $dono_lista){
 
         $conn = $this->conn;
         $id_usuario = $this->getIdUsuarios();
@@ -179,7 +181,25 @@ class Produtos extends Usuarios{
 
         }else{
 
-            return $this->retorna_json->retorna_json($array);
+            $confirmacoes = [];
+
+            $confirmacoes = [
+
+                /* Incluindo a informação se o usuário atual é ou
+                não dono da lista */
+                
+                "dono_lista"=>$this->verifica_titularidade_lista->verifica_titularidade_lista($dono_lista)
+
+            ];
+
+            $result = [
+
+                "Confirmacoes"=>$confirmacoes,
+                "Produtos"=>$array
+
+            ];
+
+            return $this->retorna_json->retorna_json($result);
 
         }
 

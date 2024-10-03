@@ -66,7 +66,7 @@ class UsuariosListas extends Usuarios{
     Se a o id do usuário atual, for o mesmo que o id
     do dono da lista, a função retorna true */
 
-    private function verifica_titularidade_lista($id_dono){
+    public function verifica_titularidade_lista($id_dono){
 
         $conn = $this->conn;
         $id_usuario_atual = $this->getIdUsuarios();
