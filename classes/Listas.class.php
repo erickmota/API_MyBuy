@@ -34,8 +34,29 @@ class Listas extends Usuarios{
 
     }
 
+    /* Verificar a quantidade de usuários que tem em uma lista */
+
+    private function verificar_qtd_usuarios_lista($id_lista){
+
+        $conn = $this->conn;
+
+        $sql = mysqli_query(
+
+            $conn,
+            "SELECT * FROM usuarios_listas
+            WHERE id_listas='$id_lista'"
+
+        ) or die("Erro conexão");
+
+        $qtd = mysqli_num_rows($sql);
+
+        return $qtd;
+
+    }
+
     /* Retorna todas as listas que o usuário tem disponível,
     seja criada ou compartilhada */
+
     public function retorna_listas(){
 
         $conn = $this->conn;
@@ -76,6 +97,16 @@ class Listas extends Usuarios{
                 $qtd_prod = mysqli_num_rows($sql);
 
                 $navegacao["qtd_produtos"] = $qtd_prod;
+
+            }
+
+            /* Percorrendo o array e inserindo um novo item
+            com a quantidade de produtos que existem na lista */
+            foreach($array as &$qtdUsers){
+
+                $id_list = $qtdUsers["id"];
+
+                $qtdUsers["qtd_usuarios"] = $this->verificar_qtd_usuarios_lista($id_list);
 
             }
 
