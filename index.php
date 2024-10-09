@@ -19,7 +19,7 @@ require_once "classes/UsuariosListas.class.php";
 $classeUsuariosListas = new UsuariosListas($classeListas ,$classeRetornosJson, $classeConexao);
 
 require_once "classes/ProdutosUsuario.class.php";
-$classeProdutosUsuario = new ProdutosUsuario($classeConexao);
+$classeProdutosUsuario = new ProdutosUsuario($classeRetornosJson, $classeConexao);
 
 require_once "classes/Produtos.class.php";
 $classeProdutos = new Produtos($classeProdutosUsuario, $classeUsuariosListas, $classeRetornosJson, $classeConexao);
@@ -160,6 +160,12 @@ if(isset($_GET["url"])){
                             echo $classeRetornosJson->retornaErro("Insira o id da lista, na rota");
 
                         }
+
+                    break;
+
+                    case "produtos_exemplo_usuario":
+
+                        $classeUsuariosListas->setIdUsuarios($explode[0]);
 
                     break;
 

@@ -4,6 +4,7 @@ class ProdutosExemplo{
 
     private $conn;
     private $retorna_json;
+    
     public $id;
     public $nome;
     public $tipo_exibicao;

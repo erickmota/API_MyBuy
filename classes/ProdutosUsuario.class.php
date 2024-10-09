@@ -3,6 +3,7 @@
 class ProdutosUsuario{
 
     private $conn;
+    private $retorna_json;
 
     public $id;
     public $nome;
@@ -10,9 +11,10 @@ class ProdutosUsuario{
     public $id_fotos;
     public $id_usuarios;
 
-    public function __construct($classeConexao){
+    public function __construct($classeRetornosJson, $classeConexao){
 
         $this->conn = $classeConexao->getConexao();
+        $this->retorna_json = $classeRetornosJson;
 
     }
 
@@ -124,6 +126,37 @@ class ProdutosUsuario{
             WHERE id='$this->id'"
 
         ) or die("Erro conexão");
+
+    }
+
+    public function retorna_produtos_usuario(){
+
+        $sql = mysqli_query(
+
+            $this->conn,
+            "SELECT * FROM produtos_usuario
+            INNER JOIN fotos ON fotos.id=produtos_usuario.id_fotos
+            WHERE produtos_usuario='$this->id_usuarios'"
+
+        ) or die("Erro conexão");
+
+        $qtd = mysqli_num_rows($sql);
+
+        if($qtd < 1){
+
+            return $this->$retorna_json->retornaErro("Nenhuma produto corresponde a pesquisa");
+
+        }else{
+
+            while ($row = mysqli_fetch_assoc($sql)){
+                
+                $array[] = $row;
+                
+            }
+
+            return $this->retorna_json->retorna_json($array);
+
+        }
 
     }
 
