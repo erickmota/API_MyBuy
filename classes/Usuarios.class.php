@@ -84,7 +84,7 @@ class Usuarios{
 
         $sql = mysqli_query(
             
-            $conn, "SELECT id, nome, token FROM usuarios
+            $conn, "SELECT id, nome, token, foto_url FROM usuarios
             WHERE email='$this->email'
             AND senha='$this->senha'"
         
