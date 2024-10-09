@@ -44,6 +44,8 @@ class ProdutosUsuario{
 
     /* Métodos */
 
+    /* Cria um novo registro na tabela produtos_usuarios */
+
     public function criar_produtos_usuario(){
 
         $conn = $this->conn;
@@ -73,6 +75,55 @@ class ProdutosUsuario{
         $ultimo_registro = mysqli_insert_id($conn); //Retornando último registro adicionado na tabela produtos_usuarios
 
         return $ultimo_registro;
+
+    }
+
+    /* Verifica se existe um produto com o mesmo nome de registro, de um novo produto */
+
+    public function verifica_existencia_bd(){
+
+        $conn = $this->conn;
+
+        $sql = mysqli_query(
+
+            $conn,
+            "SELECT id FROM produtos_usuario
+            WHERE nome='$this->nome'
+            AND id_usuarios='$this->id_usuarios'"
+
+        ) or die("Erro conexão");
+
+        $qtd = mysqli_num_rows($sql);
+
+        if($qtd > 0){
+
+            $result = mysqli_fetch_assoc($sql);
+
+            $id_produto = $result["id"];
+
+            return $id_produto;
+
+        }else{
+
+            return false;
+
+        }
+
+    }
+
+    /* Atualiza os dados do produtos_usuario */
+
+    public function atualiza_dados_produtos_usuario(){
+
+        $sql = mysqli_query(
+
+            $this->conn,
+            "UPDATE produtos_usuario
+            SET tipo_exibicao='$this->tipo_exibicao',
+            id_fotos='$this->id_fotos'
+            WHERE id='$this->id'"
+
+        ) or die("Erro conexão");
 
     }
 

@@ -236,8 +236,28 @@ class Produtos extends Usuarios{
             $this->produtos_usuario->tipo_exibicao = $this->tipo_exibicao;
             $this->produtos_usuario->id_fotos = $this->id_fotos;
             $this->produtos_usuario->id_usuarios = $id_usuario;
-    
-            $ultimo_registro = $this->produtos_usuario->criar_produtos_usuario();
+
+            /* Verificando se o registro existe na tabela produtos_usuario,
+            através do nome. Quando o nome já existe, significa que o usuário
+            está tentando adicionar um novo produto na lista, mas sem ter especificado
+            o id do produto relacionado. Então, pelo nome o sistema vai verificar e relacionar. */
+
+            // Essa variável tbm é responsável por armazenar o id do produto, caso haja retorno.
+            $existencia_bd = $this->produtos_usuario->verifica_existencia_bd();
+
+            if($existencia_bd == false){
+        
+                $ultimo_registro = $this->produtos_usuario->criar_produtos_usuario();
+
+            }else{
+
+                $this->produtos_usuario->id = $existencia_bd;
+
+                $this->produtos_usuario->atualiza_dados_produtos_usuario();
+
+                $ultimo_registro = $existencia_bd;
+
+            }
             
         }else{
 
