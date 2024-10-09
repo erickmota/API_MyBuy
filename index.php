@@ -18,8 +18,11 @@ $classeListas = new Listas($classeRetornosJson, $classeConexao);
 require_once "classes/UsuariosListas.class.php";
 $classeUsuariosListas = new UsuariosListas($classeListas ,$classeRetornosJson, $classeConexao);
 
+require_once "classes/ProdutosUsuario.class.php";
+$classeProdutosUsuario = new ProdutosUsuario($classeConexao);
+
 require_once "classes/Produtos.class.php";
-$classeProdutos = new Produtos($classeUsuariosListas, $classeRetornosJson, $classeConexao);
+$classeProdutos = new Produtos($classeProdutosUsuario, $classeUsuariosListas, $classeRetornosJson, $classeConexao);
 
 require_once "classes/Categorias.class.php";
 $classeCategorias = new Categorias($classeRetornosJson, $classeConexao);
@@ -269,6 +272,7 @@ if(isset($_GET["url"])){
                                 $carrinho = $_POST["carrinho"];
                                 $valor = $_POST["valor"];
                                 $obs = $_POST["obs"];
+                                $produtos_usuario = $_POST["produtos_usuario"];
 
                                 $classeProdutos->setNome($nome_produto);
                                 $classeProdutos->setTipoExibicao($tipo_exibicao);
@@ -279,6 +283,7 @@ if(isset($_GET["url"])){
                                 $classeProdutos->setCarrinho($carrinho);
                                 $classeProdutos->setValor($valor);
                                 $classeProdutos->setObs($obs);
+                                $classeProdutos->setId_produtos_usuario($produtos_usuario);
                                 
     
                                 echo $classeProdutos->adicionar_produto();

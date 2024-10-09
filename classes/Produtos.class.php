@@ -5,6 +5,7 @@ class Produtos extends Usuarios{
     private $conn;
     private $retorna_json;
     private $verifica_titularidade_lista;
+    private $produtos_usuario;
     
     public $id;
     public $nome;
@@ -19,16 +20,17 @@ class Produtos extends Usuarios{
     public $id_usuarios_dono;
     public $id_produtos_usuario;
 
-    public function __construct($classeUsuariosListas, $classeRetornosJson, $classeConexao){
+    public function __construct($produtos_usuario, $classeUsuariosListas, $classeRetornosJson, $classeConexao){
 
         $this->conn = $classeConexao->getConexao();
         $this->retorna_json = $classeRetornosJson;
         $this->verifica_titularidade_lista = $classeUsuariosListas;
+        $this->produtos_usuario = $produtos_usuario;
         parent::__construct($classeRetornosJson, $classeConexao);
 
     }
 
-    /* Setters */
+    /* SET */
 
     public function setIdLista($id_listas){
 
@@ -97,6 +99,14 @@ class Produtos extends Usuarios{
         $this->obs = $obs;
 
     }
+
+    public function setId_produtos_usuario($id_produtos_usuario){
+
+        $this->id_produtos_usuario = $id_produtos_usuario;
+
+    }
+
+    /* Métodos */
 
     /* Retornando todos os produtos, dentro de uma categorias determinada, de uma lista */
 
@@ -214,12 +224,35 @@ class Produtos extends Usuarios{
         $conn = $this->conn;
         $id_usuario = $this->getIdUsuarios();
 
+        /* Adicionando produtos na tabela produtos_usuario */
+
+        /* Se o id_produtos_usuario for diferente de NULL, significa que o usuário
+        está usando um produto já existente na tabela produtos_usuario, e
+        não precisa criar um novo registro. */
+
+        if($this->id_produtos_usuario == NULL){
+
+            $this->produtos_usuario->nome = $this->nome;
+            $this->produtos_usuario->tipo_exibicao = $this->tipo_exibicao;
+            $this->produtos_usuario->id_fotos = $this->id_fotos;
+            $this->produtos_usuario->id_usuarios = $id_usuario;
+    
+            $ultimo_registro = $this->produtos_usuario->criar_produtos_usuario();
+            
+        }else{
+
+            $ultimo_registro = $this->id_produtos_usuario;
+
+        }        
+
+        /* ***** */
+
         if($this->id_fotos == NULL){
 
             $sql = mysqli_query(
             
-                $conn, "INSERT INTO produtos (nome, tipo_exibicao, qtd, id_categorias, id_listas, id_fotos, carrinho, valor, obs, id_usuarios_dono)
-                VALUES ('$this->nome', '$this->tipo_exibicao', '$this->qtd', '$this->id_categorias', '$this->id_listas', NULL, '$this->carrinho', '$this->valor', '$this->obs', $id_usuario)"
+                $conn, "INSERT INTO produtos (nome, tipo_exibicao, qtd, id_categorias, id_listas, id_fotos, carrinho, valor, obs, id_usuarios_dono, id_produtos_usuario)
+                VALUES ('$this->nome', '$this->tipo_exibicao', '$this->qtd', '$this->id_categorias', '$this->id_listas', NULL, '$this->carrinho', '$this->valor', '$this->obs', $id_usuario, $ultimo_registro)"
                 
             ) or die("Erro conexão");
 
@@ -227,8 +260,8 @@ class Produtos extends Usuarios{
 
             $sql = mysqli_query(
             
-                $conn, "INSERT INTO produtos (nome, tipo_exibicao, qtd, id_categorias, id_listas, id_fotos, carrinho, valor, obs, id_usuarios_dono)
-                VALUES ('$this->nome', '$this->tipo_exibicao', '$this->qtd', '$this->id_categorias', '$this->id_listas', '$this->id_fotos', '$this->carrinho', '$this->valor', '$this->obs', $id_usuario)"
+                $conn, "INSERT INTO produtos (nome, tipo_exibicao, qtd, id_categorias, id_listas, id_fotos, carrinho, valor, obs, id_usuarios_dono, id_produtos_usuario)
+                VALUES ('$this->nome', '$this->tipo_exibicao', '$this->qtd', '$this->id_categorias', '$this->id_listas', '$this->id_fotos', '$this->carrinho', '$this->valor', '$this->obs', $id_usuario, $ultimo_registro)"
                 
             ) or die("Erro conexão");
 
