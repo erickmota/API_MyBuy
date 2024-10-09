@@ -6,7 +6,7 @@ class Compras extends Conexao{
 
     public $id;
     public $data;
-    public $mercado;
+    public $id_mercados;
     public $id_usuarios;
 
 }

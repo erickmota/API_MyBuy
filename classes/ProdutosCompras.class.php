@@ -10,7 +10,9 @@ class ProdutosCompras extends Conexao{
     public $qtd;
     public $validade;
     public $id_compras;
-    public $id_produtos;
+    public $tipo_exibicao;
+    public $id_produtos_usuario;
+    public $id_categorias;
 
 }
 

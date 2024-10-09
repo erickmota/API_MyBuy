@@ -5,6 +5,7 @@ class Produtos extends Usuarios{
     private $conn;
     private $retorna_json;
     private $verifica_titularidade_lista;
+    
     public $id;
     public $nome;
     public $tipo_exibicao;
@@ -15,6 +16,8 @@ class Produtos extends Usuarios{
     public $carrinho;
     public $valor;
     public $obs;
+    public $id_usuarios_dono;
+    public $id_produtos_usuario;
 
     public function __construct($classeUsuariosListas, $classeRetornosJson, $classeConexao){
 
