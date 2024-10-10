@@ -143,18 +143,7 @@ class ProdutosUsuario{
 
         ) or die("Erro conexão");
 
-        while ($row = mysqli_fetch_assoc($sql)){
-                
-            $array[] = $row;
-            
-        }
-
-        /* Inserindo a confirmação no array se é produto base do usuário ou é produto de exemplo */        
-        foreach($array as &$prod_base){
-
-            $prod_base["exemplo"] = false;
-
-        }
+        $qtd = mysqli_num_rows($sql);
 
         /* Retornando todos os produtos de exemplo como */
         $produtos_exemplo = $this->classeProdutosExemplo->busca_produto();
@@ -166,15 +155,26 @@ class ProdutosUsuario{
 
         }
 
-        $result = array_merge($array, $produtos_exemplo);
-
-        $qtd = mysqli_num_rows($sql);
-
         if($qtd < 1){
 
-            return $this->retorna_json->retornaErro("Nenhuma produto corresponde a pesquisa");
+            return $this->retorna_json->retorna_json($produtos_exemplo);
 
         }else{
+
+            while ($row = mysqli_fetch_assoc($sql)){
+                
+                $array[] = $row;
+                
+            }
+    
+            /* Inserindo a confirmação no array se é produto base do usuário ou é produto de exemplo */        
+            foreach($array as &$prod_base){
+    
+                $prod_base["exemplo"] = false;
+    
+            }
+
+            $result = array_merge($array, $produtos_exemplo);
 
             return $this->retorna_json->retorna_json($result);
 
