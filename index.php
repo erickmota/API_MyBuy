@@ -165,7 +165,9 @@ if(isset($_GET["url"])){
 
                     case "produtos_exemplo_usuario":
 
-                        $classeUsuariosListas->setIdUsuarios($explode[0]);
+                        $classeProdutosUsuario->setId_usuarios($explode[0]);
+
+                        echo $classeProdutosUsuario->retorna_produtos_usuario();
 
                     break;
 

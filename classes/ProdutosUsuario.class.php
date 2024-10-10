@@ -134,9 +134,10 @@ class ProdutosUsuario{
         $sql = mysqli_query(
 
             $this->conn,
-            "SELECT * FROM produtos_usuario
+            "SELECT produtos_usuario.id, produtos_usuario.nome, produtos_usuario.tipo_exibicao, produtos_usuario.id_fotos,
+            fotos.url FROM produtos_usuario
             INNER JOIN fotos ON fotos.id=produtos_usuario.id_fotos
-            WHERE produtos_usuario='$this->id_usuarios'"
+            WHERE produtos_usuario.id_usuarios='$this->id_usuarios'"
 
         ) or die("Erro conexão");
 
@@ -144,7 +145,7 @@ class ProdutosUsuario{
 
         if($qtd < 1){
 
-            return $this->$retorna_json->retornaErro("Nenhuma produto corresponde a pesquisa");
+            return $this->retorna_json->retornaErro("Nenhuma produto corresponde a pesquisa");
 
         }else{
 
