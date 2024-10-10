@@ -18,17 +18,17 @@ $classeListas = new Listas($classeRetornosJson, $classeConexao);
 require_once "classes/UsuariosListas.class.php";
 $classeUsuariosListas = new UsuariosListas($classeListas ,$classeRetornosJson, $classeConexao);
 
+require_once "classes/ProdutosExemplo.class.php";
+$classeProdutosExemplo = new ProdutosExemplo($classeRetornosJson, $classeConexao);
+
 require_once "classes/ProdutosUsuario.class.php";
-$classeProdutosUsuario = new ProdutosUsuario($classeRetornosJson, $classeConexao);
+$classeProdutosUsuario = new ProdutosUsuario($classeProdutosExemplo, $classeRetornosJson, $classeConexao);
 
 require_once "classes/Produtos.class.php";
 $classeProdutos = new Produtos($classeProdutosUsuario, $classeUsuariosListas, $classeRetornosJson, $classeConexao);
 
 require_once "classes/Categorias.class.php";
 $classeCategorias = new Categorias($classeRetornosJson, $classeConexao);
-
-require_once "classes/ProdutosExemplo.class.php";
-$classeProdutosExemplo = new ProdutosExemplo($classeRetornosJson, $classeConexao);
 
 if(isset($_GET["url"])){
 

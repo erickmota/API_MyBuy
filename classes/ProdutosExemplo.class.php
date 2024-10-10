@@ -49,7 +49,7 @@ class ProdutosExemplo{
 
         }else{
 
-            return $this->retorna_json->retorna_json($array);
+            return $array;
 
         }
 

@@ -4,6 +4,7 @@ class ProdutosUsuario{
 
     private $conn;
     private $retorna_json;
+    private $classeProdutosExemplo;
 
     public $id;
     public $nome;
@@ -11,10 +12,11 @@ class ProdutosUsuario{
     public $id_fotos;
     public $id_usuarios;
 
-    public function __construct($classeRetornosJson, $classeConexao){
+    public function __construct($classeProdutosExemplo, $classeRetornosJson, $classeConexao){
 
         $this->conn = $classeConexao->getConexao();
         $this->retorna_json = $classeRetornosJson;
+        $this->classeProdutosExemplo = $classeProdutosExemplo;
 
     }
 
@@ -141,6 +143,31 @@ class ProdutosUsuario{
 
         ) or die("Erro conexão");
 
+        while ($row = mysqli_fetch_assoc($sql)){
+                
+            $array[] = $row;
+            
+        }
+
+        /* Inserindo a confirmação no array se é produto base do usuário ou é produto de exemplo */        
+        foreach($array as &$prod_base){
+
+            $prod_base["exemplo"] = false;
+
+        }
+
+        /* Retornando todos os produtos de exemplo como */
+        $produtos_exemplo = $this->classeProdutosExemplo->busca_produto();
+
+        /* Inserindo a confirmação no array se é produto base do usuário ou é produto de exemplo */
+        foreach($produtos_exemplo as &$prod_exemplo){
+
+            $prod_exemplo["exemplo"] = true;
+
+        }
+
+        $result = array_merge($array, $produtos_exemplo);
+
         $qtd = mysqli_num_rows($sql);
 
         if($qtd < 1){
@@ -149,13 +176,7 @@ class ProdutosUsuario{
 
         }else{
 
-            while ($row = mysqli_fetch_assoc($sql)){
-                
-                $array[] = $row;
-                
-            }
-
-            return $this->retorna_json->retorna_json($array);
+            return $this->retorna_json->retorna_json($result);
 
         }
 
