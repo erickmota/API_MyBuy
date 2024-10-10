@@ -119,15 +119,31 @@ class ProdutosUsuario{
 
     public function atualiza_dados_produtos_usuario(){
 
-        $sql = mysqli_query(
+        if($this->id_fotos == NULL){
 
-            $this->conn,
-            "UPDATE produtos_usuario
-            SET tipo_exibicao='$this->tipo_exibicao',
-            id_fotos='$this->id_fotos'
-            WHERE id='$this->id'"
+            $sql = mysqli_query(
 
-        ) or die("Erro conexão");
+                $this->conn,
+                "UPDATE produtos_usuario
+                SET tipo_exibicao='$this->tipo_exibicao',
+                id_fotos=NULL
+                WHERE id='$this->id'"
+    
+            ) or die("Erro conexão");
+
+        }else{
+
+            $sql = mysqli_query(
+
+                $this->conn,
+                "UPDATE produtos_usuario
+                SET tipo_exibicao='$this->tipo_exibicao',
+                id_fotos='$this->id_fotos'
+                WHERE id='$this->id'"
+    
+            ) or die("Erro conexão");
+
+        }
 
     }
 
@@ -136,9 +152,9 @@ class ProdutosUsuario{
         $sql = mysqli_query(
 
             $this->conn,
-            "SELECT produtos_usuario.id, produtos_usuario.nome, produtos_usuario.tipo_exibicao, produtos_usuario.id_fotos,
+            "SELECT produtos_usuario.id, produtos_usuario.nome, produtos_usuario.tipo_exibicao, produtos_usuario.id_fotos AS id_foto,
             fotos.url FROM produtos_usuario
-            INNER JOIN fotos ON fotos.id=produtos_usuario.id_fotos
+            LEFT JOIN fotos ON fotos.id=produtos_usuario.id_fotos
             WHERE produtos_usuario.id_usuarios='$this->id_usuarios'"
 
         ) or die("Erro conexão");
@@ -176,7 +192,25 @@ class ProdutosUsuario{
 
             $result = array_merge($array, $produtos_exemplo);
 
-            return $this->retorna_json->retorna_json($result);
+            /* Elimina duplicidades no nome.
+            Caso o usuário digite uma busca que, tenha tanto no exemplo como no base,
+            o array eliminará o exemplo. */
+
+            $resultado = [];
+            $nomes_encontrados = [];
+
+            foreach ($result as $item){
+
+                if(!in_array($item["nome"], $nomes_encontrados)){
+
+                    $nomes_encontrados[] = $item["nome"];
+                    $resultado[] = $item;
+
+                }
+
+            }
+
+            return $this->retorna_json->retorna_json($resultado);
 
         }
 

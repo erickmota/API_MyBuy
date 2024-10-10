@@ -102,7 +102,15 @@ class Produtos extends Usuarios{
 
     public function setId_produtos_usuario($id_produtos_usuario){
 
-        $this->id_produtos_usuario = $id_produtos_usuario;
+        if($id_produtos_usuario == 0){
+
+            $this->id_produtos_usuario = NULL;
+
+        }else{
+
+            $this->id_produtos_usuario = $id_produtos_usuario;
+
+        }
 
     }
 
@@ -243,6 +251,7 @@ class Produtos extends Usuarios{
             o id do produto relacionado. Então, pelo nome o sistema vai verificar e relacionar. */
 
             // Essa variável tbm é responsável por armazenar o id do produto, caso haja retorno.
+            // Verfica se existe o valor no banco, pelo nome.
             $existencia_bd = $this->produtos_usuario->verifica_existencia_bd();
 
             if($existencia_bd == false){
