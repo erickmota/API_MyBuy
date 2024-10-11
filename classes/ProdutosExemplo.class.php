@@ -17,6 +17,12 @@ class ProdutosExemplo{
 
     }
 
+    public function setId($id){
+
+        $this->id = $id;
+
+    }
+
     public function setNome($nome){
 
         $this->nome = $nome;
@@ -52,6 +58,58 @@ class ProdutosExemplo{
             return $array;
 
         }
+
+    }
+
+    public function verifica_existencia_nome(){
+
+        $consulta = $this->conn->prepare(
+            
+            "SELECT id FROM produtos_exemplo
+            WHERE nome=?"
+        
+        );
+        $consulta->bind_param("s", $this->nome);
+        $consulta->execute();
+
+        $sql = $consulta->get_result();
+
+        $qtd = $sql->num_rows;
+
+        if($qtd > 0){
+
+            $result = $sql->fetch_assoc();
+
+            return $result["id"];
+
+        }else{
+
+            return false;
+
+        }
+
+
+    }
+
+    public function retorna_foto_exemplo(){
+
+        $consulta = $this->conn->prepare(
+
+            "SELECT fotos.id FROM fotos
+            INNER JOIN produtos_exemplo ON produtos_exemplo.id_fotos=fotos.id
+            WHERE produtos_exemplo.id=?"
+
+        );
+        $consulta->bind_param("i", $this->id);
+        $consulta->execute();
+
+        $sql = $consulta->get_result();
+
+        $resultado = $sql->fetch_assoc();
+
+        $id_foto = $resultado["id"];
+
+        return $id_foto;
 
     }
 

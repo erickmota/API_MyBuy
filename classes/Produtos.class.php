@@ -6,6 +6,7 @@ class Produtos extends Usuarios{
     private $retorna_json;
     private $verifica_titularidade_lista;
     private $produtos_usuario;
+    private $produtos_exemplo;
     
     public $id__prod;
     public $nome;
@@ -20,12 +21,13 @@ class Produtos extends Usuarios{
     public $id_usuarios_dono;
     public $id_produtos_usuario;
 
-    public function __construct($produtos_usuario, $classeUsuariosListas, $classeRetornosJson, $classeConexao){
+    public function __construct($produtos_exemplo, $produtos_usuario, $classeUsuariosListas, $classeRetornosJson, $classeConexao){
 
         $this->conn = $classeConexao->getConexao();
         $this->retorna_json = $classeRetornosJson;
         $this->verifica_titularidade_lista = $classeUsuariosListas;
         $this->produtos_usuario = $produtos_usuario;
+        $this->produtos_exemplo = $produtos_exemplo;
         parent::__construct($classeRetornosJson, $classeConexao);
 
     }
@@ -243,7 +245,32 @@ class Produtos extends Usuarios{
 
         if($existencia_bd == false){
 
-            $ultimo_registro = $this->produtos_usuario->criar_produtos_usuario();
+            $this->produtos_exemplo->setNome($this->nome);
+
+            /* Se o produto não existir nos produtos base do usuário, vai verificar se existe
+            algum produto com o mesmo nome nos produtos de exemplo.
+            Caso tenha, vai ser usada a foto do produto de exemplo, no produto base e da lista. */
+            $verifica_nome_exemplo = $this->produtos_exemplo->verifica_existencia_nome();
+
+            if($verifica_nome_exemplo == false){
+
+                $ultimo_registro = $this->produtos_usuario->criar_produtos_usuario();
+
+            }else{
+
+                $id_produto_exemplo = $verifica_nome_exemplo;
+
+                $this->produtos_exemplo->setId($id_produto_exemplo);
+
+                $id_foto_exemplo = $this->produtos_exemplo->retorna_foto_exemplo();
+
+                $this->produtos_usuario->id_fotos = $id_foto_exemplo;
+
+                $ultimo_registro = $this->produtos_usuario->criar_produtos_usuario();
+
+                $this->setIdFotos($id_foto_exemplo);
+
+            }
 
         }else{
 

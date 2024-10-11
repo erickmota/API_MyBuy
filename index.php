@@ -25,7 +25,7 @@ require_once "classes/ProdutosUsuario.class.php";
 $classeProdutosUsuario = new ProdutosUsuario($classeProdutosExemplo, $classeRetornosJson, $classeConexao);
 
 require_once "classes/Produtos.class.php";
-$classeProdutos = new Produtos($classeProdutosUsuario, $classeUsuariosListas, $classeRetornosJson, $classeConexao);
+$classeProdutos = new Produtos($classeProdutosExemplo, $classeProdutosUsuario, $classeUsuariosListas, $classeRetornosJson, $classeConexao);
 
 require_once "classes/Categorias.class.php";
 $classeCategorias = new Categorias($classeRetornosJson, $classeConexao);
