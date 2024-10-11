@@ -36,7 +36,15 @@ class ProdutosUsuario{
 
     public function setId_fotos($id_fotos){
 
-        $this->id_fotos = $id_fotos;
+        if($id_fotos == 0){
+
+            $this->id_fotos = NULL;
+
+        }else{
+
+            $this->id_fotos = $id_fotos;
+
+        }
 
     }
 

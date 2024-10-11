@@ -280,7 +280,6 @@ if(isset($_GET["url"])){
                                 $carrinho = $_POST["carrinho"];
                                 $valor = $_POST["valor"];
                                 $obs = $_POST["obs"];
-                                $produtos_usuario = $_POST["produtos_usuario"];
 
                                 $classeProdutos->setNome($nome_produto);
                                 $classeProdutos->setTipoExibicao($tipo_exibicao);
@@ -291,7 +290,6 @@ if(isset($_GET["url"])){
                                 $classeProdutos->setCarrinho($carrinho);
                                 $classeProdutos->setValor($valor);
                                 $classeProdutos->setObs($obs);
-                                $classeProdutos->setId_produtos_usuario($produtos_usuario);
                                 
     
                                 echo $classeProdutos->adicionar_produto();
@@ -344,6 +342,8 @@ if(isset($_GET["url"])){
                         if($_SERVER["REQUEST_METHOD"] === "POST"){
     
                             if(isset($_POST["id_produto"]) && isset($_POST["nome_produto"])){
+
+                                $classeProdutos->setIdUsuarios($explode[0]);
     
                                 $id_produto = $_POST["id_produto"];
                                 $nome_produto = $_POST["nome_produto"];
@@ -354,9 +354,7 @@ if(isset($_GET["url"])){
                                 $carrinho = $_POST["carrinho"];
                                 $valor = $_POST["valor"];
                                 $obs = $_POST["obs"];
-
-                                $classeProdutos->setIdUsuarios($explode[0]);
-
+                                
                                 $classeProdutos->setIdProduto($id_produto);
                                 $classeProdutos->setNome($nome_produto );
                                 $classeProdutos->setTipoExibicao($tipo_exibicao);

@@ -7,7 +7,7 @@ class Produtos extends Usuarios{
     private $verifica_titularidade_lista;
     private $produtos_usuario;
     
-    public $id;
+    public $id__prod;
     public $nome;
     public $tipo_exibicao;
     public $qtd;
@@ -40,7 +40,7 @@ class Produtos extends Usuarios{
 
     public function setIdProduto($id_produto){
 
-        $this->id = $id_produto;
+        $this->id__prod = $id_produto;
 
     }
 
@@ -232,47 +232,28 @@ class Produtos extends Usuarios{
         $conn = $this->conn;
         $id_usuario = $this->getIdUsuarios();
 
-        /* Adicionando produtos na tabela produtos_usuario */
+        $this->produtos_usuario->nome = $this->nome;
+        $this->produtos_usuario->id_usuarios = $id_usuario;
+        $this->produtos_usuario->tipo_exibicao = $this->tipo_exibicao;
+        $this->produtos_usuario->id_fotos = $this->id_fotos;
 
-        /* Se o id_produtos_usuario for diferente de NULL, significa que o usuário
-        está usando um produto já existente na tabela produtos_usuario, e
-        não precisa criar um novo registro. */
+        // Essa variável tbm é responsável por armazenar o id do produto, caso haja retorno.
+        // Verfica se existe o valor no banco, pelo nome.
+        $existencia_bd = $this->produtos_usuario->verifica_existencia_bd();
 
-        if($this->id_produtos_usuario == NULL){
+        if($existencia_bd == false){
 
-            $this->produtos_usuario->nome = $this->nome;
-            $this->produtos_usuario->tipo_exibicao = $this->tipo_exibicao;
-            $this->produtos_usuario->id_fotos = $this->id_fotos;
-            $this->produtos_usuario->id_usuarios = $id_usuario;
+            $ultimo_registro = $this->produtos_usuario->criar_produtos_usuario();
 
-            /* Verificando se o registro existe na tabela produtos_usuario,
-            através do nome. Quando o nome já existe, significa que o usuário
-            está tentando adicionar um novo produto na lista, mas sem ter especificado
-            o id do produto relacionado. Então, pelo nome o sistema vai verificar e relacionar. */
-
-            // Essa variável tbm é responsável por armazenar o id do produto, caso haja retorno.
-            // Verfica se existe o valor no banco, pelo nome.
-            $existencia_bd = $this->produtos_usuario->verifica_existencia_bd();
-
-            if($existencia_bd == false){
-        
-                $ultimo_registro = $this->produtos_usuario->criar_produtos_usuario();
-
-            }else{
-
-                $this->produtos_usuario->id = $existencia_bd;
-
-                $this->produtos_usuario->atualiza_dados_produtos_usuario();
-
-                $ultimo_registro = $existencia_bd;
-
-            }
-            
         }else{
 
-            $ultimo_registro = $this->id_produtos_usuario;
+            $this->produtos_usuario->id = $existencia_bd;
 
-        }        
+            $this->produtos_usuario->atualiza_dados_produtos_usuario();
+
+            $ultimo_registro = $existencia_bd;
+
+        }
 
         /* ***** */
 
@@ -308,7 +289,7 @@ class Produtos extends Usuarios{
         $sql = mysqli_query(
 
             $conn, "DELETE FROM produtos
-            WHERE id='$this->id'"
+            WHERE id='$this->id__prod'"
 
         ) or die("Erro conexão");
 
@@ -320,6 +301,30 @@ class Produtos extends Usuarios{
     public function editar_produto(){
 
         $conn = $this->conn;
+        $id_usuario = $this->getIdUsuarios();
+
+        $this->produtos_usuario->nome = $this->nome;
+        $this->produtos_usuario->id_usuarios = $id_usuario;
+        $this->produtos_usuario->tipo_exibicao = $this->tipo_exibicao;
+        $this->produtos_usuario->id_fotos = $this->id_fotos;
+
+        // Essa variável tbm é responsável por armazenar o id do produto, caso haja retorno.
+        // Verfica se existe o valor no banco, pelo nome.
+        $existencia_bd = $this->produtos_usuario->verifica_existencia_bd();
+
+        if($existencia_bd == false){
+
+            $ultimo_registro = $this->produtos_usuario->criar_produtos_usuario();
+
+        }else{
+
+            $this->produtos_usuario->id = $existencia_bd;
+
+            $this->produtos_usuario->atualiza_dados_produtos_usuario();
+
+            $ultimo_registro = $existencia_bd;
+
+        }
 
         if($this->id_fotos == NULL){
 
@@ -334,8 +339,9 @@ class Produtos extends Usuarios{
                     id_fotos=NULL,
                     carrinho='$this->carrinho',
                     valor='$this->valor',
-                    obs='$this->obs'
-                    WHERE id='$this->id'"
+                    obs='$this->obs',
+                    id_produtos_usuario='$ultimo_registro'
+                    WHERE id='$this->id__prod'"
         
                 ) or die("Erro conexão");
 
@@ -351,8 +357,9 @@ class Produtos extends Usuarios{
                     id_fotos=NULL,
                     carrinho='$this->carrinho',
                     valor='$this->valor',
-                    obs='$this->obs'
-                    WHERE id='$this->id'"
+                    obs='$this->obs',
+                    id_produtos_usuario='$ultimo_registro'
+                    WHERE id='$this->id__prod'"
         
                 ) or die("Erro conexão");
 
@@ -371,8 +378,9 @@ class Produtos extends Usuarios{
                     id_fotos='$this->id_fotos',
                     carrinho='$this->carrinho',
                     valor='$this->valor',
-                    obs='$this->obs'
-                    WHERE id='$this->id'"
+                    obs='$this->obs',
+                    id_produtos_usuario='$ultimo_registro'
+                    WHERE id='$this->id__prod'"
         
                 ) or die("Erro conexão");
 
@@ -388,8 +396,9 @@ class Produtos extends Usuarios{
                     id_fotos='$this->id_fotos',
                     carrinho='$this->carrinho',
                     valor='$this->valor',
-                    obs='$this->obs'
-                    WHERE id='$this->id'"
+                    obs='$this->obs',
+                    id_produtos_usuario='$ultimo_registro'
+                    WHERE id='$this->id__prod'"
         
                 ) or die("Erro conexão");
 
@@ -411,7 +420,7 @@ class Produtos extends Usuarios{
             SET carrinho='$this->carrinho',
             qtd='$this->qtd',
             valor='$this->valor'
-            WHERE id='$this->id'"
+            WHERE id='$this->id__prod'"
 
         ) or die("Erro conexão");
 
@@ -427,7 +436,7 @@ class Produtos extends Usuarios{
 
             $conn, "UPDATE produtos
             SET carrinho='$this->carrinho'
-            WHERE id='$this->id'"
+            WHERE id='$this->id__prod'"
 
         ) or die("Erro conexão");
 
