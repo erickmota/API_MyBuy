@@ -344,15 +344,43 @@ class Produtos extends Usuarios{
 
         if($existencia_bd == false){
 
-            $ultimo_registro = $this->produtos_usuario->criar_produtos_usuario();
+            $this->produtos_exemplo->setNome($this->nome);
+
+            /* Se o produto não existir nos produtos base do usuário, vai verificar se existe
+            algum produto com o mesmo nome nos produtos de exemplo.
+            Caso tenha, vai ser usada a foto do produto de exemplo, no produto base e da lista. */
+            $verifica_nome_exemplo = $this->produtos_exemplo->verifica_existencia_nome();
+
+            if($verifica_nome_exemplo == false){
+
+                $ultimo_registro = $this->produtos_usuario->criar_produtos_usuario();
+
+            }else{
+
+                $id_produto_exemplo = $verifica_nome_exemplo;
+
+                $this->produtos_exemplo->setId($id_produto_exemplo);
+
+                $id_foto_exemplo = $this->produtos_exemplo->retorna_foto_exemplo();
+
+                $this->produtos_usuario->id_fotos = $id_foto_exemplo;
+
+                $ultimo_registro = $this->produtos_usuario->criar_produtos_usuario();
+
+                $this->setIdFotos($id_foto_exemplo);
+
+            }
 
         }else{
 
-            $this->produtos_usuario->id = $existencia_bd;
+            $this->produtos_usuario->id = $existencia_bd[0];
+            $this->produtos_usuario->id_fotos = $existencia_bd[1];
 
             $this->produtos_usuario->atualiza_dados_produtos_usuario();
 
-            $ultimo_registro = $existencia_bd;
+            $this->id_fotos = $existencia_bd[1];
+
+            $ultimo_registro = $existencia_bd[0];
 
         }
 
