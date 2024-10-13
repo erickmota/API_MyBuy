@@ -48,7 +48,7 @@ class Produtos extends Usuarios{
 
     public function setNome($nome){
 
-        $this->nome = $nome;
+        $this->nome = ucfirst($nome);
 
     }
 
@@ -234,7 +234,7 @@ class Produtos extends Usuarios{
         $conn = $this->conn;
         $id_usuario = $this->getIdUsuarios();
 
-        $this->produtos_usuario->nome = $this->nome;
+        $this->produtos_usuario->nome = ucfirst($this->nome);
         $this->produtos_usuario->id_usuarios = $id_usuario;
         $this->produtos_usuario->tipo_exibicao = $this->tipo_exibicao;
         $this->produtos_usuario->id_fotos = $this->id_fotos;
@@ -274,11 +274,14 @@ class Produtos extends Usuarios{
 
         }else{
 
-            $this->produtos_usuario->id = $existencia_bd;
+            $this->produtos_usuario->id = $existencia_bd[0];
+            $this->produtos_usuario->id_fotos = $existencia_bd[1];
 
             $this->produtos_usuario->atualiza_dados_produtos_usuario();
 
-            $ultimo_registro = $existencia_bd;
+            $this->id_fotos = $existencia_bd[1];
+
+            $ultimo_registro = $existencia_bd[0];
 
         }
 

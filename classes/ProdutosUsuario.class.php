@@ -99,7 +99,7 @@ class ProdutosUsuario{
         $sql = mysqli_query(
 
             $conn,
-            "SELECT id FROM produtos_usuario
+            "SELECT id, id_fotos FROM produtos_usuario
             WHERE nome='$this->nome'
             AND id_usuarios='$this->id_usuarios'"
 
@@ -112,8 +112,9 @@ class ProdutosUsuario{
             $result = mysqli_fetch_assoc($sql);
 
             $id_produto = $result["id"];
+            $id_foto = $result["id_fotos"];
 
-            return $id_produto;
+            return [$id_produto, $id_foto];
 
         }else{
 
