@@ -1,0 +1,55 @@
+Unknown column 'nomes' in 'field list'
+Unknown column 'nomes' in 'field list'
+Unknown column 'nomes' in 'field list'
+Unknown column 'nomes' in 'field list'
+Unknown column 'nomes' in 'field list'
+Unknown column 'nomes' in 'field list'
+Unknown column 'nomes' in 'field list'
+Unknown column 'nomes' in 'field list'
+Unknown column 'nomes' in 'field list'
+Unknown column 'nomes' in 'field list'
+Unknown column 'nomes' in 'field list'
+Unknown column 'nomes' in 'field list'
+Unknown column 'nomes' in 'field list'
+Unknown column 'nomes' in 'field list'
+Erro de execução: coluna 'nomes' não existe
+Erro de execução: coluna 'nomes' não existe
+Erro de execução: coluna 'nomes' não existe
+Erro de execução: coluna 'nomes' não existe
+Unknown column 'nomes' in 'field list'
+Unknown column 'nomes' in 'field list'
+Unknown column 'nomes' in 'field list'
+Unknown column 'nomes' in 'field list'
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Cannot delete or update a parent row: a foreign key constraint fails (`mybuy`.`produtos`, CONSTRAINT `produtos_ibfk_1` FOREIGN KEY (`id_categorias`) REFERENCES `categorias` (`id`))
+Cannot delete or update a parent row: a foreign key constraint fails (`mybuy`.`produtos`, CONSTRAINT `produtos_ibfk_1` FOREIGN KEY (`id_categorias`) REFERENCES `categorias` (`id`))
+Cannot delete or update a parent row: a foreign key constraint fails (`mybuy`.`produtos`, CONSTRAINT `produtos_ibfk_1` FOREIGN KEY (`id_categorias`) REFERENCES `categorias` (`id`))
+Cannot delete or update a parent row: a foreign key constraint fails (`mybuy`.`produtos`, CONSTRAINT `produtos_ibfk_1` FOREIGN KEY (`id_categorias`) REFERENCES `categorias` (`id`))
+Cannot delete or update a parent row: a foreign key constraint fails (`mybuy`.`produtos`, CONSTRAINT `produtos_ibfk_1` FOREIGN KEY (`id_categorias`) REFERENCES `categorias` (`id`))
+Cannot delete or update a parent row: a foreign key constraint fails (`mybuy`.`produtos`, CONSTRAINT `produtos_ibfk_1` FOREIGN KEY (`id_categorias`) REFERENCES `categorias` (`id`))
+Cannot delete or update a parent row: a foreign key constraint fails (`mybuy`.`produtos`, CONSTRAINT `produtos_ibfk_1` FOREIGN KEY (`id_categorias`) REFERENCES `categorias` (`id`))
+Cannot delete or update a parent row: a foreign key constraint fails (`mybuy`.`produtos`, CONSTRAINT `produtos_ibfk_1` FOREIGN KEY (`id_categorias`) REFERENCES `categorias` (`id`))
+Cannot delete or update a parent row: a foreign key constraint fails (`mybuy`.`produtos`, CONSTRAINT `produtos_ibfk_1` FOREIGN KEY (`id_categorias`) REFERENCES `categorias` (`id`))
+Cannot delete or update a parent row: a foreign key constraint fails (`mybuy`.`produtos`, CONSTRAINT `produtos_ibfk_1` FOREIGN KEY (`id_categorias`) REFERENCES `categorias` (`id`))
+Cannot delete or update a parent row: a foreign key constraint fails (`mybuy`.`produtos`, CONSTRAINT `produtos_ibfk_1` FOREIGN KEY (`id_categorias`) REFERENCES `categorias` (`id`))
+Usuário sem acesso a categoria
+Cannot delete or update a parent row: a foreign key constraint fails (`mybuy`.`produtos`, CONSTRAINT `produtos_ibfk_1` FOREIGN KEY (`id_categorias`) REFERENCES `categorias` (`id`))
+Cannot delete or update a parent row: a foreign key constraint fails (`mybuy`.`produtos`, CONSTRAINT `produtos_ibfk_1` FOREIGN KEY (`id_categorias`) REFERENCES `categorias` (`id`))
+Unknown column 'nomes' in 'field list'
+Cannot delete or update a parent row: a foreign key constraint fails (`mybuy`.`produtos`, CONSTRAINT `produtos_ibfk_1` FOREIGN KEY (`id_categorias`) REFERENCES `categorias` (`id`))
+Cannot delete or update a parent row: a foreign key constraint fails (`mybuy`.`produtos`, CONSTRAINT `produtos_ibfk_1` FOREIGN KEY (`id_categorias`) REFERENCES `categorias` (`id`))
+Cannot delete or update a parent row: a foreign key constraint fails (`mybuy`.`produtos`, CONSTRAINT `produtos_ibfk_1` FOREIGN KEY (`id_categorias`) REFERENCES `categorias` (`id`))
+Cannot delete or update a parent row: a foreign key constraint fails (`mybuy`.`produtos`, CONSTRAINT `produtos_ibfk_1` FOREIGN KEY (`id_categorias`) REFERENCES `categorias` (`id`))

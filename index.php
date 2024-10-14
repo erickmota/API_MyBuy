@@ -499,6 +499,63 @@ if(isset($_GET["url"])){
 
                     break;
 
+                    /* Adiciona uma nova categoria */
+                    case "adiciona_categoria":
+
+                        if($_SERVER["REQUEST_METHOD"] === "POST"){
+    
+                            if(isset($_POST["nome_categoria"])){
+    
+                                $nome_categoria = $_POST["nome_categoria"];
+
+                                $classeCategorias->setIdUsuarios($explode[0]);
+
+                                $classeCategorias->setNome($nome_categoria);
+    
+                                echo $classeCategorias->add_categoria();
+    
+                            }else{
+    
+                                echo $classeRetornosJson->retornaErro("Você precisa inserir o nome da categoria.");
+    
+                            }
+    
+                        }else{
+    
+                            echo $classeRetornosJson->retornaErro("Você precisa inserir o nome da categoria como POST.");
+    
+                        }
+
+                    break;
+
+                    /* Deleta uma lista existente */
+                    case "deletar_categoria":
+
+                        if($_SERVER["REQUEST_METHOD"] === "POST"){
+    
+                            if(isset($_POST["id_categoria"])){
+    
+                                $id_categoria = $_POST["id_categoria"];
+
+                                $classeCategorias->setId($id_categoria);
+                                $classeCategorias->setIdUsuarios($explode[0]);
+    
+                                echo $classeCategorias->apagar_categoria();
+    
+                            }else{
+    
+                                echo $classeRetornosJson->retornaErro("Você precisa inserir o id da categoria que quer deletar.");
+    
+                            }
+    
+                        }else{
+    
+                            echo $classeRetornosJson->retornaErro("Você precisa inserir o id da categoria como POST.");
+    
+                        }
+
+                    break;
+
                     default:
 
                         echo $classeRetornosJson->retornaErro("A rota definida não existe");
