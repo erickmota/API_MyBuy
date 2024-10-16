@@ -35,7 +35,71 @@ class Categorias{
     /* Retorna todas as categorias que um usuário tem na conta */
     public function retorna_categoria(){
 
-        $conn = $this->conn;
+        try {
+
+            $conexao = $this->conn->prepare(
+
+                "SELECT * FROM categorias
+                WHERE id_usuarios=?"
+
+            );
+
+            if(!$conexao){
+
+                throw new Exception("Erro de conexão: ".$this->conn->error);
+
+            }
+
+            $conexao->bind_param("i", $this->id_usuarios);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao->error);
+
+            }
+
+            $sql = $conexao->get_result();
+
+            $qtd = $sql->num_rows;
+
+            if($qtd > 0){
+
+                while($result = $sql->fetch_assoc()){
+
+                    $array[] = $result;
+
+                };
+
+                $confirmacoes = [
+
+                    "quantidade" => $qtd
+
+                ];
+
+                $retorno = [
+
+                    "confirmacoes"=>$confirmacoes,
+                    "categorias"=>$array
+
+                ];
+
+                return $this->retorna_json->retorna_json($retorno);
+
+            }else{
+
+                throw new Exception("Nenhuma categoria encontrada.");
+
+            }
+            
+        } catch (Exception $e) {
+
+            error_log($e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
+
+        /* $conn = $this->conn;
 
         $sql = mysqli_query(
             
@@ -59,7 +123,7 @@ class Categorias{
 
             return $this->retorna_json->retorna_json($array);
 
-        }
+        } */
 
     }
 
@@ -189,6 +253,50 @@ class Categorias{
 
             error_log($e->getMessage()."\n", 3, 'erros.log');
             
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
+
+    }
+
+    public function editar_categoria(){
+
+        try {
+
+            if($this->verifica_titularidade_categoria() == false){
+
+                throw new Exception ("Usuário sem acesso a categoria");
+
+            };
+
+            $conexao = $this->conn->prepare(
+
+                "UPDATE categorias
+                SET nome=?
+                WHERE id=?"
+
+            );
+
+            if(!$conexao){
+
+                throw new Exception("Erro de conexão: ".$this->conn->error);
+
+            }
+
+            $conexao->bind_param("si", $this->nome, $this->id);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao->error);
+
+            }
+
+            return $this->retorna_json->retorna_json(NULL);
+            
+        } catch (Exception $e) {
+
+            error_log($e->getMessage()."\n", 3, 'erros.log');
+
             return $this->retorna_json->retornaErro($e->getMessage());
             
         }

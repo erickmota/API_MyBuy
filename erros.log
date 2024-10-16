@@ -53,3 +53,22 @@ Cannot delete or update a parent row: a foreign key constraint fails (`mybuy`.`p
 Cannot delete or update a parent row: a foreign key constraint fails (`mybuy`.`produtos`, CONSTRAINT `produtos_ibfk_1` FOREIGN KEY (`id_categorias`) REFERENCES `categorias` (`id`))
 Cannot delete or update a parent row: a foreign key constraint fails (`mybuy`.`produtos`, CONSTRAINT `produtos_ibfk_1` FOREIGN KEY (`id_categorias`) REFERENCES `categorias` (`id`))
 Cannot delete or update a parent row: a foreign key constraint fails (`mybuy`.`produtos`, CONSTRAINT `produtos_ibfk_1` FOREIGN KEY (`id_categorias`) REFERENCES `categorias` (`id`))
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Usuário sem acesso a categoria
+Nenhuma categoria encontrada.

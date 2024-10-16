@@ -556,6 +556,36 @@ if(isset($_GET["url"])){
 
                     break;
 
+                    case "editar_categoria":
+
+                        if($_SERVER["REQUEST_METHOD"] === "POST"){
+    
+                            if(isset($_POST["id_categoria"]) && isset($_POST["nome_categoria"])){
+    
+                                $id_categoria = $_POST["id_categoria"];
+                                $nome_categoria = $_POST["nome_categoria"];
+
+                                $classeCategorias->setIdUsuarios($explode[0]);
+
+                                $classeCategorias->setId($id_categoria);
+                                $classeCategorias->setNome($nome_categoria);
+    
+                                echo $classeCategorias->editar_categoria();
+    
+                            }else{
+    
+                                echo $classeRetornosJson->retornaErro("Você precisa informar o id e o novo nome da categoria que quer alterar.");
+    
+                            }
+    
+                        }else{
+    
+                            echo $classeRetornosJson->retornaErro("Você precisa informar o id e o novo nome da categoria como POST.");
+    
+                        }
+
+                    break;
+
                     default:
 
                         echo $classeRetornosJson->retornaErro("A rota definida não existe");
