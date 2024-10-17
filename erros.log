@@ -72,3 +72,39 @@ Usuário sem acesso a categoria
 Usuário sem acesso a categoria
 Usuário sem acesso a categoria
 Nenhuma categoria encontrada.
+Table 'mybuy.marcados' doesn't exist
+Cannot add or update a child row: a foreign key constraint fails (`mybuy`.`compras`, CONSTRAINT `compras_ibfk_2` FOREIGN KEY (`id_mercados`) REFERENCES `mercados` (`id`))
+Table 'mybuy.marcados' doesn't exist
+Cannot add or update a child row: a foreign key constraint fails (`mybuy`.`compras`, CONSTRAINT `compras_ibfk_2` FOREIGN KEY (`id_mercados`) REFERENCES `mercados` (`id`))
+Table 'mybuy.marcados' doesn't exist
+Cannot add or update a child row: a foreign key constraint fails (`mybuy`.`compras`, CONSTRAINT `compras_ibfk_2` FOREIGN KEY (`id_mercados`) REFERENCES `mercados` (`id`))
+Table 'mybuy.marcados' doesn't exist
+Cannot add or update a child row: a foreign key constraint fails (`mybuy`.`compras`, CONSTRAINT `compras_ibfk_2` FOREIGN KEY (`id_mercados`) REFERENCES `mercados` (`id`))
+Classe Mercados - Métodos: cadastra_mercado - Table 'mybuy.marcados' doesn't exist
+Classe Compras - Métodos: cadastra_compra - Cannot add or update a child row: a foreign key constraint fails (`mybuy`.`compras`, CONSTRAINT `compras_ibfk_2` FOREIGN KEY (`id_mercados`) REFERENCES `mercados` (`id`))
+Classe Mercados - Métodos: cadastra_mercado - Table 'mybuy.marcados' doesn't exist
+Classe Compras - Métodos: cadastra_compra - Cannot add or update a child row: a foreign key constraint fails (`mybuy`.`compras`, CONSTRAINT `compras_ibfk_2` FOREIGN KEY (`id_mercados`) REFERENCES `mercados` (`id`))
+Classe Mercados - Métodos: cadastra_mercado - Table 'mybuy.marcados' doesn't exist
+Classe Compras - Métodos: cadastra_compra - Cannot add or update a child row: a foreign key constraint fails (`mybuy`.`compras`, CONSTRAINT `compras_ibfk_2` FOREIGN KEY (`id_mercados`) REFERENCES `mercados` (`id`))
+Classe Mercados - Métodos: cadastra_mercado - Table 'mybuy.marcados' doesn't exist
+Classe Mercados - Métodos: cadastra_mercado - Table 'mybuy.marcados' doesn't exist
+Classe Mercados - Métodos: cadastra_mercado - Table 'mybuy.marcados' doesn't exist
+Classe Mercados - Métodos: cadastra_mercado - Table 'mybuy.marcados' doesn't exist
+Classe Mercados - Métodos: cadastra_mercado - Table 'mybuy.marcados' doesn't exist
+Classe Mercados - Métodos: cadastra_mercado - Table 'mybuy.marcados' doesn't exist
+Classe Compras - Métodos: cadastra_compra - Usuário não tem acesso a lista definida
+Classe Compras - Métodos: cadastra_compra - Usuário não tem acesso a lista definida
+Classe Compras - Métodos: cadastra_compra - Usuário não tem acesso a lista definida
+Classe Compras - Métodos: cadastra_compra - Usuário não tem acesso a lista definida
+Classe Compras - Métodos: cadastra_compra - Usuário não tem acesso a lista definida
+Classe Compras - Métodos: cadastra_compra - Usuário não tem acesso a lista definida
+Classe Compras - Métodos: cadastra_compra - Usuário não tem acesso a lista definida
+Classe Compras - Métodos: cadastra_compra - Usuário não tem acesso a lista definida
+Classe Compras - Métodos: cadastra_compra - Usuário não tem acesso a lista definida
+Classe Compras - Métodos: cadastra_compra - Usuário não tem acesso a lista definida
+Classe Compras - Métodos: cadastra_compra - Usuário não tem acesso a lista definida
+Classe Compras - Métodos: cadastra_compra - Usuário não tem acesso a lista definida
+Classe Compras - Métodos: cadastra_compra - Usuário não tem acesso a lista definida
+Classe Compras - Métodos: cadastra_compra - Usuário não tem acesso a lista definida
+Classe Compras - Métodos: cadastra_compra - Usuário não tem acesso a lista definida
+Classe Compras - Métodos: cadastra_compra - Usuário não tem acesso a lista definida

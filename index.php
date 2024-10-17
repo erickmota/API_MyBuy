@@ -30,6 +30,15 @@ $classeProdutos = new Produtos($classeProdutosExemplo, $classeProdutosUsuario, $
 require_once "classes/Categorias.class.php";
 $classeCategorias = new Categorias($classeRetornosJson, $classeConexao);
 
+require_once "classes/ProdutosCompras.class.php";
+$classeProdutosCompras = new ProdutosCompras($classeRetornosJson, $classeConexao);
+
+require_once "classes/Mercados.class.php";
+$classeMercados = new Mercados($classeRetornosJson, $classeConexao);
+
+require_once "classes/Compras.class.php";
+$classeCompras = new Compras($classeUsuariosListas, $classeProdutosCompras, $classeMercados, $classeRetornosJson, $classeConexao);
+
 if(isset($_GET["url"])){
 
     $explode = explode("/", $_GET["url"]);
@@ -581,6 +590,34 @@ if(isset($_GET["url"])){
                         }else{
     
                             echo $classeRetornosJson->retornaErro("Você precisa informar o id e o novo nome da categoria como POST.");
+    
+                        }
+
+                    break;
+
+                    case "cadastrar_compra":
+
+                        if($_SERVER["REQUEST_METHOD"] === "POST"){
+    
+                            if(isset($_POST["nome_mercado"]) && isset($_POST["id_lista"])){
+    
+                                $nome_mercado = $_POST["nome_mercado"];
+                                $id_lista = $_POST["id_lista"];
+
+                                $classeCompras->setData(date('Y-m-d')); // Passando a data atual
+                                $classeCompras->setIdUsuarios($explode[0]);
+    
+                                echo $classeCompras->cadastra_compra($id_lista, $nome_mercado);
+    
+                            }else{
+    
+                                echo $classeRetornosJson->retornaErro("Você precisa inserir o nome do mercado e o id da lista.");
+    
+                            }
+    
+                        }else{
+    
+                            echo $classeRetornosJson->retornaErro("Você precisa inserir o nome do mercado e o id da lista, como POST.");
     
                         }
 
