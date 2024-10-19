@@ -204,6 +204,8 @@ class Produtos extends Usuarios{
 
         }else{
 
+            $qtd_produtos_carrinho = $this->retorna_qtd_produtos_carrinho();
+
             $confirmacoes = [];
 
             $confirmacoes = [
@@ -211,7 +213,8 @@ class Produtos extends Usuarios{
                 /* Incluindo a informação se o usuário atual é ou
                 não dono da lista */
                 
-                "dono_lista"=>$this->verifica_titularidade_lista->verifica_titularidade_lista($dono_lista)
+                "dono_lista"=>$this->verifica_titularidade_lista->verifica_titularidade_lista($dono_lista),
+                "produtos_carrinho"=>$qtd_produtos_carrinho
 
             ];
 
@@ -499,6 +502,49 @@ class Produtos extends Usuarios{
         ) or die("Erro conexão");
 
         return $this->retorna_json->retorna_json(false);
+
+    }
+
+    private function retorna_qtd_produtos_carrinho(){
+
+        try {
+
+            $conexao = $this->conn->prepare(
+
+                "SELECT * FROM produtos
+                WHERE id_listas=?
+                AND carrinho=?"
+
+            );
+
+            if(!$conexao){
+
+                throw new Exception("Erro de conexão: ".$this->conn->error);
+
+            }
+
+            $carrinho = 1;
+
+            $conexao->bind_param("ii", $this->id_listas, $carrinho);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao->error);
+
+            }
+
+            $sql = $conexao->get_result();
+            $qtd = $sql->num_rows;
+
+            return $qtd;
+            
+        } catch (Exception $e) {
+
+            error_log("Classe Produtos - Métodos: retorna_qtd_produtos_carrinho - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
 
     }
 

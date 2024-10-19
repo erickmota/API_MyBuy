@@ -71,6 +71,126 @@ class ProdutosCompras{
 
     }
 
+    /* Retorna a quantidade de itens de uma compra */
+    public function retorna_qtd_produtos(){
+
+        try {
+
+            $conexao = $this->conn->prepare(
+
+                "SELECT * FROM produtos_compras
+                WHERE id_compras=?"
+
+            );
+
+            if($conexao === false){
+
+                throw new Exception("Erro na conexão: ".$this->conn->error);
+
+            }
+
+            $conexao->bind_param("i", $this->id_compras);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro na execução: ".$conexao->error);
+
+            }
+
+            $sql = $conexao->get_result();
+
+            return $sql->num_rows;
+            
+        } catch (Exception $e) {
+
+            error_log("Classe ProdutosCompras - Métodos: retorna_qtd_produtos - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
+
+    }
+
+    /* Soma o valor de todos os produtos registrados em uma compra */
+    private function somar_valor_produtos($array){
+
+        $i = 0;
+
+        $valor_total_compra = [];
+
+        /* Realizando a soma dos produtos.
+        O tipo 3 e 5 é o tipo de exibição, eles são os tipo, ml e g, e não somam
+        o valor de acordo com o quantidade. */
+        foreach($array as $navegacao){
+
+            $valor = $navegacao["preco_produto"];
+            $qtd = $navegacao["qtd"];
+            $tipo = $navegacao["tipo_exibicao"];
+
+            /* Se o tipo for ml ou g, não considera a quantidade */
+            if($tipo == 3 || $tipo == 5){
+
+                $valor_total_produto = $valor;
+
+            }else{
+
+                $valor_total_produto = $valor * $qtd;
+
+            }
+
+            $valor_total_compra[$i++] = $valor_total_produto;
+
+        }
+
+        return number_format(array_sum($valor_total_compra), 2, ".", "");
+
+    }
+
+    public function retorna_valor_compra(){
+
+        try {
+
+            $conexao = $this->conn->prepare(
+
+                "SELECT preco_produto, qtd, tipo_exibicao FROM produtos_compras
+                WHERE id_compras=?"
+
+            );
+
+            if($conexao === false){
+
+                throw new Exception("Erro na conexão: ".$this->conn->error);
+
+            }
+
+            $conexao->bind_param("i", $this->id_compras);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro na execução: ".$conexao->error);
+
+            }
+
+            $sql = $conexao->get_result();
+
+            while($result = $sql->fetch_assoc()){
+
+                $array[] = $result;
+
+            }
+
+            return $this->somar_valor_produtos($array);
+            
+        } catch (Exception $e) {
+
+            error_log("Classe ProdutosCompras - Métodos: retorna_qtd_produtos - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
+
+    }
+
 }
 
 ?>

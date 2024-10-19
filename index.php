@@ -180,6 +180,22 @@ if(isset($_GET["url"])){
 
                     break;
 
+                    case "mercados":
+
+                        $classeMercados->setIdUsuarios($explode[0]);
+
+                        echo $classeMercados->retorna_mercado();
+
+                    break;
+
+                    case "compras":
+
+                        $classeCompras->setIdUsuarios($explode[0]);
+
+                        echo $classeCompras->retorna_compras();
+
+                    break;
+
                     /* *** POST *** */
 
                     /* Atualiza o nome da lista individualmente. */
@@ -604,7 +620,7 @@ if(isset($_GET["url"])){
                                 $nome_mercado = $_POST["nome_mercado"];
                                 $id_lista = $_POST["id_lista"];
 
-                                $classeCompras->setData(date('Y-m-d')); // Passando a data atual
+                                $classeCompras->setData(date('Y-m-d H:i:s')); // Passando a data atual
                                 $classeCompras->setIdUsuarios($explode[0]);
     
                                 echo $classeCompras->cadastra_compra($id_lista, $nome_mercado);

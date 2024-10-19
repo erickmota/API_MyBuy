@@ -111,6 +111,82 @@ class Compras{
 
     }
 
+    /* Retorna as compras do usuário */
+    public function retorna_compras(){
+
+        try {
+
+            $conexao = $this->conn->prepare(
+
+                "SELECT * FROM compras
+                WHERE id_usuarios=?"
+
+            );
+
+            if($conexao === false){
+
+                throw new Exception("Erro na conexão: ".$this->conn->error);
+
+            }
+
+            $conexao->bind_param("i", $this->id_usuarios);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro na execução: ".$conexao->error);
+
+            }
+
+            $sql = $conexao->get_result();
+
+            if($sql->num_rows < 1){
+
+                throw new Exception("Nenhum lista disponível para esse usuário.");
+
+            }
+
+            while($result = $sql->fetch_assoc()){
+
+                $array[] = $result;
+
+            }
+
+            /* Inserindo e formatando os campos data e hora */
+            foreach($array as &$navegacao){
+
+                $data_time = $navegacao["data"];
+
+                $dia = substr($data_time, 8, 2);
+                $mes = substr($data_time, 5, 2);
+                $ano = substr($data_time, 0, 4);
+
+                $novo_horario = substr($data_time, 11, 5);
+
+                $nova_data = $dia."/".$mes."/".$ano;
+
+                $this->class_produtos_compra->setIdCompras($navegacao["id"]);
+
+                $qtd_itens = $this->class_produtos_compra->retorna_qtd_produtos();
+                $valor_compra = $this->class_produtos_compra->retorna_valor_compra();
+
+                $navegacao["data"] = $nova_data;
+                $navegacao["horas"] = $novo_horario;
+                $navegacao["qtd_itens"] = $qtd_itens;
+                $navegacao["valor_compra"] = $valor_compra;
+            }
+
+            return $this->retorna_json->retorna_json($array);
+            
+        } catch (Exception $e) {
+
+            error_log("Classe Compras - Métodos: retorna_compras - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
+        
+    }
+
 }
 
 ?>
