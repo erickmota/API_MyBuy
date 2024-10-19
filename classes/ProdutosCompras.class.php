@@ -146,6 +146,7 @@ class ProdutosCompras{
 
     }
 
+    /* Retorna o valor da compra */
     public function retorna_valor_compra(){
 
         try {
@@ -184,6 +185,174 @@ class ProdutosCompras{
         } catch (Exception $e) {
 
             error_log("Classe ProdutosCompras - Métodos: retorna_qtd_produtos - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
+
+    }
+
+    /* Retorna o valor real pago no produto, individualmente */
+    private function somar_qtd_valor($qtd, $tipo, $valor){
+
+        /* Se o tipo for ml ou g, não considera a quantidade */
+        if($tipo == 3 || $tipo == 5){
+
+            $valor_real = $valor;
+
+        }else{
+
+            $valor_real = $valor * $qtd;
+
+        }
+
+        return $valor_real;
+
+    }
+
+    private function retorna_tipo_formatado($tipo){
+
+        /* 1 = Un
+        2 = Kg
+        3 = g
+        4 = L
+        5 = ml
+        6 = dz
+        7 = Caixa
+        8 = Pacote
+        9 = Garrafa
+        10 = Lata
+        11 = Embalagem */
+
+        switch($tipo){
+
+            case 1:
+
+                $formato = "Un";
+
+            break;
+
+            case 2:
+
+                $formato = "Kg";
+
+            break;
+
+            case 3:
+
+                $formato = "g";
+
+            break;
+
+            case 4:
+
+                $formato = "L";
+
+            break;
+
+            case 5:
+
+                $formato = "ml";
+
+            break;
+
+            case 6:
+
+                $formato = "dz";
+
+            break;
+
+            case 7:
+
+                $formato = "Caixa";
+
+            break;
+
+            case 8:
+
+                $formato = "Pacote";
+
+            break;
+
+            case 9:
+
+                $formato = "Garrafa";
+
+            break;
+
+            case 10:
+
+                $formato = "Lata";
+
+            break;
+
+            case 11:
+
+                $formato = "Embalagem";
+
+            break;
+
+        }
+
+        return $formato;
+
+    }
+
+    /* Retorna todos os produtos e dados de uma determinada compra */
+    public function retorna_produtos_compra(){
+
+        try {
+
+            $conexao = $this->conn->prepare(
+
+                "SELECT produtos_compras.id, produtos_compras.nome_produto, produtos_compras.qtd, produtos_compras.tipo_exibicao,
+                produtos_compras.preco_produto FROM produtos_compras
+                INNER JOIN compras ON compras.id=produtos_compras.id_compras
+                WHERE produtos_compras.id_compras=?"
+
+            );
+
+            if($conexao === false){
+
+                throw new Exception("Erro na conexão: ".$this->conn->error);
+
+            }
+
+            $conexao->bind_param("i", $this->id_compras);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro na execução: ".$conexao->error);
+
+            }
+
+            $sql = $conexao->get_result();
+
+            while($result = $sql->fetch_assoc()){
+
+                $array[] = $result;
+
+            }
+
+            /* Manipulando dados do array */
+            foreach($array as &$resultadoArray){
+
+                /* Retorna o valor total do produto */
+                $valor_total = $this->somar_qtd_valor($resultadoArray["qtd"], $resultadoArray["tipo_exibicao"], $resultadoArray["preco_produto"]);
+
+                /* Retorna o tipo formatado */
+                $tipo_correto = $this->retorna_tipo_formatado($resultadoArray["tipo_exibicao"]);
+
+                $resultadoArray["preco_produto"] = number_format($valor_total, 2, ".", "");
+                $resultadoArray["tipo_exibicao"] = $tipo_correto;
+
+            }
+
+            return $this->retorna_json->retorna_json($array);
+            
+        } catch (Exception $e) {
+
+            error_log("Classe ProdutosCompras - Métodos: retorna_produtos_compra - ".$e->getMessage()."\n", 3, 'erros.log');
 
             return $this->retorna_json->retornaErro($e->getMessage());
             

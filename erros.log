@@ -138,3 +138,9 @@ Classe Compras - Métodos: retorna_compras - Nenhum lista disponível para esse 
 Classe Compras - Métodos: retorna_compras - Nenhum lista disponível para esse usuário.
 Classe Compras - Métodos: retorna_compras - Nenhum lista disponível para esse usuário.
 Classe Compras - Métodos: retorna_compras - Nenhum lista disponível para esse usuário.
+Classe Compras - Métodos: retorna_compras - Column 'id_usuarios' in where clause is ambiguous
+Classe Compras - Métodos: retorna_compras - Column 'id_usuarios' in where clause is ambiguous
+Classe Compras - Métodos: retorna_compras - Nenhum lista disponível para esse usuário.
+Classe Mercados - Métodos: retorna_mercado - Nenhum resultado encontrado
+Classe Compras - Métodos: retorna_compras - Nenhum lista disponível para esse usuário.
+Classe ProdutosCompras - Métodos: retorna_produtos_compra - Unknown column 'produtos_compras.nome' in 'field list'

@@ -196,6 +196,22 @@ if(isset($_GET["url"])){
 
                     break;
 
+                    case "produtos_compra":
+
+                        if(isset($explode[2])){
+
+                            $classeProdutosCompras->setIdCompras($explode[2]);
+
+                            echo $classeProdutosCompras->retorna_produtos_compra();
+
+                        }else{
+
+                            echo $classeRetornosJson->retornaErro("Insira um id da compra, na rota");
+
+                        }
+
+                    break;
+
                     /* *** POST *** */
 
                     /* Atualiza o nome da lista individualmente. */

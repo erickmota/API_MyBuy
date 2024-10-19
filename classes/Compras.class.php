@@ -118,8 +118,9 @@ class Compras{
 
             $conexao = $this->conn->prepare(
 
-                "SELECT * FROM compras
-                WHERE id_usuarios=?"
+                "SELECT compras.id AS id, compras.data, mercados.id AS id_mercado, mercados.nome AS nome_mercado FROM compras
+                INNER JOIN mercados ON mercados.id=compras.id_mercados
+                WHERE compras.id_usuarios=? ORDER BY compras.id desc"
 
             );
 
