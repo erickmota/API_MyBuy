@@ -112,17 +112,67 @@ class Compras{
     }
 
     /* Retorna as compras do usuário */
-    public function retorna_compras(){
+    public function retorna_compras($filtro_data, $data_1, $data_2){
 
         try {
 
-            $conexao = $this->conn->prepare(
+            switch($filtro_data){
 
-                "SELECT compras.id AS id, compras.data, mercados.id AS id_mercado, mercados.nome AS nome_mercado FROM compras
-                INNER JOIN mercados ON mercados.id=compras.id_mercados
-                WHERE compras.id_usuarios=? ORDER BY compras.id desc"
+                case "mes_atual":
 
-            );
+                    $conexao = $this->conn->prepare(
+
+                        "SELECT compras.id AS id, compras.data, mercados.id AS id_mercado, mercados.nome AS nome_mercado FROM compras
+                        INNER JOIN mercados ON mercados.id=compras.id_mercados
+                        WHERE compras.id_usuarios=?
+                        AND DATE_FORMAT(compras.data, '%Y-%m')=DATE_FORMAT(CURRENT_DATE, '%Y-%m')
+                        ORDER BY compras.id desc"
+        
+                    );
+
+                break;
+
+                case "mes_passado":
+
+                    $conexao = $this->conn->prepare(
+
+                        "SELECT compras.id AS id, compras.data, mercados.id AS id_mercado, mercados.nome AS nome_mercado FROM compras
+                        INNER JOIN mercados ON mercados.id=compras.id_mercados
+                        WHERE compras.id_usuarios=?
+                        AND DATE_FORMAT(compras.data, '%Y-%m')=DATE_FORMAT(DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH), '%Y-%m')
+                        ORDER BY compras.id desc"
+        
+                    );
+
+                break;
+
+                case "escolher_datas":
+
+                    $conexao = $this->conn->prepare(
+
+                        "SELECT compras.id AS id, compras.data, mercados.id AS id_mercado, mercados.nome AS nome_mercado FROM compras
+                        INNER JOIN mercados ON mercados.id=compras.id_mercados
+                        WHERE compras.id_usuarios=?
+                        AND DATE(compras.data) BETWEEN ? AND ?
+                        ORDER BY compras.id desc"
+        
+                    );
+
+                break;
+
+                default:
+
+                    $conexao = $this->conn->prepare(
+
+                        "SELECT compras.id AS id, compras.data, mercados.id AS id_mercado, mercados.nome AS nome_mercado FROM compras
+                        INNER JOIN mercados ON mercados.id=compras.id_mercados
+                        WHERE compras.id_usuarios=? ORDER BY compras.id desc"
+        
+                    );
+
+                break;
+
+            }
 
             if($conexao === false){
 
@@ -130,7 +180,15 @@ class Compras{
 
             }
 
-            $conexao->bind_param("i", $this->id_usuarios);
+            if($filtro_data == "escolher_datas"){
+
+                $conexao->bind_param("iss", $this->id_usuarios, $data_1, $data_2);
+
+            }else{
+
+                $conexao->bind_param("i", $this->id_usuarios);
+
+            }
 
             if(!$conexao->execute()){
 

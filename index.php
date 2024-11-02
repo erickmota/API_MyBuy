@@ -192,7 +192,48 @@ if(isset($_GET["url"])){
 
                         $classeCompras->setIdUsuarios($explode[0]);
 
-                        echo $classeCompras->retorna_compras();
+                        /* explode[2] = Filtro data */
+                        if(isset($explode[2])){
+
+                            switch($explode[2]){
+
+                                case "mes_atual":
+
+                                    echo $classeCompras->retorna_compras("mes_atual", false, false);
+
+                                break;
+
+                                case "mes_passado":
+
+                                    echo $classeCompras->retorna_compras("mes_passado", false, false);
+
+                                break;
+
+                                case "escolher_datas":
+
+                                    if(isset($explode[3]) && isset($explode[4])){
+
+                                        echo $classeCompras->retorna_compras("escolher_datas", $explode[3], $explode[4]);
+
+                                    }else{
+
+                                        echo $classeRetornosJson->retornaErro(
+
+                                            "Insira a data 1 e a data 2 para comparação. Ex: API/escolher_datas/2024-10-26/1996-10-16"
+                                            
+                                        );
+
+                                    }
+
+                                break;
+
+                            }
+
+                        }else{
+
+                            echo $classeCompras->retorna_compras(false);
+
+                        }
 
                     break;
 
