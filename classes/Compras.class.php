@@ -123,7 +123,7 @@ class Compras{
                     $conexao = $this->conn->prepare(
 
                         "SELECT compras.id AS id, compras.data, mercados.id AS id_mercado, mercados.nome AS nome_mercado FROM compras
-                        INNER JOIN mercados ON mercados.id=compras.id_mercados
+                        LEFT JOIN mercados ON mercados.id=compras.id_mercados
                         WHERE compras.id_usuarios=?
                         AND DATE_FORMAT(compras.data, '%Y-%m')=DATE_FORMAT(CURRENT_DATE, '%Y-%m')
                         ORDER BY compras.id desc"
@@ -137,7 +137,7 @@ class Compras{
                     $conexao = $this->conn->prepare(
 
                         "SELECT compras.id AS id, compras.data, mercados.id AS id_mercado, mercados.nome AS nome_mercado FROM compras
-                        INNER JOIN mercados ON mercados.id=compras.id_mercados
+                        LEFT JOIN mercados ON mercados.id=compras.id_mercados
                         WHERE compras.id_usuarios=?
                         AND DATE_FORMAT(compras.data, '%Y-%m')=DATE_FORMAT(DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH), '%Y-%m')
                         ORDER BY compras.id desc"
@@ -151,7 +151,7 @@ class Compras{
                     $conexao = $this->conn->prepare(
 
                         "SELECT compras.id AS id, compras.data, mercados.id AS id_mercado, mercados.nome AS nome_mercado FROM compras
-                        INNER JOIN mercados ON mercados.id=compras.id_mercados
+                        LEFT JOIN mercados ON mercados.id=compras.id_mercados
                         WHERE compras.id_usuarios=?
                         AND DATE(compras.data) BETWEEN ? AND ?
                         ORDER BY compras.id desc"

@@ -39,6 +39,9 @@ $classeMercados = new Mercados($classeRetornosJson, $classeConexao);
 require_once "classes/Compras.class.php";
 $classeCompras = new Compras($classeUsuariosListas, $classeProdutosCompras, $classeMercados, $classeRetornosJson, $classeConexao);
 
+require_once "classes/Graficos.class.php";
+$classeGraficos = new Graficos($classeConexao, $classeRetornosJson, $classeProdutosCompras);
+
 if(isset($_GET["url"])){
 
     $explode = explode("/", $_GET["url"]);
@@ -248,6 +251,82 @@ if(isset($_GET["url"])){
                         }else{
 
                             echo $classeRetornosJson->retornaErro("Insira um id da compra, na rota");
+
+                        }
+
+                    break;
+
+                    case "graficos":
+
+                        if(isset($explode[2])){
+
+                            switch($explode[2]){
+
+                                case "geral":
+
+                                    if(isset($explode[3])){
+
+                                        $classeGraficos->ano = $explode[3];
+                                        $classeGraficos->id_usuario = $explode[0];
+
+                                        echo $classeGraficos->formata_venda_mes();
+                                        
+                                    }else{
+
+                                        echo $classeRetornosJson->retornaErro("Informe o ano que deseja exibir. API/grficos/geral/ano");
+
+                                    }
+
+                                break;
+
+                                case "total_media":
+
+                                    if(isset($explode[3])){
+
+                                        $classeGraficos->ano = $explode[3];
+                                        $classeGraficos->id_usuario = $explode[0];
+
+                                        echo $classeGraficos->total_media();
+                                        
+                                    }else{
+
+                                        echo $classeRetornosJson->retornaErro("Informe o ano que deseja exibir. API/grficos/total_media/ano");
+
+                                    }
+
+                                break;
+
+                                case "detalhes_compras":
+
+                                    if(isset($explode[3])){
+
+                                        $classeGraficos->ano = $explode[3];
+                                        $classeGraficos->id_usuario = $explode[0];
+
+                                        echo $classeGraficos->detalhes_mes();
+                                        
+                                    }else{
+
+                                        echo $classeRetornosJson->retornaErro("Informe o ano que deseja exibir. API/grficos/detalhes_compras/ano");
+
+                                    }
+
+                                break;
+
+                                case "valor_mes":
+
+                                    $classeGraficos->ano = date("Y");
+                                    $classeGraficos->id_usuario = $explode[0];
+
+                                    echo $classeGraficos->despesas_totais_mes_atual_passado();
+
+                                break;
+
+                            }
+
+                        }else{
+
+                            echo $classeRetornosJson->retornaErro("Informe o tipo de gráfico que deseja retornar. API/graficos/tipo");
 
                         }
 
