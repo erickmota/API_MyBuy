@@ -308,3 +308,48 @@ Classe Compras - Métodos: retorna_compras - Nenhum lista disponível para esse 
 Classe Compras - Métodos: retorna_compras - Nenhum lista disponível para esse usuário.
 Classe Compras - Métodos: retorna_compras - Nenhum lista disponível para esse usuário.
 Classe Compras - Métodos: retorna_compras - Nenhum lista disponível para esse usuário.
+Classe Gráficos - Métodos: retorna_categorias_por_data - You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '*) AS quantidade FROM categorias
+                        INNER JOIN produtos...' at line 1
+Classe Gráficos - Métodos: retorna_categorias_por_data - Unknown column 'categoria.id' in 'field list'
+Classe Gráficos - Métodos: retorna_categorias_por_data - Unknown column 'valor_total' in 'where clause'
+Classe Gráficos - Métodos: retorna_categorias_por_data - Unknown column 'valor_total' in 'where clause'
+Classe Gráficos - Métodos: retorna_categorias_por_data - You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '= 0
+                        AND DATE(compras.data) BETWEEN ? AND ?
+        ...' at line 12
+Classe Gráficos - Métodos: retorna_categorias_por_data - You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '= 0
+                        AND DATE(compras.data) BETWEEN ? AND ?
+        ...' at line 12
+Classe Gráficos - Métodos: retorna_categorias_por_data - Unknown column 'valor_total' in 'where clause'
+Classe Gráficos - Métodos: retorna_categorias_por_data - Unknown column 'valor_total' in 'where clause'
+Classe Gráficos - Métodos: retorna_categorias_por_data - You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '= 0
+                        GROUP BY categorias.id
+                        ...' at line 13
+Classe Gráficos - Métodos: retorna_categorias_por_data - Unknown column 'valor_total' in 'where clause'
+Classe Gráficos - Métodos: retorna_categorias_por_data - Unknown column 'valor_total' in 'where clause'
+Classe Compras - Métodos: retorna_compras - Nenhum lista disponível para esse usuário.
+Classe Compras - Métodos: retorna_compras - Nenhum lista disponível para esse usuário.
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.nome' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.nome' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.nome' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.nome' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.nome' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.nome' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.nome' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.nome' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.nome' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.nome' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.nome' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.nome' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_usuario.id' in 'group statement'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_usuario.id' in 'group statement'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_usuario.id' in 'group statement'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_usuario.id' in 'group statement'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_usuario.id' in 'group statement'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_usuario.id' in 'group statement'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_usuario.id' in 'group statement'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_usuario.id' in 'group statement'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_usuario.id' in 'group statement'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_usuario.id' in 'group statement'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_usuario.id' in 'group statement'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_usuario.id' in 'group statement'
+Classe Gráficos - Métodos: retorna_categorias_por_data - Unknown column 'produtos_compras.id_mercados' in 'on clause'
