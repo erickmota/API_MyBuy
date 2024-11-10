@@ -353,3 +353,56 @@ Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_u
 Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_usuario.id' in 'group statement'
 Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_usuario.id' in 'group statement'
 Classe Gráficos - Métodos: retorna_categorias_por_data - Unknown column 'produtos_compras.id_mercados' in 'on clause'
+Classe Gráficos - Métodos: retorna_categorias_por_data - You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AS name, COUNT(*) AS quantidade,
+                        SUM(CASE
+
+       ...' at line 1
+Classe Gráficos - Métodos: retorna_categorias_por_data - You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'COUNT(*) AS quantidade,
+                        SUM(CASE
+
+                ...' at line 1
+Classe Gráficos - Métodos: retorna_categorias_por_data - Unknown column 'produtos_usuario.qtd' in 'field list'
+Classe Compras - Métodos: retorna_compras - Nenhum lista disponível para esse usuário.
+Nenhuma categoria encontrada.
+Classe Mercados - Métodos: retorna_mercado - Nenhum resultado encontrado
+Nenhuma categoria encontrada.
+Nenhuma categoria encontrada.
+Classe Gráficos - Métodos: retorna_categorias_por_data - You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '=1
+                        ELSE produtos_compras.qtd * 1
+                  ...' at line 12
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.id' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.id' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.id' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.id' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.id' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.id' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.id' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.id' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.id' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.id' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.id' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.id' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Table 'mybuy.pprodutos_compras' doesn't exist
+Classe Gráficos - Métodos: dados_extras_categoria - Table 'mybuy.pprodutos_compras' doesn't exist
+Classe Gráficos - Métodos: dados_extras_categoria - Table 'mybuy.pprodutos_compras' doesn't exist
+Classe Gráficos - Métodos: dados_extras_categoria - Table 'mybuy.pprodutos_compras' doesn't exist
+Classe Gráficos - Métodos: dados_extras_categoria - Table 'mybuy.pprodutos_compras' doesn't exist
+Classe Gráficos - Métodos: dados_extras_categoria - Table 'mybuy.pprodutos_compras' doesn't exist
+Classe Gráficos - Métodos: dados_extras_categoria - Table 'mybuy.pprodutos_compras' doesn't exist
+Classe Gráficos - Métodos: dados_extras_categoria - Table 'mybuy.pprodutos_compras' doesn't exist
+Classe Gráficos - Métodos: dados_extras_categoria - Table 'mybuy.pprodutos_compras' doesn't exist
+Classe Gráficos - Métodos: dados_extras_categoria - Table 'mybuy.pprodutos_compras' doesn't exist
+Classe Gráficos - Métodos: dados_extras_categoria - Table 'mybuy.pprodutos_compras' doesn't exist
+Classe Gráficos - Métodos: dados_extras_categoria - Table 'mybuy.pprodutos_compras' doesn't exist
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.nome' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.nome' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.nome' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.nome' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.nome' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.nome' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.nome' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.nome' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.nome' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.nome' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.nome' in 'field list'
+Classe Gráficos - Métodos: dados_extras_categoria - Unknown column 'produtos_compras.nome' in 'field list'

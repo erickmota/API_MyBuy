@@ -410,6 +410,50 @@ if(isset($_GET["url"])){
 
                                 break;
 
+                                case "produtos":
+
+                                    if(isset($explode[3])){
+
+                                        $classeGraficos->id_usuario = $explode[0];
+
+                                        switch($explode[3]){
+
+                                            case "mes_atual":
+
+                                                echo $classeGraficos->retorna_produtos_por_data("mes_atual", false, false);
+
+                                            break;
+
+                                            case "mes_passado":
+
+                                                echo $classeGraficos->retorna_produtos_por_data("mes_passado", false, false);
+
+                                            break;
+
+                                            case "escolher_datas":
+
+                                                if(isset($explode[4]) && isset($explode[5])){
+
+                                                    echo $classeGraficos->retorna_produtos_por_data("escolher_datas", $explode[4], $explode[5]);
+
+                                                }else{
+
+                                                    echo $classeRetornosJson->retornaErro("Informe as datas para aplicar o filtro. API/grficos/produtos/escolher_datas/data_1/data_2");
+
+                                                }
+
+                                            break;
+
+                                        }
+
+                                    }else{
+
+                                        echo $classeRetornosJson->retornaErro("Informe o tipo de fitro que deseja aplicar. API/grficos/produtos/tipo_filtro");
+
+                                    }
+
+                                break;
+
                             }
 
                         }else{

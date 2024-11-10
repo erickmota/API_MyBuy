@@ -135,7 +135,7 @@ class Graficos{
                 INNER JOIN compras ON compras.id=produtos_compras.id_compras
                 WHERE DATE_FORMAT(compras.data, '%Y-%m')=?
                 AND categorias.id_usuarios=?
-                GROUP BY categorias.id
+                GROUP BY produtos_compras.id_categorias
                 ORDER BY quantidade DESC
                 LIMIT 1"
 
@@ -190,7 +190,7 @@ class Graficos{
                 INNER JOIN compras ON compras.id_mercados=mercados.id
                 WHERE DATE_FORMAT(compras.data, '%Y-%m')=?
                 AND mercados.id_usuarios=?
-                GROUP BY mercados.id
+                GROUP BY compras.id_mercados
                 ORDER BY quantidade DESC
                 LIMIT 1"
 
@@ -245,7 +245,7 @@ class Graficos{
                 INNER JOIN compras ON compras.id=produtos_compras.id_compras
                 WHERE DATE_FORMAT(compras.data, '%Y-%m')=?
                 AND compras.id_usuarios=?
-                GROUP BY produtos_compras.id
+                GROUP BY produtos_compras.nome_produto
                 ORDER BY quantidade DESC
                 LIMIT 1"
 
@@ -298,18 +298,18 @@ class Graficos{
 
             $meses_nomes = [
 
-                "janeiro",
-                "fevereiro",
-                "marco",
-                "abril",
-                "maio",
-                "junho",
+                "Janeiro",
+                "Fevereiro",
+                "Marco",
+                "Abril",
+                "Maio",
+                "Junho",
                 "julho",
-                "agosto",
-                "setembro",
-                "outubro",
-                "novembro",
-                "dezembro"
+                "Agosto",
+                "Setembro",
+                "Outubro",
+                "Novembro",
+                "Dezembro"
 
             ];
 
@@ -666,21 +666,6 @@ class Graficos{
                         GROUP BY mercados.id
                         ORDER BY valor_total DESC"
 
-                        /* "SELECT categorias.id, categorias.nome AS name, COUNT(DISTINCT compras.id) AS quantidade,
-                        SUM(CASE
-
-                        WHEN produtos_compras.tipo_exibicao = 3 OR produtos_compras.tipo_exibicao = 5
-                        THEN produtos_compras.preco_produto
-                        ELSE produtos_compras.preco_produto * produtos_compras.qtd
-                        
-                        END) AS valor_total FROM categorias
-                        INNER JOIN produtos_compras ON produtos_compras.id_categorias=categorias.id
-                        INNER JOIN compras ON compras.id=produtos_compras.id_compras
-                        WHERE categorias.id_usuarios=?
-                        AND DATE_FORMAT(compras.data, '%Y-%m')=DATE_FORMAT(CURRENT_DATE, '%Y-%m')
-                        GROUP BY categorias.id
-                        ORDER BY valor_total DESC" */
-
                     );
 
                     if(!$conexao){
@@ -742,6 +727,234 @@ class Graficos{
                         AND DATE(compras.data) BETWEEN ? AND ?
                         GROUP BY mercados.id
                         ORDER BY valor_total DESC"
+
+                    );
+
+                    if(!$conexao){
+
+                        throw new Exception("Erro de conexão: ".$this->conn->error);
+
+                    }
+
+                    $conexao->bind_param("iss", $this->id_usuario, $data_1, $data_2);
+
+                break;
+
+            }
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao->error);
+
+            }
+
+            $sql = $conexao->get_result();
+
+            if($sql->num_rows > 0){
+
+                while($resultado = $sql->fetch_assoc()){
+
+                    $array[] = $resultado;
+    
+                }
+
+                $inf_graficos = $this->informacoes_visuais_graficos();
+
+                $i = 0;
+
+                foreach($array as &$resultados){
+
+                    if($i > 14){
+
+                        $resultados["color"] = "#DDD";
+
+                    }else{
+
+                        $resultados["color"] = $inf_graficos["cores"][$i];
+
+                    }
+
+                    $resultados["legendFontColor"] = $inf_graficos["cor_legenda"];
+                    $resultados["legendFontSize"] = $inf_graficos["tamanho_legenda"];
+
+                    $i++;
+
+                }
+    
+                return $this->class_json->retorna_json($array);
+
+            }else{
+
+                return $this->class_json->retornaErro("Sem dados para exibição");
+
+            }
+            
+        } catch (Exception $e) {
+
+            error_log("Classe Gráficos - Métodos: retorna_categorias_por_data - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->class_json->retornaErro($e->getMessage());
+            
+        }
+
+    }
+
+    /* Retorna os dados para o gráfico mercados */
+    public function retorna_produtos_por_data($filtro_data, $data_1, $data_2){
+
+        try {
+
+            switch($filtro_data){
+
+                case "mes_atual":
+
+                    $conexao = $this->conn->prepare(
+
+                        "SELECT produtos_usuario.id, produtos_usuario.nome AS name, fotos.url AS url_foto, COUNT(*) AS quantidade,
+                        SUM(CASE
+
+                        WHEN produtos_compras.tipo_exibicao = 3 OR produtos_compras.tipo_exibicao = 5
+                        THEN produtos_compras.preco_produto
+                        ELSE produtos_compras.preco_produto * produtos_compras.qtd
+                        
+                        END) AS valor_total,
+                        SUM(CASE
+
+                        WHEN produtos_compras.tipo_exibicao = 3 OR produtos_compras.tipo_exibicao = 5
+                        THEN produtos_compras.qtd / 1000.0
+                        ELSE produtos_compras.qtd * 1
+                        
+                        END) AS qtd_comprados FROM produtos_usuario
+                        INNER JOIN produtos_compras ON produtos_compras.id_produtos_usuario=produtos_usuario.id
+                        INNER JOIN compras ON compras.id=produtos_compras.id_compras
+                        LEFT JOIN fotos ON fotos.id=produtos_usuario.id_fotos
+                        WHERE produtos_usuario.id_usuarios=?
+                        AND DATE_FORMAT(compras.data, '%Y-%m')=DATE_FORMAT(CURRENT_DATE, '%Y-%m')
+                        GROUP BY produtos_usuario.id
+                        ORDER BY valor_total DESC"
+
+                        /* "SELECT mercados.id, mercados.nome AS name, COUNT(DISTINCT compras.id) AS quantidade,
+                        SUM(CASE
+
+                        WHEN produtos_compras.tipo_exibicao = 3 OR produtos_compras.tipo_exibicao = 5
+                        THEN produtos_compras.preco_produto
+                        ELSE produtos_compras.preco_produto * produtos_compras.qtd
+                        
+                        END) AS valor_total FROM mercados
+                        INNER JOIN compras ON compras.id_mercados=mercados.id
+                        INNER JOIN produtos_compras ON produtos_compras.id_compras=compras.id
+                        WHERE compras.id_usuarios=?
+                        AND DATE_FORMAT(compras.data, '%Y-%m')=DATE_FORMAT(CURRENT_DATE, '%Y-%m')
+                        GROUP BY mercados.id
+                        ORDER BY valor_total DESC" */
+
+                    );
+
+                    if(!$conexao){
+
+                        throw new Exception("Erro de conexão: ".$this->conn->error);
+
+                    }
+
+                    $conexao->bind_param("i", $this->id_usuario);
+
+                break;
+
+                case "mes_passado":
+
+                    $conexao = $this->conn->prepare(
+
+                        "SELECT produtos_usuario.id, produtos_usuario.nome AS name, fotos.url AS url_foto, COUNT(*) AS quantidade,
+                        SUM(CASE
+
+                        WHEN produtos_compras.tipo_exibicao = 3 OR produtos_compras.tipo_exibicao = 5
+                        THEN produtos_compras.preco_produto
+                        ELSE produtos_compras.preco_produto * produtos_compras.qtd
+                        
+                        END) AS valor_total,
+                        SUM(CASE
+
+                        WHEN produtos_compras.tipo_exibicao = 3 OR produtos_compras.tipo_exibicao = 5
+                        THEN produtos_compras.qtd / 1000.0
+                        ELSE produtos_compras.qtd * 1
+                        
+                        END) AS qtd_comprados FROM produtos_usuario
+                        INNER JOIN produtos_compras ON produtos_compras.id_produtos_usuario=produtos_usuario.id
+                        INNER JOIN compras ON compras.id=produtos_compras.id_compras
+                        LEFT JOIN fotos ON fotos.id=produtos_usuario.id_fotos
+                        WHERE produtos_usuario.id_usuarios=?
+                        AND DATE_FORMAT(compras.data, '%Y-%m')=DATE_FORMAT(DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH), '%Y-%m')
+                        GROUP BY produtos_usuario.id
+                        ORDER BY valor_total DESC"
+
+                        /* "SELECT mercados.id, mercados.nome AS name, COUNT(DISTINCT compras.id) AS quantidade,
+                        SUM(CASE
+
+                        WHEN produtos_compras.tipo_exibicao = 3 OR produtos_compras.tipo_exibicao = 5
+                        THEN produtos_compras.preco_produto
+                        ELSE produtos_compras.preco_produto * produtos_compras.qtd
+                        
+                        END) AS valor_total FROM mercados
+                        INNER JOIN compras ON compras.id_mercados=mercados.id
+                        INNER JOIN produtos_compras ON produtos_compras.id_compras=compras.id
+                        WHERE compras.id_usuarios=?
+                        AND DATE_FORMAT(compras.data, '%Y-%m')=DATE_FORMAT(DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH), '%Y-%m')
+                        GROUP BY mercados.id
+                        ORDER BY valor_total DESC" */
+
+                    );
+
+                    if(!$conexao){
+
+                        throw new Exception("Erro de conexão: ".$this->conn->error);
+
+                    }
+
+                    $conexao->bind_param("i", $this->id_usuario);
+
+                break;
+
+                case "escolher_datas":
+
+                    $conexao = $this->conn->prepare(
+
+                        "SELECT produtos_usuario.id, produtos_usuario.nome AS name, fotos.url AS url_foto, COUNT(*) AS quantidade,
+                        SUM(CASE
+
+                        WHEN produtos_compras.tipo_exibicao = 3 OR produtos_compras.tipo_exibicao = 5
+                        THEN produtos_compras.preco_produto
+                        ELSE produtos_compras.preco_produto * produtos_compras.qtd
+                        
+                        END) AS valor_total,
+                        SUM(CASE
+
+                        WHEN produtos_compras.tipo_exibicao = 3 OR produtos_compras.tipo_exibicao = 5
+                        THEN produtos_compras.qtd / 1000.0
+                        ELSE produtos_compras.qtd * 1
+                        
+                        END) AS qtd_comprados FROM produtos_usuario
+                        INNER JOIN produtos_compras ON produtos_compras.id_produtos_usuario=produtos_usuario.id
+                        INNER JOIN compras ON compras.id=produtos_compras.id_compras
+                        LEFT JOIN fotos ON fotos.id=produtos_usuario.id_fotos
+                        WHERE produtos_usuario.id_usuarios=?
+                        AND DATE(compras.data) BETWEEN ? AND ?
+                        GROUP BY produtos_usuario.id
+                        ORDER BY valor_total DESC"
+
+                        /* "SELECT mercados.id, mercados.nome AS name, COUNT(DISTINCT compras.id) AS quantidade,
+                        SUM(CASE
+
+                        WHEN produtos_compras.tipo_exibicao = 3 OR produtos_compras.tipo_exibicao = 5
+                        THEN produtos_compras.preco_produto
+                        ELSE produtos_compras.preco_produto * produtos_compras.qtd
+                        
+                        END) AS valor_total FROM mercados
+                        INNER JOIN compras ON compras.id_mercados=mercados.id
+                        INNER JOIN produtos_compras ON produtos_compras.id_compras=compras.id
+                        WHERE compras.id_usuarios=?
+                        AND DATE(compras.data) BETWEEN ? AND ?
+                        GROUP BY mercados.id
+                        ORDER BY valor_total DESC" */
 
                     );
 
