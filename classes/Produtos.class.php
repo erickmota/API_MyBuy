@@ -7,6 +7,7 @@ class Produtos extends Usuarios{
     private $verifica_titularidade_lista;
     private $produtos_usuario;
     private $produtos_exemplo;
+    private $class_historico;
     
     public $id__prod;
     public $nome;
@@ -21,7 +22,7 @@ class Produtos extends Usuarios{
     public $id_usuarios_dono;
     public $id_produtos_usuario;
 
-    public function __construct($produtos_exemplo, $produtos_usuario, $classeUsuariosListas, $classeRetornosJson, $classeConexao){
+    public function __construct($produtos_exemplo, $produtos_usuario, $classeUsuariosListas, $classeRetornosJson, $classeConexao, $class_historico){
 
         $this->conn = $classeConexao->getConexao();
         $this->retorna_json = $classeRetornosJson;
@@ -29,6 +30,7 @@ class Produtos extends Usuarios{
         $this->produtos_usuario = $produtos_usuario;
         $this->produtos_exemplo = $produtos_exemplo;
         parent::__construct($classeRetornosJson, $classeConexao);
+        $this->class_historico = $class_historico;
 
     }
 
@@ -310,7 +312,62 @@ class Produtos extends Usuarios{
 
         }
 
+        /* Histórico */
+
+        $this->class_historico->setData("today");
+        $this->class_historico->setTipo(3);
+        $this->class_historico->setMsg("adicionou o item '".$this->nome."' à lista.");
+        $this->class_historico->setIdListas(intval($this->id_listas));
+        $this->class_historico->setIdCompras(false);
+        $this->class_historico->setIdUsuarios(intval($this->getIdUsuarios()));
+
+        $this->class_historico->incluir_historico();
+
         return $this->retorna_json->retorna_json(false);
+
+    }
+
+    /* Retorna o nome e a lista do produto pelo id */
+    private function retorna_nome_lista_produto($id_produto){
+
+        try {
+
+            $conexao = $this->conn->prepare(
+
+                "SELECT nome, id_listas FROM produtos
+                WHERE id=?"
+
+            );
+
+            if($conexao === false){
+
+                throw new Exception("Erro de conexão: ".$this->conn->error);
+
+            }
+
+            $conexao->bind_param("i", $id_produto);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao->error);
+
+            }
+
+            $sql = $conexao->get_result();
+            $result = $sql->fetch_assoc();
+
+            $nome_produto = $result["nome"];
+            $id_lista_produto = $result["id_listas"];
+
+            return [$nome_produto, $id_lista_produto];
+            
+        } catch (Exception $e) {
+
+            error_log("Classe Produtos - Métodos: retorna_nome_produto - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
 
     }
 
@@ -318,6 +375,19 @@ class Produtos extends Usuarios{
     public function deletar_produto(){
 
         $conn = $this->conn;
+
+        $inf_produto = $this->retorna_nome_lista_produto($this->id__prod);
+
+        /* Histórico */
+
+        $this->class_historico->setData("today");
+        $this->class_historico->setTipo(4);
+        $this->class_historico->setMsg("removeu o item '".$inf_produto[0]."' da lista.");
+        $this->class_historico->setIdListas(intval($inf_produto[1]));
+        $this->class_historico->setIdCompras(false);
+        $this->class_historico->setIdUsuarios(intval($this->getIdUsuarios()));
+
+        $this->class_historico->incluir_historico();
 
         $sql = mysqli_query(
 
@@ -327,6 +397,177 @@ class Produtos extends Usuarios{
         ) or die("Erro conexão");
 
         return $this->retorna_json->retorna_json(false);
+
+    }
+
+    private function retorna_tipo($tipo){
+
+        /* 1 = Un
+        2 = Kg
+        3 = g
+        4 = L
+        5 = ml
+        6 = dz
+        7 = Caixa
+        8 = Pacote
+        9 = Garrafa
+        10 = Lata
+        11 = Embalagem */
+
+        switch($tipo){
+
+            case 1:
+                return "Un";
+            break;
+            case 2:
+                return "Kg";
+            break;
+            case 3:
+                return "g";
+            break;
+            case 4:
+                return "L";
+            break;
+            case 5:
+                return "ml";
+            break;
+            case 6:
+                return "dz";
+            break;
+            case 7:
+                return "Caixa";
+            break;
+            case 8:
+                return "Pacote";
+            break;
+            case 9:
+                return "Garrafa";
+            break;
+            case 10:
+                return "Lata";
+            break;
+            case 11:
+                return "Embalagem";
+            break;
+
+        }
+
+    }
+
+    /* Verifica o tipo de edição do produto e inclui a alteração no histórico */
+    private function verifica_edicao_produto($id_produto, $inf_produtos_att, $id_usuario){
+
+        try {
+
+            $conexao = $this->conn->prepare(
+
+                "SELECT nome, tipo_exibicao, qtd, id_listas, valor, obs FROM produtos
+                WHERE id=?"
+
+            );
+
+            if($conexao === false){
+
+                throw new Exception("Erro de conexão: ".$this->conn->error);
+
+            }
+
+            $conexao->bind_param("i", $id_produto);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao->error);
+
+            }
+
+            $sql = $conexao->get_result();
+
+            $inf_produtos_ant = []; // Informações antigas do produto
+
+            $alteracoes = []; // Guarda as edições do produto
+
+            $result = $sql->fetch_assoc();
+
+            $inf_produtos_ant[0] = $result["nome"];
+            $inf_produtos_ant[1] = $result["tipo_exibicao"];
+            $inf_produtos_ant[2] = $result["qtd"];
+            $inf_produtos_ant[3] = $result["valor"];
+            $inf_produtos_ant[4] = $result["obs"];
+
+            $id_lista = $result["id_listas"];
+            
+            if($inf_produtos_ant[0] != $inf_produtos_att[0]){
+
+                array_push($alteracoes, "Nome: de '".$inf_produtos_ant[0]."' para '".$inf_produtos_att[0]."'");
+
+            }
+
+            if($inf_produtos_ant[1] != $inf_produtos_att[1]){
+
+                array_push($alteracoes, "Tipo: de '".$this->retorna_tipo($inf_produtos_ant[1])."' para '".$this->retorna_tipo($inf_produtos_att[1])."'");
+
+            }
+
+            if($inf_produtos_ant[2] != $inf_produtos_att[2]){
+
+                array_push($alteracoes, "Quantidade: de '".$inf_produtos_ant[2]."' para '".$inf_produtos_att[2]."'");
+
+            }
+
+            if($inf_produtos_ant[3] != $inf_produtos_att[3]){
+
+                array_push($alteracoes, "Valor: de 'R$".number_format($inf_produtos_ant[3], 2)."' para 'R$".number_format($inf_produtos_att[3], 2)."'");
+
+            }
+
+            if($inf_produtos_ant[4] != $inf_produtos_att[4]){
+
+                if($inf_produtos_ant[4] == ""){
+
+                    $obs_ant = "(Vazio)";
+
+                }else{
+
+                    $obs_ant = $inf_produtos_ant[4];
+
+                }
+
+                if($inf_produtos_att[4] == ""){
+
+                    $obs_att = "(Vazio)";
+
+                }else{
+
+                    $obs_att = $inf_produtos_att[4];
+
+                }
+
+                array_push($alteracoes, "Obs: de '".$obs_ant."' para '".$obs_att."'");
+
+            }
+
+            if(count($alteracoes) > 0){
+
+                /* Histórico */
+
+                $this->class_historico->setData("today");
+                $this->class_historico->setTipo(5);
+                $this->class_historico->setMsg("alterou o item: ".$inf_produtos_att[0]."\n\n".implode("\n", $alteracoes));
+                $this->class_historico->setIdListas(intval($id_lista));
+                $this->class_historico->setIdCompras(false);
+                $this->class_historico->setIdUsuarios(intval($id_usuario));
+
+                $this->class_historico->incluir_historico();
+
+            }
+            
+        } catch (Exception $e) {
+
+            error_log("Classe Produtos - Métodos: verifica_edicao_produto - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
 
     }
 
@@ -340,6 +581,20 @@ class Produtos extends Usuarios{
         $this->produtos_usuario->id_usuarios = $id_usuario;
         $this->produtos_usuario->tipo_exibicao = $this->tipo_exibicao;
         $this->produtos_usuario->id_fotos = $this->id_fotos;
+
+        /* Chamando o histórico */
+
+        $inf_produtos = [
+
+            $this->nome,
+            $this->tipo_exibicao,
+            $this->qtd,
+            $this->valor,
+            $this->obs
+
+        ];
+
+        $this->verifica_edicao_produto($this->id__prod, $inf_produtos, $id_usuario);
 
         // Essa variável tbm é responsável por armazenar o id do produto, caso haja retorno.
         // Verfica se existe o valor no banco, pelo nome.

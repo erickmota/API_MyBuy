@@ -19,6 +19,7 @@ class ProdutosCompras{
 
         $this->conn = $classeConexao->getConexao();
         $this->retorna_json = $classeRetornosJson;
+        
     }
 
     public function setIdCompras($id_compras){

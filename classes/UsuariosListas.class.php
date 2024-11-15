@@ -5,16 +5,19 @@ class UsuariosListas extends Usuarios{
     private $conn;
     private $retorna_json;
     private $classeListas;
+    private $class_historico;
+
     public $id;
     public $id_usuarios;
     public $id_listas;
 
-    public function __construct($classeListas, $classeRetornosJson, $classeConexao){
+    public function __construct($classeListas, $classeRetornosJson, $classeConexao, $class_historico){
 
         $this->conn = $classeConexao->getConexao();
         $this->retorna_json = $classeRetornosJson;
         $this->classeListas = $classeListas;
         parent::__construct($classeRetornosJson, $classeConexao);
+        $this->class_historico = $class_historico;
 
     }
 
@@ -163,7 +166,6 @@ class UsuariosListas extends Usuarios{
     } */
 
     /* Retorna o ID do usuário via email. */
-
     private function retorna_id_usario_via_email($email_usuario){
 
         $conn = $this->conn;
@@ -171,14 +173,14 @@ class UsuariosListas extends Usuarios{
         $sql = mysqli_query(
 
             $conn,
-            "SELECT id FROM usuarios
+            "SELECT id, nome FROM usuarios
             WHERE email='$email_usuario'"
 
         ) or die("Erro conexão");
 
         $result = mysqli_fetch_assoc($sql);
 
-        return $result["id"];
+        return [$result["id"], $result["nome"]];
 
     }
 
@@ -188,7 +190,8 @@ class UsuariosListas extends Usuarios{
 
         $conn = $this->conn;
 
-        $id_novo_usuario = $this->retorna_id_usario_via_email($email_usuario);
+        $inf_novo_usuario = $this->retorna_id_usario_via_email($email_usuario);
+        $id_novo_usuario = $inf_novo_usuario[0];
 
         $sql = mysqli_query(
 
@@ -197,6 +200,17 @@ class UsuariosListas extends Usuarios{
             VALUES ('$id_novo_usuario', '$id_lista')"
 
         ) or die("Erro conexão");
+
+        /* Histórico */
+
+        $this->class_historico->setData("today");
+        $this->class_historico->setTipo(6);
+        $this->class_historico->setMsg("adicionou o usuario: '".$inf_novo_usuario[1]."' à lista");
+        $this->class_historico->setIdListas(intval($id_lista));
+        $this->class_historico->setIdCompras(false);
+        $this->class_historico->setIdUsuarios(intval($this->getIdUsuarios()));
+
+        $this->class_historico->incluir_historico();
 
         return $this->retorna_json->retorna_json(false);
 
@@ -217,6 +231,28 @@ class UsuariosListas extends Usuarios{
             AND id_listas='$this->id_listas'"
 
         ) or die("Erro conexão");
+
+        /* Histórico */
+
+        $this->class_historico->setData("today");
+        $this->class_historico->setTipo(7);
+        
+        if($this->id_usuarios == $this->getIdUsuarios()){
+
+            $this->class_historico->setMsg("saiu da lista");
+            $this->class_historico->setIdUsuarios(intval($this->getIdUsuarios()));
+
+        }else{
+
+            $this->class_historico->setMsg("foi removido(a) da lista");
+            $this->class_historico->setIdUsuarios(intval($this->id_usuarios));
+
+        }
+
+        $this->class_historico->setIdListas(intval($this->id_listas));
+        $this->class_historico->setIdCompras(false);
+
+        $this->class_historico->incluir_historico();
 
         return $this->retorna_json->retorna_json(false);
 

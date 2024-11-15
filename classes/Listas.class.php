@@ -4,15 +4,18 @@ class Listas extends Usuarios{
 
     private $conn;
     private $retorna_json;
+    private $class_historico;
+
     public $id;
     public $nome;
     public $id_usuarios_dono;
 
-    public function __construct($classeRetornosJson, $classeConexao){
+    public function __construct($classeRetornosJson, $classeConexao, $class_historico){
 
         $this->conn = $classeConexao->getConexao();
         $this->retorna_json = $classeRetornosJson;
         parent::__construct($classeRetornosJson, $classeConexao);
+        $this->class_historico = $class_historico;
 
     }
 
@@ -117,45 +120,142 @@ class Listas extends Usuarios{
     }
 
     /* Atualiza o nome de uma lista */
-    public function atualiza_nome_lista(){
+    public function atualiza_nome_lista($id_usuarios){
 
-        $conn = $this->conn;
+        try {
 
-        $sql = mysqli_query(
+            $conexao = $this->conn->prepare(
+
+                "UPDATE listas
+                SET nome=?
+                WHERE id=?"
+
+            );
+
+            if($conexao === false){
+
+                throw new Exception("Erro de conexão: ".$this->conn->error);
+
+            }
+
+            $conexao->bind_param("si", $this->nome, $this->id);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao->error);
+
+            }
+
+            /* Histórico */
+
+            $this->class_historico->setData("today");
+            $this->class_historico->setTipo(2);
+            $this->class_historico->setMsg("alterou o nome da lista para: ".$this->nome);
+            $this->class_historico->setIdListas(intval($this->id));
+            $this->class_historico->setIdCompras(false);
+            $this->class_historico->setIdUsuarios(intval($id_usuarios));
+
+            $this->class_historico->incluir_historico();
+
+            return $this->retorna_json->retorna_json(false);
             
-            $conn, "UPDATE listas
-            SET nome='$this->nome'
-            WHERE id='$this->id'"
-            
-        ) or die("Erro conexão");
+        } catch (Exception $e) {
 
-        return $this->retorna_json->retorna_json(false);
+            error_log("Classe Listas - Métodos: atualiza_nome_lista - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
+
+    }
+
+    private function incluir_usuario_lista($id_usuario, $ultimo_id){
+
+        try {
+
+            $conexao = $this->conn->prepare(
+
+                "INSERT INTO usuarios_listas (id_usuarios, id_listas)
+                VALUES (?, ?)"
+
+            );
+
+            if($conexao === false){
+
+                throw new Exception("Erro de conexão: ".$this->conn->error);
+
+            }
+
+            $conexao->bind_param("ii", $id_usuario, $ultimo_id);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao->error);
+
+            }
+            
+        } catch (Exception $e) {
+
+            error_log("Classe Listas - Métodos: incluir_usuario_lista - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
 
     }
 
     /* Cria uma nova lista */
     public function criar_lista(){
 
-        $conn = $this->conn;
-        $id_usuario = $this->getIdUsuarios();
+        try {
 
-        $sql = mysqli_query(
+            $id_usuario = $this->getIdUsuarios();
 
-            $conn, "INSERT INTO listas (nome, id_usuarios_dono)
-            VALUES ('$this->nome', '$id_usuario')"
+            $conexao = $this->conn->prepare(
 
-        ) or die("Erro conexão");
+                "INSERT INTO listas (nome, id_usuarios_dono)
+                VALUES (?, ?)"
 
-        $ultimo_id = mysqli_insert_id($conn);
+            );
 
-        $sql2 = mysqli_query(
+            if($conexao === false){
 
-            $conn, "INSERT INTO usuarios_listas (id_usuarios, id_listas)
-            VALUES ('$id_usuario', '$ultimo_id')"
+                throw new Exception("Erro de conexão: ".$this->conn->error);
 
-        ) or die("Erro conexão");
+            }
 
-        return $this->retorna_json->retorna_json(false);
+            $conexao->bind_param("si", $this->nome, $id_usuario);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao->error);
+
+            }
+
+            $ultimo_id = mysqli_insert_id($this->conn);
+
+            $this->incluir_usuario_lista($id_usuario, $ultimo_id);
+
+            /* Histórico */
+
+            $this->class_historico->setData("today");
+            $this->class_historico->setTipo(1);
+            $this->class_historico->setMsg("criou a lista");
+            $this->class_historico->setIdListas($ultimo_id);
+            $this->class_historico->setIdCompras(false);
+            $this->class_historico->setIdUsuarios(intval($this->getIdUsuarios()));
+
+            $this->class_historico->incluir_historico();
+
+            return $this->retorna_json->retorna_json(false);
+            
+        } catch (Exception $e) {
+
+            error_log("Classe Listas - Métodos: criar_lista - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
 
     }
 

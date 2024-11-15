@@ -9,14 +9,17 @@ $classeConexao = new Conexao();
 require_once "classes/RetornosJson.class.php";
 $classeRetornosJson = new RetornosJson();
 
+require_once "classes/HistoricoListas.class.php";
+$classeHistoricos = new HistoricoListas($classeRetornosJson, $classeConexao);
+
 require_once "classes/Usuarios.class.php";
 $classeUsuarios = new Usuarios($classeRetornosJson, $classeConexao);
 
 require_once "classes/Listas.class.php";
-$classeListas = new Listas($classeRetornosJson, $classeConexao);
+$classeListas = new Listas($classeRetornosJson, $classeConexao, $classeHistoricos);
 
 require_once "classes/UsuariosListas.class.php";
-$classeUsuariosListas = new UsuariosListas($classeListas ,$classeRetornosJson, $classeConexao);
+$classeUsuariosListas = new UsuariosListas($classeListas ,$classeRetornosJson, $classeConexao, $classeHistoricos);
 
 require_once "classes/ProdutosExemplo.class.php";
 $classeProdutosExemplo = new ProdutosExemplo($classeRetornosJson, $classeConexao);
@@ -25,7 +28,7 @@ require_once "classes/ProdutosUsuario.class.php";
 $classeProdutosUsuario = new ProdutosUsuario($classeProdutosExemplo, $classeRetornosJson, $classeConexao);
 
 require_once "classes/Produtos.class.php";
-$classeProdutos = new Produtos($classeProdutosExemplo, $classeProdutosUsuario, $classeUsuariosListas, $classeRetornosJson, $classeConexao);
+$classeProdutos = new Produtos($classeProdutosExemplo, $classeProdutosUsuario, $classeUsuariosListas, $classeRetornosJson, $classeConexao, $classeHistoricos);
 
 require_once "classes/Categorias.class.php";
 $classeCategorias = new Categorias($classeRetornosJson, $classeConexao);
@@ -37,7 +40,7 @@ require_once "classes/Mercados.class.php";
 $classeMercados = new Mercados($classeRetornosJson, $classeConexao);
 
 require_once "classes/Compras.class.php";
-$classeCompras = new Compras($classeUsuariosListas, $classeProdutosCompras, $classeMercados, $classeRetornosJson, $classeConexao);
+$classeCompras = new Compras($classeUsuariosListas, $classeProdutosCompras, $classeMercados, $classeRetornosJson, $classeConexao, $classeHistoricos);
 
 require_once "classes/Graficos.class.php";
 $classeGraficos = new Graficos($classeConexao, $classeRetornosJson, $classeProdutosCompras);
@@ -464,6 +467,33 @@ if(isset($_GET["url"])){
 
                     break;
 
+                    case "historico":
+
+                        if(isset($explode[2])){
+
+                            $classeUsuariosListas->setIdUsuarios($explode[0]);
+                            $classeUsuariosListas->setIdListas($explode[2]);
+
+                            if($classeUsuariosListas->verifica_usuario_lista() == true){
+
+                                $classeHistoricos->setIdListas(intval($explode[2]));
+
+                                echo $classeHistoricos->retorna_historico();
+
+                            }else{
+
+                                echo $classeRetornosJson->retornaErro("Acesso do usuário a lista, negado.");
+
+                            }
+
+                        }else{
+
+                            echo $classeRetornosJson->retornaErro("Informe o id da lista. API/usuario/historico/ID_LISTA");
+
+                        }
+
+                    break;
+
                     /* *** POST *** */
 
                     /* Atualiza o nome da lista individualmente. */
@@ -476,12 +506,10 @@ if(isset($_GET["url"])){
                                 $id_lista = $_POST["id_lista"];
                                 $novo_nome = $_POST["novo_nome"];
 
-                                $classeCategorias->setIdUsuarios($explode[0]);
-
                                 $classeListas->setIdLista($id_lista);
                                 $classeListas->setNomeLista($novo_nome);
     
-                                echo $classeListas->atualiza_nome_lista($id_lista, $novo_nome);
+                                echo $classeListas->atualiza_nome_lista($explode[0]);
     
                             }else{
     

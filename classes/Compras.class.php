@@ -7,19 +7,21 @@ class Compras{
     private $class_mercado;
     private $class_produtos_compra;
     private $class_usuarios_listas;
+    private $class_historico;
 
     public $id;
     public $data;
     public $id_mercados;
     public $id_usuarios;
 
-    public function __construct($class_usuarios_listas, $class_produtos_compra, $class_mercado, $classeRetornosJson, $classeConexao){
+    public function __construct($class_usuarios_listas, $class_produtos_compra, $class_mercado, $classeRetornosJson, $classeConexao, $class_historico){
 
         $this->conn = $classeConexao->getConexao();
         $this->retorna_json = $classeRetornosJson;
         $this->class_mercado = $class_mercado;
         $this->class_produtos_compra = $class_produtos_compra;
         $this->class_usuarios_listas = $class_usuarios_listas;
+        $this->class_historico = $class_historico;
     }
 
     public function setData($data){
@@ -98,6 +100,17 @@ class Compras{
             $this->class_produtos_compra->setIdCompras($id_compra);
 
             $this->class_produtos_compra->cadastrar_produtos($id_lista);
+
+            /* Histórico */
+
+            $this->class_historico->setData("today");
+            $this->class_historico->setTipo(8);
+            $this->class_historico->setMsg("efetuou uma compra.");
+            $this->class_historico->setIdListas(intval($id_lista));
+            $this->class_historico->setIdCompras(intval($id_compra));
+            $this->class_historico->setIdUsuarios(intval($this->id_usuarios));
+
+            $this->class_historico->incluir_historico();
 
             return $this->retorna_json->retorna_json(null);
             
