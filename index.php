@@ -494,6 +494,34 @@ if(isset($_GET["url"])){
 
                     break;
 
+                    case "limpar_carrinho":
+
+                        if(isset($explode[2])){
+
+                            $classeUsuariosListas->setIdUsuarios($explode[0]);
+                            $classeUsuariosListas->setIdListas($explode[2]);
+
+                            if($classeUsuariosListas->verifica_usuario_lista() == true){
+
+                                $classeProdutos->setIdLista($explode[2]);
+                                $classeProdutos->setIdUsuarios($explode[0]);
+
+                                echo $classeProdutos->limpar_carrinho();
+
+                            }else{
+
+                                echo $classeRetornosJson->retornaErro("Permissão negada.");
+
+                            }
+
+                        }else{
+
+                            echo $classeRetornosJson->retornaErro("Informe o id da lista. API/usuario/limpar_carrinho/ID_LISTA");
+
+                        }
+
+                    break;
+
                     /* *** POST *** */
 
                     /* Atualiza o nome da lista individualmente. */

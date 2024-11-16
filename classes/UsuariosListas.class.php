@@ -153,18 +153,6 @@ class UsuariosListas extends Usuarios{
 
     }
 
-    /* private function envia_email($texto, $assunto, $email_origem, $email_destino){
-
-        $corpo = $texto;
-
-        $header = "MIME-Version: 1.0\r\n";
-        $header .= "Content-type: text/html; charset=utf-8\r\n";
-        $header .= "From: $email_origem\r\n";
-
-        mail ($email_destino,  $assunto, $corpo, $header);
-
-    } */
-
     /* Retorna o ID do usuário via email. */
     private function retorna_id_usario_via_email($email_usuario){
 

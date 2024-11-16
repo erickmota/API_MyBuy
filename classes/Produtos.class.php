@@ -803,6 +803,61 @@ class Produtos extends Usuarios{
 
     }
 
+    public function limpar_carrinho(){
+
+        try {
+
+            $conexao = $this->conn->prepare(
+
+                "UPDATE produtos
+                SET carrinho=?
+                WHERE id_listas=?"
+
+            );
+
+            if($conexao === false){
+
+                throw new Exception("Erro de conexão: ".$this->conn->error);
+
+            }
+
+            $carrinho = 0;
+
+            $conexao->bind_param("ii", $carrinho, $this->id_listas);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao->error);
+
+            }
+
+            if($this->conn->affected_rows > 0){
+
+                /* Histórico */
+
+                $this->class_historico->setData("today");
+                $this->class_historico->setTipo(9);
+                $this->class_historico->setMsg("limpou o carrinho.");
+                $this->class_historico->setIdListas(intval($this->id_listas));
+                $this->class_historico->setIdCompras(false);
+                $this->class_historico->setIdUsuarios(intval($this->getIdUsuarios()));
+
+                $this->class_historico->incluir_historico();
+
+            }
+
+            return $this->retorna_json->retorna_json(null);
+            
+        } catch (Exception $e) {
+            
+            error_log("Classe Produtos - Métodos: limpar_carrinho - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+
+        }
+
+    }
+
 }
 
 ?>
