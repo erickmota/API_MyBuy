@@ -142,7 +142,7 @@ class Produtos extends Usuarios{
                 LEFT JOIN usuarios ON produtos.id_usuarios_dono=usuarios.id
                 WHERE usuarios_listas.id_usuarios='$id_usuario'
                 AND listas.id='$this->id_listas'
-                AND produtos.carrinho=0"
+                AND (produtos.carrinho=0 OR produtos.carrinho=2)"
             
             ) or die("Erro BD");
 
@@ -182,7 +182,7 @@ class Produtos extends Usuarios{
                         WHERE usuarios_listas.id_usuarios='$id_usuario'
                         AND produtos.id_categorias='$categoria'
                         AND listas.id='$this->id_listas'
-                        AND produtos.carrinho=0"
+                        AND (produtos.carrinho=0 OR produtos.carrinho=2)"
                     
                     ) or die("Erro BD");
     
@@ -803,7 +803,8 @@ class Produtos extends Usuarios{
 
     }
 
-    public function limpar_carrinho(){
+    /* Limpa o carrinho e desmarca os produtos comprados */
+    public function limpar_carrinho($tipo){
 
         try {
 
@@ -811,7 +812,8 @@ class Produtos extends Usuarios{
 
                 "UPDATE produtos
                 SET carrinho=?
-                WHERE id_listas=?"
+                WHERE id_listas=?
+                AND carrinho=?"
 
             );
 
@@ -820,10 +822,26 @@ class Produtos extends Usuarios{
                 throw new Exception("Erro de conexão: ".$this->conn->error);
 
             }
+            
+            switch($tipo){
 
-            $carrinho = 0;
+                case "limpar_carrinho":
 
-            $conexao->bind_param("ii", $carrinho, $this->id_listas);
+                    $carrinho = 0;
+                    $carrinho_where = 1;
+
+                break;
+
+                case "desmarcar_comprados":
+
+                    $carrinho = 0;
+                    $carrinho_where = 2;
+
+                break;
+
+            }
+
+            $conexao->bind_param("iii", $carrinho, $this->id_listas, $carrinho_where);
 
             if(!$conexao->execute()){
 
@@ -835,9 +853,25 @@ class Produtos extends Usuarios{
 
                 /* Histórico */
 
+                switch($tipo){
+
+                    case "limpar_carrinho":
+    
+                        $this->class_historico->setTipo(9);
+                        $this->class_historico->setMsg("limpou o carrinho.");
+    
+                    break;
+    
+                    case "desmarcar_comprados":
+    
+                        $this->class_historico->setTipo(10);
+                        $this->class_historico->setMsg("Removeu a etiqueta 'COMPRADO' de todos os produtos.");
+    
+                    break;
+    
+                }
+
                 $this->class_historico->setData("today");
-                $this->class_historico->setTipo(9);
-                $this->class_historico->setMsg("limpou o carrinho.");
                 $this->class_historico->setIdListas(intval($this->id_listas));
                 $this->class_historico->setIdCompras(false);
                 $this->class_historico->setIdUsuarios(intval($this->getIdUsuarios()));
@@ -854,6 +888,103 @@ class Produtos extends Usuarios{
 
             return $this->retorna_json->retornaErro($e->getMessage());
 
+        }
+
+    }
+
+    public function remover_comprados(){
+
+        try {
+
+            $conexao = $this->conn->prepare(
+
+                "DELETE FROM produtos
+                WHERE id_listas=?
+                AND carrinho=?"
+
+            );
+
+            if($conexao === false){
+
+                throw new Exception("Erro de conexão: ".$this->conn->error);
+
+            }
+
+            $carrinho = 2;
+
+            $conexao->bind_param("ii", $this->id_listas, $carrinho);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao->error);
+
+            }
+
+            if($this->conn->affected_rows > 0){
+
+                /* Histórico */
+
+                $this->class_historico->setData("today");
+                $this->class_historico->setTipo(11);
+                $this->class_historico->setMsg("removeu da lista, todos os produtos com a etiqueta 'COMPRADO'.");
+                $this->class_historico->setIdListas(intval($this->id_listas));
+                $this->class_historico->setIdCompras(false);
+                $this->class_historico->setIdUsuarios(intval($this->getIdUsuarios()));
+
+                $this->class_historico->incluir_historico();
+
+            }
+
+            return $this->retorna_json->retorna_json(null);
+            
+        } catch (Exception $e) {
+
+            error_log("Classe Produtos - Métodos: remover_comprados - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
+
+    }
+
+    /* Métodos chamado após o usuário realizar uma compra.
+    Ele tira todos os produto do carrinho, e insere a etiqueta "COMPRADO" */
+    public function inserir_etiqueta_comprado(){
+
+        try {
+
+            $conexao = $this->conn->prepare(
+
+                "UPDATE produtos
+                SET carrinho=?
+                WHERE id_listas=?
+                AND carrinho=?"
+
+            );
+
+            if($conexao === false){
+
+                throw new Exception("Erro de conexão: ".$this->conn->error);
+
+            }
+
+            $carrinho = 2;
+            $carrinho_where = 1;
+
+            $conexao->bind_param("iii", $carrinho, $this->id_listas, $carrinho_where);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao->error);
+
+            }
+            
+        } catch (Exception $e) {
+
+            error_log("Classe Produtos - Métodos: inserir_etiqueta_comprado - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
         }
 
     }

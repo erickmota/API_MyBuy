@@ -58,7 +58,9 @@ class HistoricoListas{
     6 = Usuario inserido
     7 = Usuário saiu
     8 - Compra efetuada
-    9 - Limpar carrinho */
+    9 - Limpar carrinho
+    10 - Desmarcar_comprados
+    11 - Remover comprados */
     public function setTipo($tipo){
 
         if(is_int($tipo)){

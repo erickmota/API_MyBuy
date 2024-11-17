@@ -8,13 +8,14 @@ class Compras{
     private $class_produtos_compra;
     private $class_usuarios_listas;
     private $class_historico;
+    private $class_produtos;
 
     public $id;
     public $data;
     public $id_mercados;
     public $id_usuarios;
 
-    public function __construct($class_usuarios_listas, $class_produtos_compra, $class_mercado, $classeRetornosJson, $classeConexao, $class_historico){
+    public function __construct($class_usuarios_listas, $class_produtos_compra, $class_mercado, $classeRetornosJson, $classeConexao, $class_historico, $class_produtos){
 
         $this->conn = $classeConexao->getConexao();
         $this->retorna_json = $classeRetornosJson;
@@ -22,6 +23,7 @@ class Compras{
         $this->class_produtos_compra = $class_produtos_compra;
         $this->class_usuarios_listas = $class_usuarios_listas;
         $this->class_historico = $class_historico;
+        $this->class_produtos = $class_produtos;
     }
 
     public function setData($data){
@@ -100,6 +102,9 @@ class Compras{
             $this->class_produtos_compra->setIdCompras($id_compra);
 
             $this->class_produtos_compra->cadastrar_produtos($id_lista);
+
+            $this->class_produtos->setIdLista($id_lista);
+            $this->class_produtos->inserir_etiqueta_comprado();
 
             /* Histórico */
 

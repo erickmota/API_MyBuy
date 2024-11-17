@@ -40,7 +40,7 @@ require_once "classes/Mercados.class.php";
 $classeMercados = new Mercados($classeRetornosJson, $classeConexao);
 
 require_once "classes/Compras.class.php";
-$classeCompras = new Compras($classeUsuariosListas, $classeProdutosCompras, $classeMercados, $classeRetornosJson, $classeConexao, $classeHistoricos);
+$classeCompras = new Compras($classeUsuariosListas, $classeProdutosCompras, $classeMercados, $classeRetornosJson, $classeConexao, $classeHistoricos, $classeProdutos);
 
 require_once "classes/Graficos.class.php";
 $classeGraficos = new Graficos($classeConexao, $classeRetornosJson, $classeProdutosCompras);
@@ -506,7 +506,63 @@ if(isset($_GET["url"])){
                                 $classeProdutos->setIdLista($explode[2]);
                                 $classeProdutos->setIdUsuarios($explode[0]);
 
-                                echo $classeProdutos->limpar_carrinho();
+                                echo $classeProdutos->limpar_carrinho("limpar_carrinho");
+
+                            }else{
+
+                                echo $classeRetornosJson->retornaErro("Permissão negada.");
+
+                            }
+
+                        }else{
+
+                            echo $classeRetornosJson->retornaErro("Informe o id da lista. API/usuario/limpar_carrinho/ID_LISTA");
+
+                        }
+
+                    break;
+
+                    case "desmarcar_comprados":
+
+                        if(isset($explode[2])){
+
+                            $classeUsuariosListas->setIdUsuarios($explode[0]);
+                            $classeUsuariosListas->setIdListas($explode[2]);
+
+                            if($classeUsuariosListas->verifica_usuario_lista() == true){
+
+                                $classeProdutos->setIdLista($explode[2]);
+                                $classeProdutos->setIdUsuarios($explode[0]);
+
+                                echo $classeProdutos->limpar_carrinho("desmarcar_comprados");
+
+                            }else{
+
+                                echo $classeRetornosJson->retornaErro("Permissão negada.");
+
+                            }
+
+                        }else{
+
+                            echo $classeRetornosJson->retornaErro("Informe o id da lista. API/usuario/limpar_carrinho/ID_LISTA");
+
+                        }
+
+                    break;
+
+                    case "remover_comprados":
+
+                        if(isset($explode[2])){
+
+                            $classeUsuariosListas->setIdUsuarios($explode[0]);
+                            $classeUsuariosListas->setIdListas($explode[2]);
+
+                            if($classeUsuariosListas->verifica_usuario_lista() == true){
+
+                                $classeProdutos->setIdLista($explode[2]);
+                                $classeProdutos->setIdUsuarios($explode[0]);
+
+                                echo $classeProdutos->remover_comprados();
 
                             }else{
 
