@@ -446,3 +446,9 @@ Classe Produtos - Métodos: limpar_carrinho - You have an error in your SQL synt
                 SET carrinho=?
                 WHERE id_listas=?' at line 1
 Classe HistoricoListas - Métodos: incluir_historico - Cannot add or update a child row: a foreign key constraint fails (`mybuy`.`historico_listas`, CONSTRAINT `historico_listas_ibfk_3` FOREIGN KEY (`id_usuarios`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE)
+Classe Mercados - Métodos: retorna_mercado - Nenhum resultado encontrado
+Classe Mercados - Métodos: retorna_mercado - Nenhum resultado encontrado
+Classe Mercados - Métodos: retorna_mercado - Nenhum resultado encontrado
+Classe Mercados - Métodos: retorna_mercado - Nenhum resultado encontrado
+Classe Mercados - Métodos: retorna_mercado - Nenhum resultado encontrado
+Classe Mercados - Métodos: retorna_mercado - Nenhum resultado encontrado
