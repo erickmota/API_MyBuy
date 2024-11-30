@@ -239,7 +239,8 @@ class ProdutosUsuario{
 
                 "SELECT produtos_usuario.id, produtos_usuario.nome, fotos.url AS url_foto FROM produtos_usuario
                 LEFT JOIN fotos ON fotos.id=produtos_usuario.id_fotos
-                WHERE id_usuarios=?"
+                WHERE id_usuarios=?
+                ORDER BY produtos_usuario.nome ASC"
 
             );
 
