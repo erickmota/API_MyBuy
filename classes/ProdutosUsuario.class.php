@@ -22,6 +22,12 @@ class ProdutosUsuario{
 
     /* SET */
 
+    public function setId($id){
+
+        $this->id = $id;
+
+    }
+
     public function setNome($nome){
 
         $this->nome = $nome;
@@ -221,6 +227,148 @@ class ProdutosUsuario{
 
             return $this->retorna_json->retorna_json($resultado);
 
+        }
+
+    }
+
+    public function retorna_todos_produtos_usuarios(){
+
+        try {
+
+            $conexao = $this->conn->prepare(
+
+                "SELECT produtos_usuario.id, produtos_usuario.nome, fotos.url AS url_foto FROM produtos_usuario
+                LEFT JOIN fotos ON fotos.id=produtos_usuario.id_fotos
+                WHERE id_usuarios=?"
+
+            );
+
+            if($conexao === false){
+
+                throw new Exception("Erro de conexão: ".$this->conn->error);
+
+            }
+
+            $conexao->bind_param("i", $this->id_usuarios);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao->error);
+
+            }
+
+            $sql = $conexao->get_result();
+            $num = $sql->num_rows;
+
+            if($num < 1){
+
+                return $this->retorna_json->retornaErro("Nenhum produto encontrado.");
+
+            }else{
+
+                while($resultado = $sql->fetch_assoc()){
+
+                    $array[] = $resultado;
+    
+                }
+
+                return $this->retorna_json->retorna_json($array);
+
+            }
+            
+        } catch (Exception $e) {
+
+            error_log("Classe ProdutosUsuario - Métodos: retorna_todos_produtos_usuarios - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
+
+    }
+
+    public function apaga_produto_usuario(){
+
+        try {
+
+            $conexao = $this->conn->prepare(
+
+                "DELETE FROM produtos_usuario
+                WHERE id=?"
+
+            );
+
+            if($conexao === false){
+
+                throw new Exception("Erro de conexão: ".$this->conn->error);
+
+            }
+
+            $conexao->bind_param("i", $this->id);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao->error);
+
+            }
+
+            return $this->retorna_json->retorna_json(null);
+            
+        } catch (Exception $e) {
+
+            error_log("Classe ProdutosUsuario - Métodos: apaga_produto_usuario - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
+
+    }
+
+    /* Verifica se o id do produto, pertence ao usuário */
+    public function verifica_produto_usuario(){
+
+        try {
+
+            $conexao = $this->conn->prepare(
+
+                "SELECT * FROM produtos_usuario
+                WHERE id_usuarios=?
+                AND id=?"
+
+            );
+
+            if($conexao === false){
+
+                throw new Exception("Erro de conexão: ".$this->conn->error);
+
+            }
+
+            $conexao->bind_param("ii", $this->id_usuarios, $this->id);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao->error);
+
+            }
+
+            $sql = $conexao->get_result();
+            $qtd = $sql->num_rows;
+
+            if($qtd > 0){
+
+                return true;
+
+            }else{
+
+                return false;
+
+            }
+            
+        } catch (Exception $e) {
+
+            error_log("Classe ProdutosUsuario - Métodos: verifica_produto_usuario - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
         }
 
     }

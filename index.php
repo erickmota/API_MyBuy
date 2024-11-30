@@ -578,6 +578,14 @@ if(isset($_GET["url"])){
 
                     break;
 
+                    case "meus_produtos":
+                        
+                        $classeProdutosUsuario->setId_usuarios($explode[0]);
+
+                        echo $classeProdutosUsuario->retorna_todos_produtos_usuarios();
+
+                    break;
+
                     /* *** POST *** */
 
                     /* Atualiza o nome da lista individualmente. */
@@ -1014,6 +1022,39 @@ if(isset($_GET["url"])){
                         }else{
     
                             echo $classeRetornosJson->retornaErro("Você precisa inserir o nome do mercado e o id da lista, como POST.");
+    
+                        }
+
+                    break;
+
+                    case "apaga_produto_usuario":
+
+                        if($_SERVER["REQUEST_METHOD"] === "POST"){
+    
+                            if(isset($_POST["id_produto"])){
+
+                                $classeProdutosUsuario->setId($_POST["id_produto"]);
+                                $classeProdutosUsuario->setId_usuarios($explode[0]);
+
+                                if($classeProdutosUsuario->verifica_produto_usuario() == true){
+
+                                    echo $classeProdutosUsuario->apaga_produto_usuario();
+
+                                }else{
+
+                                    echo $classeRetornosJson->retornaErro("Acesso negado!");
+
+                                }
+    
+                            }else{
+    
+                                echo $classeRetornosJson->retornaErro("Você precisa inserir o id do produto com o nome POST: id_produto.");
+    
+                            }
+    
+                        }else{
+    
+                            echo $classeRetornosJson->retornaErro("Você precisa inserir o id do produto, como POST.");
     
                         }
 
