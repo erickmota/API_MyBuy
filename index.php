@@ -1060,6 +1060,41 @@ if(isset($_GET["url"])){
 
                     break;
 
+                    case "altera_nome_meus_produtos":
+
+                        if($_SERVER["REQUEST_METHOD"] === "POST"){
+    
+                            if(isset($_POST["id_produto"]) && isset($_POST["nome_produto"])){
+
+                                $classeProdutosUsuario->setId($_POST["id_produto"]);
+                                $classeProdutosUsuario->setId_usuarios($explode[0]);
+
+                                if($classeProdutosUsuario->verifica_produto_usuario() == true){
+
+                                    $classeProdutosUsuario->setNome($_POST["nome_produto"]);
+
+                                    echo $classeProdutosUsuario->altera_nome_produto_usuario();
+
+                                }else{
+
+                                    echo $classeRetornosJson->retornaErro("Acesso negado!");
+
+                                }
+    
+                            }else{
+    
+                                echo $classeRetornosJson->retornaErro("Você precisa inserir o id do produto e o novo nome com o nome POST: id_produto, nome_produto respectivamente.");
+    
+                            }
+    
+                        }else{
+    
+                            echo $classeRetornosJson->retornaErro("Você precisa inserir o id do produto e o novo nome, como POST.");
+    
+                        }
+
+                    break;
+
                     default:
 
                         echo $classeRetornosJson->retornaErro("A rota definida não existe");

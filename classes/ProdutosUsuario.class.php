@@ -374,6 +374,44 @@ class ProdutosUsuario{
 
     }
 
+    public function altera_nome_produto_usuario(){
+
+        try {
+
+            $conexao = $this->conn->prepare(
+
+                "UPDATE produtos_usuario
+                SET nome=?
+                WHERE id=?"
+
+            );
+
+            if($conexao === false){
+
+                throw new Exception("Erro de conexão: ".$this->conn->error);
+
+            }
+
+            $conexao->bind_param("si", $this->nome, $this->id);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao->error);
+
+            }
+
+            return $this->retorna_json->retorna_json(null);
+            
+        } catch (Exception $e) {
+
+            error_log("Classe ProdutosUsuario - Métodos: altera_nome_produto_usuario - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
+
+    }
+
 }
 
 ?>
