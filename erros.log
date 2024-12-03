@@ -460,3 +460,5 @@ Classe ProdutosUsuario - Métodos: verifica_produto_usuario - Unknown column 'id
 Classe ProdutosUsuario - Métodos: verifica_produto_usuario - Unknown column 'id_usuario' in 'where clause'
 Classe Compras - Métodos: retorna_compras - Nenhum lista disponível para esse usuário.
 Classe Compras - Métodos: retorna_compras - Nenhum lista disponível para esse usuário.
+Classe Compras - Métodos: retorna_compras - Nenhum lista disponível para esse usuário.
+Classe Compras - Métodos: retorna_compras - Nenhum lista disponível para esse usuário.
