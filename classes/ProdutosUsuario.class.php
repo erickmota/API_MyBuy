@@ -392,7 +392,9 @@ class ProdutosUsuario{
 
             }
 
-            $conexao->bind_param("si", $this->nome, $this->id);
+            $nome_att = ucfirst($this->nome);
+
+            $conexao->bind_param("si", $nome_att, $this->id);
 
             if(!$conexao->execute()){
 
