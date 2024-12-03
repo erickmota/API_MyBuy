@@ -1095,6 +1095,74 @@ if(isset($_GET["url"])){
 
                     break;
 
+                    case "altera_nome_mercado":
+
+                        if($_SERVER["REQUEST_METHOD"] === "POST"){
+    
+                            if(isset($_POST["id_mercado"]) && isset($_POST["nome_mercado"])){
+
+                                $classeMercados->setId($_POST["id_mercado"]);
+                                $classeMercados->setIdUsuarios($explode[0]);
+
+                                if($classeMercados->verifica_mercado_usuario() == true){
+
+                                    $classeMercados->setNome($_POST["nome_mercado"]);
+
+                                    echo $classeMercados->altera_nome_mercado();
+
+                                }else{
+
+                                    echo $classeRetornosJson->retornaErro("Acesso negado!");
+
+                                }
+    
+                            }else{
+    
+                                echo $classeRetornosJson->retornaErro("Você precisa inserir o id do mercado e o novo nome com o nome POST: id_mercado, nome_mercado respectivamente.");
+    
+                            }
+    
+                        }else{
+    
+                            echo $classeRetornosJson->retornaErro("Você precisa inserir o id do mercado e o novo nome, como POST.");
+    
+                        }
+
+                    break;
+
+                    case "apaga_mercado":
+
+                        if($_SERVER["REQUEST_METHOD"] === "POST"){
+    
+                            if(isset($_POST["id_mercado"])){
+
+                                $classeMercados->setId($_POST["id_mercado"]);
+                                $classeMercados->setIdUsuarios($explode[0]);
+
+                                if($classeMercados->verifica_mercado_usuario() == true){
+
+                                    echo $classeMercados->apaga_mercado();
+
+                                }else{
+
+                                    echo $classeRetornosJson->retornaErro("Acesso negado!");
+
+                                }
+    
+                            }else{
+    
+                                echo $classeRetornosJson->retornaErro("Você precisa inserir o id do mercado com o nome POST: id_mercado.");
+    
+                            }
+    
+                        }else{
+    
+                            echo $classeRetornosJson->retornaErro("Você precisa inserir o id do mercado, como POST.");
+    
+                        }
+
+                    break;
+
                     default:
 
                         echo $classeRetornosJson->retornaErro("A rota definida não existe");
