@@ -177,7 +177,7 @@ class HistoricoListas{
 
             $conexao = $this->conn->prepare(
 
-                "SELECT historico_listas.id, DATE_FORMAT(historico_listas.data, '%d/%m/%Y - %H:%m') AS data, historico_listas.tipo, historico_listas.msg,
+                "SELECT historico_listas.id, DATE_FORMAT(historico_listas.data, '%d/%m/%Y - %H:%i') AS data, historico_listas.tipo, historico_listas.msg,
                 historico_listas.id_compras, historico_listas.id_usuarios AS id_usuario, usuarios.nome AS nome_usuario FROM historico_listas
                 INNER JOIN usuarios ON usuarios.id=historico_listas.id_usuarios
                 WHERE id_listas=?
