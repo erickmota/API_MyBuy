@@ -1163,6 +1163,39 @@ if(isset($_GET["url"])){
 
                     break;
 
+                    case "apaga_compra":
+
+                        if($_SERVER["REQUEST_METHOD"] === "POST"){
+    
+                            if(isset($_POST["id_compra"])){
+
+                                $classeCompras->setId($_POST["id_compra"]);
+                                $classeCompras->setIdUsuarios($explode[0]);
+
+                                if($classeCompras->verifica_compra_usuario() == true){
+
+                                    echo $classeCompras->apaga_compra();
+
+                                }else{
+
+                                    echo $classeRetornosJson->retornaErro("Acesso negado!");
+
+                                }
+    
+                            }else{
+    
+                                echo $classeRetornosJson->retornaErro("Você precisa inserir o id da compra com o nome POST: id_compra.");
+    
+                            }
+    
+                        }else{
+    
+                            echo $classeRetornosJson->retornaErro("Você precisa inserir o id da compra, como POST.");
+    
+                        }
+
+                    break;
+
                     default:
 
                         echo $classeRetornosJson->retornaErro("A rota definida não existe");

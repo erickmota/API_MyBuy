@@ -26,6 +26,12 @@ class Compras{
         $this->class_produtos = $class_produtos;
     }
 
+    public function setId($id){
+
+        $this->id = $id;
+
+    }
+
     public function setData($data){
 
         $this->data = $data;
@@ -262,6 +268,92 @@ class Compras{
             
         }
         
+    }
+
+    public function apaga_compra(){
+
+        try {
+
+            $conexao = $this->conn->prepare(
+
+                "DELETE FROM compras
+                WHERE id=?"
+
+            );
+
+            if($conexao === false){
+
+                throw new Exception("Erro na conexão: ".$this->conn->error);
+
+            }
+
+            $conexao->bind_param("i", $this->id);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro na execução: ".$conexao->error);
+
+            }
+
+            return $this->retorna_json->retorna_json(null);
+            
+        } catch (Exception $e) {
+
+            error_log("Classe Compras - Métodos: apagar_compra - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
+
+    }
+
+    public function verifica_compra_usuario(){
+
+        try {
+
+            $conexao = $this->conn->prepare(
+
+                "SELECT * FROM compras
+                WHERE id_usuarios=?
+                AND id=?"
+
+            );
+
+            if($conexao === false){
+
+                throw new Exception("Erro de conexão: ".$this->conn->error);
+
+            }
+
+            $conexao->bind_param("ii", $this->id_usuarios, $this->id);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao->error);
+
+            }
+
+            $sql = $conexao->get_result();
+            $qtd = $sql->num_rows;
+
+            if($qtd > 0){
+
+                return true;
+
+            }else{
+
+                return false;
+
+            }
+            
+        } catch (Exception $e) {
+
+            error_log("Classe Compras - Métodos: verifica_compra_usuario - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
+
     }
 
 }
