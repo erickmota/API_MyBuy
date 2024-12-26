@@ -12,14 +12,17 @@ $classeRetornosJson = new RetornosJson();
 require_once "classes/HistoricoListas.class.php";
 $classeHistoricos = new HistoricoListas($classeRetornosJson, $classeConexao);
 
+require_once "classes/Categorias.class.php";
+$classeCategorias = new Categorias($classeRetornosJson, $classeConexao);
+
 require_once "classes/Usuarios.class.php";
-$classeUsuarios = new Usuarios($classeRetornosJson, $classeConexao);
+$classeUsuarios = new Usuarios($classeRetornosJson, $classeConexao, $classeCategorias);
 
 require_once "classes/Listas.class.php";
-$classeListas = new Listas($classeRetornosJson, $classeConexao, $classeHistoricos);
+$classeListas = new Listas($classeRetornosJson, $classeConexao, $classeHistoricos, $classeCategorias);
 
 require_once "classes/UsuariosListas.class.php";
-$classeUsuariosListas = new UsuariosListas($classeListas ,$classeRetornosJson, $classeConexao, $classeHistoricos);
+$classeUsuariosListas = new UsuariosListas($classeListas ,$classeRetornosJson, $classeConexao, $classeHistoricos, $classeCategorias);
 
 require_once "classes/ProdutosExemplo.class.php";
 $classeProdutosExemplo = new ProdutosExemplo($classeRetornosJson, $classeConexao);
@@ -28,10 +31,7 @@ require_once "classes/ProdutosUsuario.class.php";
 $classeProdutosUsuario = new ProdutosUsuario($classeProdutosExemplo, $classeRetornosJson, $classeConexao);
 
 require_once "classes/Produtos.class.php";
-$classeProdutos = new Produtos($classeProdutosExemplo, $classeProdutosUsuario, $classeUsuariosListas, $classeRetornosJson, $classeConexao, $classeHistoricos);
-
-require_once "classes/Categorias.class.php";
-$classeCategorias = new Categorias($classeRetornosJson, $classeConexao);
+$classeProdutos = new Produtos($classeProdutosExemplo, $classeProdutosUsuario, $classeUsuariosListas, $classeRetornosJson, $classeConexao, $classeHistoricos, $classeCategorias);
 
 require_once "classes/ProdutosCompras.class.php";
 $classeProdutosCompras = new ProdutosCompras($classeRetornosJson, $classeConexao);
@@ -1243,6 +1243,37 @@ if(isset($_GET["url"])){
                 case "produtos_exemplo":
 
                     echo $classeProdutosExemplo->busca_produto();
+
+                break;
+
+                case "cadastrar":
+
+                    if($_SERVER["REQUEST_METHOD"] === "POST"){
+
+                        if(isset($_POST["nome"]) && isset($_POST["email"]) && isset($_POST["senha"]) && isset($_POST["confirma_senha"])){
+
+                            $nome = $_POST["nome"];
+                            $email = $_POST["email"];
+                            $senha = $_POST["senha"];
+                            $confirma_senha = $_POST["confirma_senha"];
+
+                            $classeUsuarios->setNome($nome);
+                            $classeUsuarios->setEmailUsuarios($email);
+                            $classeUsuarios->setSenhaUsuarios($senha);
+    
+                            echo $classeUsuarios->cadastrar($confirma_senha);
+
+                        }else{
+
+                            echo $classeRetornosJson->retornaErro("Você precisa informar nome, email, senha, confirmar_senha como POST");
+
+                        }
+
+                    }else{
+
+                        echo $classeRetornosJson->retornaErro("Nessa rota você precisa informar nome, email, senha, confirmar_senha como POST");
+
+                    }
 
                 break;
 

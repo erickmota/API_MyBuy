@@ -4,15 +4,21 @@ class Usuarios{
 
     private $conn;
     private $retorna_json;
+    private $classe_categoria;
+
     public $id;
     public $nome;
     public $email;
     public $senha;
+    public $token;
+    public $foto_url;
+    public $confirmado;
 
-    public function __construct($classeRetornosJson, $classeConexao){
+    public function __construct($classeRetornosJson, $classeConexao, $classe_categoria){
 
         $this->conn = $classeConexao->getConexao();
         $this->retorna_json = $classeRetornosJson;
+        $this->classe_categoria = $classe_categoria;
 
     }
 
@@ -34,9 +40,31 @@ class Usuarios{
 
     }
 
+    public function setNome($nome){
+
+        if(empty($nome)){
+
+            die ($this->retorna_json->retornaErro("Nome vazio"));
+
+        }else{
+
+            $this->nome = $nome;
+
+        }
+
+    }
+
     public function setEmailUsuarios($email){
 
-        $this->email = $email;
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
+            $this->email = $email;
+
+        } else {
+
+            die ($this->retorna_json->retornaErro("Formato de e-mail inválido!"));
+
+        }
 
     }
 
@@ -48,7 +76,15 @@ class Usuarios{
 
     public function setSenhaUsuarios($senha){
 
-        $this->senha = $senha;
+        if(empty($senha)){
+
+            die ($this->retorna_json->retornaErro("Senha Vazia"));
+
+        }else{
+
+            $this->senha = $senha;
+
+        }
 
     }
 
@@ -104,6 +140,120 @@ class Usuarios{
 
             return $this->retorna_json->retornaErro("Usuário não localizado");
 
+        }
+
+    }
+
+    /* Verifica se o email de cadastro já existe no banco */
+    public function verifica_email(){
+
+        try {
+
+            $conexao = $this->conn->prepare(
+
+                "SELECT * FROM usuarios
+                WHERE email=?"
+
+            );
+
+            if($conexao === false){
+
+                throw new Exception("Erro de conexão: ".$this->conn->error);
+
+            }
+
+            $conexao->bind_param("s", $this->email);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao->error);
+
+            }
+
+            $sql = $conexao->get_result();
+
+            $qtd = $sql->num_rows;
+
+            if($qtd > 0){
+
+                return true;
+
+            }else{
+
+                return false;
+
+            }
+            
+        } catch (Exception $e) {
+
+            error_log("Classe Usuarios - Métodos: verifica_email - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
+
+    }
+
+    public function cadastrar($confirma_senha){
+
+        try {
+
+            if($this->senha != $confirma_senha){
+
+                return $this->retorna_json->retornaErro("Senha e confirmacao de senha, nao conferem!");
+
+            }else{
+
+                if($this->verifica_email() == true){
+
+                    return $this->retorna_json->retornaErro("E-mail já cadastrado!");
+
+                }else{
+
+                    $conexao = $this->conn->prepare(
+
+                        "INSERT INTO usuarios (nome, email, senha, token, foto_url, confirmado)
+                        VALUES (?, ?, ?, ?, ?, ?)"
+        
+                    );
+        
+                    if($conexao === false){
+        
+                        throw new Exception("Erro de conexão: ".$this->conn->error);
+        
+                    }
+
+                    $this->foto_url = NULL;
+                    $this->confirmado = 0;
+        
+                    $conexao->bind_param("sssssi", $this->nome, $this->email, $this->senha, $this->token, $this->foto_url, $this->confirmado);
+        
+                    if(!$conexao->execute()){
+        
+                        throw new Exception("Erro de execução: ".$conexao->error);
+        
+                    }
+
+                    $ultimo_id = $conexao->insert_id;
+
+                    $this->classe_categoria->setNome("Padrão");
+
+                    $this->classe_categoria->setIdUsuarios($ultimo_id); // ***
+
+                    $this->classe_categoria->add_categoria();
+        
+                    return $this->retorna_json->retorna_json(null);
+
+                }
+
+            }
+            
+        } catch (Exception $e) {
+
+            error_log("Classe Usuarios - Métodos: cadastrar - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
         }
 
     }

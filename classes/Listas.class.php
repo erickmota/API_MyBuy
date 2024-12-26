@@ -5,16 +5,17 @@ class Listas extends Usuarios{
     private $conn;
     private $retorna_json;
     private $class_historico;
+    private $classe_categoria;
 
     public $id;
     public $nome;
     public $id_usuarios_dono;
 
-    public function __construct($classeRetornosJson, $classeConexao, $class_historico){
+    public function __construct($classeRetornosJson, $classeConexao, $class_historico, $classe_categoria){
 
         $this->conn = $classeConexao->getConexao();
         $this->retorna_json = $classeRetornosJson;
-        parent::__construct($classeRetornosJson, $classeConexao);
+        parent::__construct($classeRetornosJson, $classeConexao, $classe_categoria);
         $this->class_historico = $class_historico;
 
     }
