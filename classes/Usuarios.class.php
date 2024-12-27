@@ -200,13 +200,13 @@ class Usuarios{
 
             if($this->senha != $confirma_senha){
 
-                return $this->retorna_json->retornaErro("Senha e confirmacao de senha, nao conferem!");
+                return $this->retorna_json->retornaErro("Senha e confirmacão de senha, nao conferem!");
 
             }else{
 
                 if($this->verifica_email() == true){
 
-                    return $this->retorna_json->retornaErro("E-mail já cadastrado!");
+                    return $this->retorna_json->retornaErro("Já existe um cadastro com esse e-mail!");
 
                 }else{
 
