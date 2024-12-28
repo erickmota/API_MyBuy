@@ -15,14 +15,17 @@ $classeHistoricos = new HistoricoListas($classeRetornosJson, $classeConexao);
 require_once "classes/Categorias.class.php";
 $classeCategorias = new Categorias($classeRetornosJson, $classeConexao);
 
+require_once "classes/ConfiguracoesUser.class.php";
+$classeConfiguracoesUser = new ConfiguracoesUser($classeRetornosJson, $classeConexao);
+
 require_once "classes/Usuarios.class.php";
-$classeUsuarios = new Usuarios($classeRetornosJson, $classeConexao, $classeCategorias);
+$classeUsuarios = new Usuarios($classeRetornosJson, $classeConexao, $classeCategorias, $classeConfiguracoesUser);
 
 require_once "classes/Listas.class.php";
-$classeListas = new Listas($classeRetornosJson, $classeConexao, $classeHistoricos, $classeCategorias);
+$classeListas = new Listas($classeRetornosJson, $classeConexao, $classeHistoricos, $classeCategorias, $classeConfiguracoesUser);
 
 require_once "classes/UsuariosListas.class.php";
-$classeUsuariosListas = new UsuariosListas($classeListas ,$classeRetornosJson, $classeConexao, $classeHistoricos, $classeCategorias);
+$classeUsuariosListas = new UsuariosListas($classeListas ,$classeRetornosJson, $classeConexao, $classeHistoricos, $classeCategorias, $classeConfiguracoesUser);
 
 require_once "classes/ProdutosExemplo.class.php";
 $classeProdutosExemplo = new ProdutosExemplo($classeRetornosJson, $classeConexao);
@@ -31,7 +34,7 @@ require_once "classes/ProdutosUsuario.class.php";
 $classeProdutosUsuario = new ProdutosUsuario($classeProdutosExemplo, $classeRetornosJson, $classeConexao);
 
 require_once "classes/Produtos.class.php";
-$classeProdutos = new Produtos($classeProdutosExemplo, $classeProdutosUsuario, $classeUsuariosListas, $classeRetornosJson, $classeConexao, $classeHistoricos, $classeCategorias);
+$classeProdutos = new Produtos($classeProdutosExemplo, $classeProdutosUsuario, $classeUsuariosListas, $classeRetornosJson, $classeConexao, $classeHistoricos, $classeCategorias, $classeConfiguracoesUser);
 
 require_once "classes/ProdutosCompras.class.php";
 $classeProdutosCompras = new ProdutosCompras($classeRetornosJson, $classeConexao);

@@ -7,17 +7,18 @@ class UsuariosListas extends Usuarios{
     private $classeListas;
     private $class_historico;
     private $classe_categoria;
+    private $classe_configuracoes_user;
 
     public $id;
     public $id_usuarios;
     public $id_listas;
 
-    public function __construct($classeListas, $classeRetornosJson, $classeConexao, $class_historico, $classe_categoria){
+    public function __construct($classeListas, $classeRetornosJson, $classeConexao, $class_historico, $classe_categoria, $classe_configuracoes_user){
 
         $this->conn = $classeConexao->getConexao();
         $this->retorna_json = $classeRetornosJson;
         $this->classeListas = $classeListas;
-        parent::__construct($classeRetornosJson, $classeConexao, $classe_categoria);
+        parent::__construct($classeRetornosJson, $classeConexao, $classe_categoria, $classe_configuracoes_user);
         $this->class_historico = $class_historico;
 
     }

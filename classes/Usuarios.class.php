@@ -5,6 +5,7 @@ class Usuarios{
     private $conn;
     private $retorna_json;
     private $classe_categoria;
+    private $classe_configuracoes_user;
 
     public $id;
     public $nome;
@@ -14,11 +15,12 @@ class Usuarios{
     public $foto_url;
     public $confirmado;
 
-    public function __construct($classeRetornosJson, $classeConexao, $classe_categoria){
+    public function __construct($classeRetornosJson, $classeConexao, $classe_categoria, $classe_configuracoes_user){
 
         $this->conn = $classeConexao->getConexao();
         $this->retorna_json = $classeRetornosJson;
         $this->classe_categoria = $classe_categoria;
+        $this->classe_configuracoes_user = $classe_configuracoes_user;
 
     }
 
@@ -236,11 +238,20 @@ class Usuarios{
 
                     $ultimo_id = $conexao->insert_id;
 
+                    /* Categoria */
+
                     $this->classe_categoria->setNome("Padrão");
 
                     $this->classe_categoria->setIdUsuarios($ultimo_id); // ***
 
                     $this->classe_categoria->add_categoria();
+
+                    /* Configurações */
+
+                    $this->classe_configuracoes_user->setIdUsuarios($ultimo_id);
+                    $this->classe_configuracoes_user->setIdUltimaLista(NULL);
+
+                    $this->classe_configuracoes_user->cria_configuracoes();
         
                     return $this->retorna_json->retorna_json(null);
 

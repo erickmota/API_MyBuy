@@ -9,6 +9,7 @@ class Produtos extends Usuarios{
     private $produtos_exemplo;
     private $class_historico;
     private $classe_categoria;
+    private $classe_configuracoes_user;
     
     public $id__prod;
     public $nome;
@@ -23,14 +24,14 @@ class Produtos extends Usuarios{
     public $id_usuarios_dono;
     public $id_produtos_usuario;
 
-    public function __construct($produtos_exemplo, $produtos_usuario, $classeUsuariosListas, $classeRetornosJson, $classeConexao, $class_historico, $classe_categoria){
+    public function __construct($produtos_exemplo, $produtos_usuario, $classeUsuariosListas, $classeRetornosJson, $classeConexao, $class_historico, $classe_categoria, $classe_configuracoes_user){
 
         $this->conn = $classeConexao->getConexao();
         $this->retorna_json = $classeRetornosJson;
         $this->verifica_titularidade_lista = $classeUsuariosListas;
         $this->produtos_usuario = $produtos_usuario;
         $this->produtos_exemplo = $produtos_exemplo;
-        parent::__construct($classeRetornosJson, $classeConexao, $classe_categoria);
+        parent::__construct($classeRetornosJson, $classeConexao, $classe_categoria, $classe_configuracoes_user);
         $this->class_historico = $class_historico;
 
     }
