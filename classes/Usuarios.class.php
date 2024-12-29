@@ -304,6 +304,20 @@ class Usuarios{
 
             }
 
+            /* Inserindo e formatando os campos data e hora */
+            foreach($array as &$navegacao){
+
+                $data_time = $navegacao["data_cadastro"];
+
+                $dia = substr($data_time, 8, 2);
+                $mes = substr($data_time, 5, 2);
+                $ano = substr($data_time, 0, 4);
+
+                $nova_data = $dia."/".$mes."/".$ano;
+
+                $navegacao["data_cadastro"] = $nova_data;
+            }
+
             return $this->retorna_json->retorna_json($array);
             
         } catch (Exception $e) {
