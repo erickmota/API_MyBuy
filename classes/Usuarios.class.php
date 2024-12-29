@@ -14,6 +14,7 @@ class Usuarios{
     public $token;
     public $foto_url;
     public $confirmado;
+    public $data_cadastro;
 
     public function __construct($classeRetornosJson, $classeConexao, $classe_categoria, $classe_configuracoes_user){
 
@@ -214,8 +215,8 @@ class Usuarios{
 
                     $conexao = $this->conn->prepare(
 
-                        "INSERT INTO usuarios (nome, email, senha, token, foto_url, confirmado)
-                        VALUES (?, ?, ?, ?, ?, ?)"
+                        "INSERT INTO usuarios (nome, email, senha, token, foto_url, confirmado, data_cadastro)
+                        VALUES (?, ?, ?, ?, ?, ?, ?)"
         
                     );
         
@@ -227,8 +228,9 @@ class Usuarios{
 
                     $this->foto_url = NULL;
                     $this->confirmado = 0;
+                    $this->data_cadastro = date('Y-m-d');
         
-                    $conexao->bind_param("sssssi", $this->nome, $this->email, $this->senha, $this->token, $this->foto_url, $this->confirmado);
+                    $conexao->bind_param("sssssis", $this->nome, $this->email, $this->senha, $this->token, $this->foto_url, $this->confirmado, $this->data_cadastro);
         
                     if(!$conexao->execute()){
         
