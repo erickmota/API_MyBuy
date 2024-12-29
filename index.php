@@ -589,6 +589,14 @@ if(isset($_GET["url"])){
 
                     break;
 
+                    case "perfil":
+
+                        $classeUsuarios->setIdUsuarios($explode[0]);
+
+                        echo $classeUsuarios->retorna_dados_perfil();
+
+                    break;
+
                     /* *** POST *** */
 
                     /* Atualiza o nome da lista individualmente. */

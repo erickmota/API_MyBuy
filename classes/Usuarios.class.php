@@ -271,6 +271,51 @@ class Usuarios{
 
     }
 
+    public function retorna_dados_perfil(){
+
+        try {
+
+            $conexao = $this->conn->prepare(
+
+                "SELECT nome, email, foto_url, data_cadastro FROM usuarios
+                WHERE id=?"
+
+            );
+
+            if($conexao === false){
+
+                throw new Exception("Erro de conexão: ".$this->conn->error);
+
+            }
+
+            $conexao->bind_param("i", $this->id);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao->error);
+
+            }
+
+            $sql = $conexao->get_result();
+
+            while($result = $sql->fetch_assoc()){
+
+                $array[] = $result;
+
+            }
+
+            return $this->retorna_json->retorna_json($array);
+            
+        } catch (Exception $e) {
+
+            error_log("Classe Usuarios - Métodos: retorna_dados_perfil - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
+
+    }
+
 }
 
 ?>
