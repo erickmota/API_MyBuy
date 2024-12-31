@@ -1207,6 +1207,20 @@ if(isset($_GET["url"])){
 
                     break;
 
+                    case "upload_img_user":
+
+                        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
+
+                            echo $classeUsuarios->upload_img("fotos/users/", $_FILES['file'], "");
+
+                        }else{
+
+                            echo json_encode(['success' => false, 'message' => 'Nenhum arquivo enviado.']);
+
+                        }
+
+                    break;
+
                     default:
 
                         echo $classeRetornosJson->retornaErro("A rota definida não existe");
