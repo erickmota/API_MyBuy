@@ -338,28 +338,50 @@ class Usuarios{
         if (!is_dir($diretorio)) {
             mkdir($diretorio, 0777, true);
         }
-    
-        // Tenta mover o arquivo para o diretório
-        if (move_uploaded_file($img['tmp_name'], $uploadFile)) {
-            // Gera a URL completa da imagem
-            $imageUrl = $servidor . '/' . $diretorio . basename($img["name"]);
-    
-            // Resposta de sucesso
-            echo json_encode([
-                'success' => true,
-                'message' => 'Arquivo enviado com sucesso!',
-                'file' => $imageUrl
-            ]);
-        } else {
-            // Resposta de erro
+
+        $img_info = getimagesize($img['tmp_name']);
+
+        if($img_info["mime"] == "image/jpeg" || $img_info["mime"] == "image/png"){
+
+            if($img['size'] < 5242880){ // 5MB
+
+                if (move_uploaded_file($img['tmp_name'], $uploadFile)) {
+
+                    $imageUrl = $servidor . '/' . $diretorio . basename($img["name"]);
+            
+                    echo json_encode([
+                        'success' => true,
+                        'message' => 'Arquivo enviado com sucesso!',
+                        'file' => $imageUrl
+                    ]);
+                } else {
+                    
+                    echo json_encode([
+                        'success' => false,
+                        'message' => 'Erro ao enviar o arquivo.'
+                    ]);
+                }
+
+            }else{
+
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Imagem muito grande, por favor, selecione uma imagem com no máximo 5mb'
+                ]);
+
+            }
+
+        }else{
+
             echo json_encode([
                 'success' => false,
-                'message' => 'Erro ao enviar o arquivo.'
+                'message' => 'Formato inválido. Por favor insira uma imagem JPG ou PNG.'
             ]);
+
         }
+            
     }
     
-
 }
 
 ?>
