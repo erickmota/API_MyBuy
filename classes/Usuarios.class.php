@@ -340,14 +340,34 @@ class Usuarios{
         }
 
         $img_info = getimagesize($img['tmp_name']);
+        $extensao = pathinfo($img['name'], PATHINFO_EXTENSION);
+        $novo_nome = $this->id."-".date("dmYHis"); // O nome da imagem é o ID do usuário
 
         if($img_info["mime"] == "image/jpeg" || $img_info["mime"] == "image/png"){
 
             if($img['size'] < 5242880){ // 5MB
 
-                if (move_uploaded_file($img['tmp_name'], $uploadFile)) {
+                $verificacao_url_atual = $this->retorna_url_img_atual();
+
+                if($verificacao_url_atual != false){
+
+                    if (file_exists($verificacao_url_atual)) {
+                        unlink($verificacao_url_atual); // Exclui o arquivo antigo
+                    }
+
+                }
+
+                if($extensao == "jpeg"){
+
+                    $extensao = "jpg";
+
+                }
+
+                if (move_uploaded_file($img['tmp_name'], $diretorio.$novo_nome.".".$extensao)) {
 
                     $imageUrl = $servidor . '/' . $diretorio . basename($img["name"]);
+
+                    $this->atualizar_url_imagem($diretorio.$novo_nome.".".$extensao);
             
                     echo json_encode([
                         'success' => true,
@@ -366,7 +386,7 @@ class Usuarios{
 
                 echo json_encode([
                     'success' => false,
-                    'message' => 'Imagem muito grande, por favor, selecione uma imagem com no máximo 5mb'
+                    'message' => 'Tamanho excedido! Por favor, selecione uma imagem com no máximo 5mb.'
                 ]);
 
             }
@@ -375,11 +395,98 @@ class Usuarios{
 
             echo json_encode([
                 'success' => false,
-                'message' => 'Formato inválido. Por favor insira uma imagem JPG ou PNG.'
+                'message' => 'Formato inválido! Por favor insira uma imagem no formato JPG ou PNG.'
             ]);
 
         }
             
+    }
+
+    public function atualizar_url_imagem($url){
+
+        try {
+
+            $conexao = $this->conn->prepare(
+
+                "UPDATE usuarios
+                SET foto_url=?
+                WHERE id=?"
+
+            );
+
+            if($conexao === false){
+
+                throw new Exception("Erro de conexão: ".$this->conn->error);
+
+            }
+
+            $conexao->bind_param("si", $url, $this->id);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao->error);
+
+            }
+            
+        } catch (Exception $e) {
+
+            error_log("Classe Usuarios - Métodos: atualizar_url_imagem - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
+
+    }
+
+    public function retorna_url_img_atual(){
+
+        try {
+
+            $conexao = $this->conn->prepare(
+
+                "SELECT foto_url FROM usuarios
+                WHERE id=?"
+
+            );
+
+            if($conexao === false){
+
+                throw new Exception("Erro de conexão: ".$this->conn->error);
+
+            }
+
+            $conexao->bind_param("i", $this->id);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao->error);
+
+            }
+
+            $sql = $conexao->get_result();
+
+            $resultado = $sql->fetch_assoc();
+
+            $url = $resultado["foto_url"];
+
+            if($url == false){
+
+                return false;
+
+            }else{
+
+                return $url;
+
+            }
+            
+        } catch (Exception $e) {
+
+            error_log("Classe Usuarios - Métodos: retorna_url_img_atual - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
+
     }
     
 }

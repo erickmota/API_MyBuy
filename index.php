@@ -1211,6 +1211,8 @@ if(isset($_GET["url"])){
 
                         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
 
+                            $classeUsuarios->setIdUsuarios($explode[0]);
+
                             echo $classeUsuarios->upload_img("fotos/users/", $_FILES['file'], "");
 
                         }else{
