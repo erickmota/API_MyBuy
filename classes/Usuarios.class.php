@@ -438,7 +438,7 @@ class Usuarios{
 
     }
 
-    public function retorna_url_img_atual(){
+    private function retorna_url_img_atual(){
 
         try {
 
@@ -482,6 +482,30 @@ class Usuarios{
         } catch (Exception $e) {
 
             error_log("Classe Usuarios - Métodos: retorna_url_img_atual - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
+
+    }
+
+    public function remover_img(){
+
+        try {
+
+            $verificacao_url_atual = $this->retorna_url_img_atual();
+
+            if (file_exists($verificacao_url_atual)) {
+                unlink($verificacao_url_atual); // Exclui o arquivo antigo
+            }
+
+            $this->atualizar_url_imagem(null);
+
+            return $this->retorna_json->retorna_json(null);
+            
+        } catch (Exception $e) {
+
+            error_log("Classe Usuarios - Métodos: remover_img - ".$e->getMessage()."\n", 3, 'erros.log');
 
             return $this->retorna_json->retornaErro($e->getMessage());
             

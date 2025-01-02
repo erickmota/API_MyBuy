@@ -597,6 +597,14 @@ if(isset($_GET["url"])){
 
                     break;
 
+                    case "remover_img_user":
+
+                        $classeUsuarios->setIdUsuarios($explode[0]);
+
+                        echo $classeUsuarios->remover_img();
+
+                    break;
+
                     /* *** POST *** */
 
                     /* Atualiza o nome da lista individualmente. */
