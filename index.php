@@ -1231,6 +1231,23 @@ if(isset($_GET["url"])){
 
                     break;
 
+                    case "altera_nome":
+
+                        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["novo_nome"])) {
+                            
+                            $classeUsuarios->setIdUsuarios($explode[0]);
+                            $classeUsuarios->setNome($_POST["novo_nome"]);
+
+                            echo $classeUsuarios->alterar_dados();
+
+                        }else{
+
+                            echo $classeRetornosJson->retornaErro("Um novo nome para o usuário, precisa ser inserido como POST novo_nome.");
+
+                        }
+
+                    break;
+
                     default:
 
                         echo $classeRetornosJson->retornaErro("A rota definida não existe");

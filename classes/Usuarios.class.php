@@ -512,6 +512,45 @@ class Usuarios{
         }
 
     }
+
+    /* Altera Nome de usuário */
+    public function alterar_dados(){
+
+        try {
+
+            $conexao = $this->conn->prepare(
+
+                "UPDATE usuarios
+                SET nome=?
+                WHERE id=?"
+
+            );
+
+            if($conexao === false){
+
+                throw new Exception("Erro de conexão: ".$this->conn->error);
+
+            }
+
+            $conexao->bind_param("si", $this->nome, $this->id);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao->error);
+
+            }
+
+            return $this->retorna_json->retorna_json(null);
+            
+        } catch (Exception $e) {
+
+            error_log("Classe Usuarios - Métodos: alterar_dados - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
+
+    }
     
 }
 
