@@ -16,6 +16,9 @@ class Usuarios{
     public $confirmado;
     public $data_cadastro;
 
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\Exception;
+
     public function __construct($classeRetornosJson, $classeConexao, $classe_categoria, $classe_configuracoes_user){
 
         $this->conn = $classeConexao->getConexao();
@@ -227,7 +230,7 @@ class Usuarios{
                     }
 
                     $this->foto_url = NULL;
-                    $this->confirmado = 0;
+                    $this->confirmado = $this->gerar_codigo();
                     $this->data_cadastro = date('Y-m-d');
         
                     $conexao->bind_param("sssssis", $this->nome, $this->email, $this->senha, $this->token, $this->foto_url, $this->confirmado, $this->data_cadastro);
@@ -237,6 +240,8 @@ class Usuarios{
                         throw new Exception("Erro de execução: ".$conexao->error);
         
                     }
+
+                    $this->mandar_email("Apenas um teste de email", "Teste");
 
                     $ultimo_id = $conexao->insert_id;
 
@@ -549,6 +554,43 @@ class Usuarios{
             return $this->retorna_json->retornaErro($e->getMessage());
             
         }
+
+    }
+
+    public function mandar_email($texto, $assunto){
+
+        $mail = new PHPMailer(true);
+
+        // Configuração do servidor SMTP
+        $mail->isSMTP();
+        $mail->Host = 'smtp.office365.com';  // Servidor SMTP
+        $mail->SMTPAuth = true;
+        $mail->Username = 'xboxmota@hotmail.com'; // Seu e-mail
+        $mail->Password = 'AqTrioFut2626#'; // Sua senha
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
+
+        // Remetente e destinatário
+        $mail->setFrom('xboxmota@hotmail.com', 'Seu Nome');
+        $mail->addAddress('erick_fcsaopaulo@hotmail.com', 'Erick Mota');
+
+        // Conteúdo
+        $mail->isHTML(true);
+        $mail->Subject = 'Teste Email';
+        $mail->Body    = 'Esse é apenas um teste de email';
+
+        $mail->send();
+
+    }
+
+    /* Gera o código de confirmação para o email do usuário */
+    private function gerar_codigo(){
+
+        $numero = rand(1, 9999);
+
+        $numeroFormatado = str_pad($numero, 4, '0', STR_PAD_LEFT);
+
+        return $numeroFormatado;
 
     }
     

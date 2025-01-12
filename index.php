@@ -48,6 +48,8 @@ $classeCompras = new Compras($classeUsuariosListas, $classeProdutosCompras, $cla
 require_once "classes/Graficos.class.php";
 $classeGraficos = new Graficos($classeConexao, $classeRetornosJson, $classeProdutosCompras);
 
+require 'vendor/autoload.php';
+
 if(isset($_GET["url"])){
 
     $explode = explode("/", $_GET["url"]);
@@ -1317,13 +1319,13 @@ if(isset($_GET["url"])){
 
                         }else{
 
-                            echo $classeRetornosJson->retornaErro("Você precisa informar nome, email, senha, confirmar_senha como POST");
+                            echo $classeRetornosJson->retornaErro("Você precisa informar nome, email, senha, confirma_senha como POST");
 
                         }
 
                     }else{
 
-                        echo $classeRetornosJson->retornaErro("Nessa rota você precisa informar nome, email, senha, confirmar_senha como POST");
+                        echo $classeRetornosJson->retornaErro("Nessa rota você precisa informar nome, email, senha, confirma_senha como POST");
 
                     }
 

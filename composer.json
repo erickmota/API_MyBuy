@@ -1,0 +1,15 @@
+{
+    "name": "erick/api_my-buy",
+    "autoload": {
+        "psr-4": {
+            "Erick\\ApiMyBuy\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Erick",
+            "email": "erick_fcsaopaulo@hotmail.com"
+        }
+    ],
+    "require": {}
+}
