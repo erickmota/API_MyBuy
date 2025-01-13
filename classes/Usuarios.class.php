@@ -1,5 +1,8 @@
 <?php
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 class Usuarios{
 
     private $conn;
@@ -15,9 +18,6 @@ class Usuarios{
     public $foto_url;
     public $confirmado;
     public $data_cadastro;
-
-    use PHPMailer\PHPMailer\PHPMailer;
-    use PHPMailer\PHPMailer\Exception;
 
     public function __construct($classeRetornosJson, $classeConexao, $classe_categoria, $classe_configuracoes_user){
 
@@ -563,16 +563,18 @@ class Usuarios{
 
         // Configuração do servidor SMTP
         $mail->isSMTP();
-        $mail->Host = 'smtp.office365.com';  // Servidor SMTP
+        $mail->Host = 'mybuy.erickmota.com';  // Servidor SMTP
         $mail->SMTPAuth = true;
-        $mail->Username = 'xboxmota@hotmail.com'; // Seu e-mail
-        $mail->Password = 'AqTrioFut2626#'; // Sua senha
+        $mail->Username = 'contato@mybuy.erickmota.com'; // Seu e-mail
+        $mail->Password = 'AqTrioFut2626'; // Sua senha
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
+        $mail->CharSet = 'UTF-8';
+
         // Remetente e destinatário
-        $mail->setFrom('xboxmota@hotmail.com', 'Seu Nome');
-        $mail->addAddress('erick_fcsaopaulo@hotmail.com', 'Erick Mota');
+        $mail->setFrom('contato@mybuy.erickmota.com', 'My Buy');
+        $mail->addAddress('erick@pontocomtec.com.br', 'Erick Mota');
 
         // Conteúdo
         $mail->isHTML(true);
