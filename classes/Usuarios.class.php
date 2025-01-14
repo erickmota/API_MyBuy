@@ -3,6 +3,10 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+require "./vendor/phpmailer/phpmailer/src/Exception.php";
+require "./vendor/phpmailer/phpmailer/src/PHPMailer.php";
+require "./vendor/phpmailer/phpmailer/src/SMTP.php";
+
 class Usuarios{
 
     private $conn;
@@ -241,7 +245,7 @@ class Usuarios{
         
                     }
 
-                    $this->mandar_email("Apenas um teste de email", "Teste");
+                    $this->mandar_email("Apenas um teste para confirmar recebimento", "Teste email");
 
                     $ultimo_id = $conexao->insert_id;
 
@@ -561,25 +565,22 @@ class Usuarios{
 
         $mail = new PHPMailer(true);
 
-        // Configuração do servidor SMTP
         $mail->isSMTP();
-        $mail->Host = 'mybuy.erickmota.com';  // Servidor SMTP
+        $mail->Host = 'mybuy.erickmota.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'contato@mybuy.erickmota.com'; // Seu e-mail
-        $mail->Password = 'AqTrioFut2626'; // Sua senha
+        $mail->Username = 'contato@mybuy.erickmota.com';
+        $mail->Password = 'AqTrioFut2626';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
         $mail->CharSet = 'UTF-8';
 
-        // Remetente e destinatário
         $mail->setFrom('contato@mybuy.erickmota.com', 'My Buy');
-        $mail->addAddress('erick@pontocomtec.com.br', 'Erick Mota');
+        $mail->addAddress($this->email, 'Erick Mota');
 
-        // Conteúdo
         $mail->isHTML(true);
-        $mail->Subject = 'Teste Email';
-        $mail->Body    = 'Esse é apenas um teste de email';
+        $mail->Subject = $assunto;
+        $mail->Body    = $texto;
 
         $mail->send();
 
