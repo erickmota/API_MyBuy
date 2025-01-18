@@ -21,6 +21,8 @@ class Usuarios{
     public $token;
     public $foto_url;
     public $confirmado;
+    public $codigo_confirmacao;
+    public $expiracao_codigo;
     public $data_cadastro;
 
     public function __construct($classeRetornosJson, $classeConexao, $classe_categoria, $classe_configuracoes_user){
@@ -222,8 +224,8 @@ class Usuarios{
 
                     $conexao = $this->conn->prepare(
 
-                        "INSERT INTO usuarios (nome, email, senha, token, foto_url, confirmado, data_cadastro)
-                        VALUES (?, ?, ?, ?, ?, ?, ?)"
+                        "INSERT INTO usuarios (nome, email, senha, token, foto_url, confirmado, codigo_confirmacao, expiracao_codigo, data_cadastro)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, NOW() + INTERVAL 30 MINUTE, ?)"
         
                     );
         
@@ -234,10 +236,11 @@ class Usuarios{
                     }
 
                     $this->foto_url = NULL;
-                    $this->confirmado = $this->gerar_codigo();
+                    $this->confirmado = 0;
+                    $this->codigo_confirmacao = $this->gerar_codigo();
                     $this->data_cadastro = date('Y-m-d');
         
-                    $conexao->bind_param("sssssis", $this->nome, $this->email, $this->senha, $this->token, $this->foto_url, $this->confirmado, $this->data_cadastro);
+                    $conexao->bind_param("sssssiss", $this->nome, $this->email, $this->senha, $this->token, $this->foto_url, $this->confirmado, $this->codigo_confirmacao, $this->data_cadastro);
         
                     if(!$conexao->execute()){
         
@@ -245,7 +248,7 @@ class Usuarios{
         
                     }
 
-                    $this->mandar_email("Apenas um teste para confirmar recebimento", "Teste email");
+                    $this->mandar_email("Olá <b>".$this->nome."</b><br>Esse é o seu código para ativação da conta no nosso app: <b>".$this->codigo_confirmacao."</b>", "Confirmação de email");
 
                     $ultimo_id = $conexao->insert_id;
 
@@ -565,22 +568,47 @@ class Usuarios{
 
         $mail = new PHPMailer(true);
 
+        $email_origem = EMAIL_SISTEMA;
+        $senha_email_origem = SENHA_EMAIL;
+
         $mail->isSMTP();
         $mail->Host = 'mybuy.erickmota.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'contato@mybuy.erickmota.com';
-        $mail->Password = 'AqTrioFut2626';
+        $mail->Username = $email_origem;
+        $mail->Password = $senha_email_origem;
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
         $mail->CharSet = 'UTF-8';
 
-        $mail->setFrom('contato@mybuy.erickmota.com', 'My Buy');
+        $mail->setFrom($email_origem, 'My Buy');
         $mail->addAddress($this->email, 'Erick Mota');
 
         $mail->isHTML(true);
         $mail->Subject = $assunto;
-        $mail->Body    = $texto;
+        $mail->Body    = "<p>
+        
+        ".$texto."
+        
+        </p>
+        
+        <p style='font-size: 14px; color: #AAA'>
+        
+        Caso você não tenha solicitado este código, por favor, desconsidere este e-mail. Se você tiver alguma dúvida ou precisar de ajuda, estamos à disposição.<br>
+        
+        Essa mensagem é gerada automaticamente, por isso não é necessário responder.
+        
+        </p>
+        
+        <p>
+        
+        Atenciosamente<br>
+        
+        <span style='font-size: 20px; color: #902dc4'>My Buy Lista de compras.</span>
+        
+        </p>
+        
+        <img src='https://testes.erickmota.com/fotos/outros/logo_mybuy_email.png' width='200px'/>";
 
         $mail->send();
 
