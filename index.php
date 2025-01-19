@@ -1331,6 +1331,34 @@ if(isset($_GET["url"])){
 
                 break;
 
+                case "confirma_codigo":
+
+                    if($_SERVER["REQUEST_METHOD"] === "POST"){
+
+                        if(isset($_POST["email"]) && isset($_POST["codigo_confirmacao"])){
+
+                            $email = $_POST["email"];
+                            $codigo_confirmacao = $_POST["codigo_confirmacao"];
+
+                            $classeUsuarios->setEmailUsuarios($email);
+                            $classeUsuarios->setCodigoConfirmacao($codigo_confirmacao);
+    
+                            echo $classeUsuarios->confirma_codigo();
+
+                        }else{
+
+                            echo $classeRetornosJson->retornaErro("Você precisa informar email e codigo_confirmacao como POST");
+
+                        }
+
+                    }else{
+
+                        echo $classeRetornosJson->retornaErro("Nessa rota você precisa informar email e codigo_confirmacao como POST");
+
+                    }
+
+                break;
+
                 default:
 
                     echo $classeRetornosJson->retornaErro("Usuário não existe ou rota incorreta");

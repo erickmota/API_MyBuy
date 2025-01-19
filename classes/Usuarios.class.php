@@ -100,6 +100,20 @@ class Usuarios{
 
     }
 
+    public function setCodigoConfirmacao($codigo_confirmacao){
+
+        if(empty($codigo_confirmacao)){
+
+            die ($this->retorna_json->retornaErro("Código vazio"));
+
+        }else{
+
+            $this->codigo_confirmacao = $codigo_confirmacao;
+
+        }
+
+    }
+
     /* Verifica se o id do usuário passado na URL, é válido */
     public function verifica_usuario(){
 
@@ -132,7 +146,7 @@ class Usuarios{
 
         $sql = mysqli_query(
             
-            $conn, "SELECT id, nome, token, foto_url FROM usuarios
+            $conn, "SELECT id, nome, token, foto_url, confirmado, email FROM usuarios
             WHERE email='$this->email'
             AND senha='$this->senha'"
         
@@ -248,7 +262,7 @@ class Usuarios{
         
                     }
 
-                    $this->mandar_email("Olá <b>".$this->nome."</b><br>Esse é o seu código para ativação da conta no nosso app: <b>".$this->codigo_confirmacao."</b>", "Confirmação de email");
+                    //$this->mandar_email("Olá <b>".$this->nome."</b><br>Esse é o seu código para ativação da conta no nosso app: <b>".$this->codigo_confirmacao."</b>", "Confirmação de email");
 
                     $ultimo_id = $conexao->insert_id;
 
@@ -622,6 +636,93 @@ class Usuarios{
         $numeroFormatado = str_pad($numero, 4, '0', STR_PAD_LEFT);
 
         return $numeroFormatado;
+
+    }
+
+    public function confirma_codigo(){
+
+        try {
+
+            $conexao = $this->conn->prepare(
+
+                "SELECT codigo_confirmacao, expiracao_codigo FROM usuarios
+                WHERE email=?"
+
+            );
+
+            if($conexao === false){
+
+                throw new Exception("Erro de conexão: ".$this->conn->error);
+
+            }
+
+            $conexao->bind_param("s", $this->email);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao->error);
+
+            }
+
+            $sql = $conexao->get_result();
+
+            $result = $sql->fetch_assoc();
+
+            $codigo_confirmacao = $result["codigo_confirmacao"];
+            $expiracao_codigo = $result["expiracao_codigo"];
+
+            if($this->codigo_confirmacao != $codigo_confirmacao){
+
+                return $this->retorna_json->retornaErro("Código inválido!");
+
+            }
+
+            if($expiracao_codigo < date("Y-m-d H:i:s")){
+
+                return $this->retorna_json->retornaErro("Código expirado!");
+
+            }
+
+            $conexao_2 = $this->conn->prepare(
+
+                "UPDATE usuarios
+                SET confirmado=?,
+                codigo_confirmacao=?,
+                expiracao_codigo=?
+                WHERE email=?"
+
+            );
+
+            if($conexao_2 === false){
+
+                throw new Exception("Erro de conexão: ".$this->conn->error);
+
+            }
+
+            $novos_dados = [
+
+                1,
+                NULL
+
+            ];
+
+            $conexao_2->bind_param("isss", $novos_dados[0], $novos_dados[1], $novos_dados[1], $this->email);
+
+            if(!$conexao_2->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao_2->error);
+
+            }
+
+            return $this->retorna_json->retorna_json(null);
+            
+        } catch (Exception $e) {
+
+            error_log("Classe Usuarios - Métodos: confirma_codigo - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
 
     }
     
