@@ -1250,6 +1250,24 @@ if(isset($_GET["url"])){
 
                     break;
 
+                    case "altera_senha":
+
+                        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["email"]) && isset($_POST["senha"]) && isset($_POST["nova_senha_1"]) && isset($_POST["nova_senha_2"])) {
+                            
+                            $classeUsuarios->setIdUsuarios($explode[0]);
+                            $classeUsuarios->setEmailUsuarios($_POST["email"]);
+                            $classeUsuarios->setSenhaUsuarios($_POST["senha"]);
+
+                            echo $classeUsuarios->atualizar_senha($_POST["nova_senha_1"], $_POST["nova_senha_2"]);
+
+                        }else{
+
+                            echo $classeRetornosJson->retornaErro("Para atualizar a senha, insira os dados como POST: email, senha, nova_senha_1, nova_senha_2");
+
+                        }
+
+                    break;
+
                     default:
 
                         echo $classeRetornosJson->retornaErro("A rota definida não existe");

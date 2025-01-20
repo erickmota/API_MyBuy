@@ -811,6 +811,90 @@ class Usuarios{
         }
 
     }
+
+    public function atualizar_senha($nova_senha_1, $nova_senha_2){
+
+        try {
+
+            $conexao = $this->conn->prepare(
+
+                "SELECT senha FROM usuarios
+                WHERE email=?
+                AND id=?"
+
+            );
+
+            if($conexao === false){
+
+                throw new Exception("Erro de conexão: ".$this->conn->error);
+
+            }
+
+            $conexao->bind_param("si", $this->email, $this->id);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao->error);
+
+            }
+
+            $sql = $conexao->get_result();
+
+            $result = $sql->fetch_assoc();
+
+            $senha_banco = $result["senha"];
+
+            if(password_verify($this->senha, $senha_banco)){
+
+                if($nova_senha_1 == $nova_senha_2 && !empty($nova_senha_1) && !empty($nova_senha_2)){
+
+                    $conexao2 = $this->conn->prepare(
+
+                        "UPDATE usuarios
+                        SET senha=?
+                        WHERE email=?"
+        
+                    );
+        
+                    if($conexao2 === false){
+        
+                        throw new Exception("Erro de conexão: ".$this->conn->error);
+        
+                    }
+
+                    $senha_hash = password_hash($nova_senha_1, PASSWORD_DEFAULT);
+        
+                    $conexao2->bind_param("ss", $senha_hash, $this->email);
+        
+                    if(!$conexao2->execute()){
+        
+                        throw new Exception("Erro de execução: ".$conexao2->error);
+        
+                    }
+
+                    return $this->retorna_json->retorna_json(null);
+
+                }else{
+
+                    return $this->retorna_json->retornaErro("Senha e confirmação de senha, não conferem ou os campos estão vazios");
+
+                }
+
+            }else{
+
+                return $this->retorna_json->retornaErro("Senha atual, incorreta");
+
+            }
+            
+        } catch (Exception $e) {
+
+            error_log("Classe Usuarios - Métodos: atualizar_senha - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
+
+    }
     
 }
 
