@@ -142,30 +142,69 @@ class Usuarios{
     /* Método de verificação do login de um usuário. */
     public function login(){
 
-        $conn = $this->conn;
+        try {
 
-        $sql = mysqli_query(
+            $conexao = $this->conn->prepare(
+
+                "SELECT id, nome, token, foto_url, confirmado, email, senha FROM usuarios
+                WHERE email=?"
+
+            );
+
+            if($conexao === false){
+
+                throw new Exception("Erro de conexão: ".$this->conn->error);
+
+            }
+
+            $conexao->bind_param("s", $this->email);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao->error);
+
+            }
+
+            $sql = $conexao->get_result();
+
+            if($sql->num_rows > 0){
+
+                while($result = $sql->fetch_assoc()){
+
+                    $senha_hash = $result["senha"];
+
+                    $array[] = $result;
+
+                    foreach($array as &$navegacao){
+
+                        unset($navegacao["senha"]);
+
+                    }
+
+                }
+
+                if(password_verify($this->senha, $senha_hash)){
+
+                    return $this->retorna_json->retorna_json($array);
+
+                }else{
+
+                    return $this->retorna_json->retornaErro("Senha incorreta");
+
+                }
+
+            }else{
+
+                return $this->retorna_json->retornaErro("Usuário não localizado");
+
+            }
             
-            $conn, "SELECT id, nome, token, foto_url, confirmado, email FROM usuarios
-            WHERE email='$this->email'
-            AND senha='$this->senha'"
-        
-        ) or die("Erro ao verificar o usuário");
-        $qtd = mysqli_num_rows($sql);
-        while ($row = mysqli_fetch_assoc($sql)){
-                
-            $array[] = $row;
+        } catch (Exception $e) {
+
+            error_log("Classe Usuarios - Métodos: login - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
             
-        }
-
-        if($qtd > 0){
-
-            return $this->retorna_json->retorna_json($array);
-
-        }else{
-
-            return $this->retorna_json->retornaErro("Usuário não localizado");
-
         }
 
     }
@@ -253,8 +292,11 @@ class Usuarios{
                     $this->confirmado = 0;
                     $this->codigo_confirmacao = $this->gerar_codigo();
                     $this->data_cadastro = date('Y-m-d');
+
+                    //Senha
+                    $senha_hash = password_hash($this->senha, PASSWORD_DEFAULT);
         
-                    $conexao->bind_param("sssssiss", $this->nome, $this->email, $this->senha, $this->token, $this->foto_url, $this->confirmado, $this->codigo_confirmacao, $this->data_cadastro);
+                    $conexao->bind_param("sssssiss", $this->nome, $this->email, $senha_hash, $this->token, $this->foto_url, $this->confirmado, $this->codigo_confirmacao, $this->data_cadastro);
         
                     if(!$conexao->execute()){
         
@@ -262,7 +304,7 @@ class Usuarios{
         
                     }
 
-                    $this->mandar_email("Olá <b>".$this->nome."</b><br>Esse é o seu código para ativação da conta no nosso app: <b>".$this->codigo_confirmacao."</b>", "Confirmação de email");
+                    //$this->mandar_email("Olá <b>".$this->nome."</b><br>Esse é o seu código para ativação da conta no nosso app: <b>".$this->codigo_confirmacao."</b>", "Confirmação de email");
 
                     $ultimo_id = $conexao->insert_id;
 
