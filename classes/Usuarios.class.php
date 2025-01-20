@@ -725,6 +725,50 @@ class Usuarios{
         }
 
     }
+
+    /* Gera um novo código de confirmação, e reenvia o email */
+    public function reenviar_email(){
+
+        try {
+
+            $this->codigo_confirmacao = $this->gerar_codigo();
+
+            $conexao = $this->conn->prepare(
+
+                "UPDATE usuarios
+                SET codigo_confirmacao=?,
+                expiracao_codigo=NOW() + INTERVAL 30 MINUTE
+                WHERE email=?"
+
+            );
+
+            if($conexao === false){
+
+                throw new Exception("Erro de conexão: ".$this->conn->error);
+
+            }
+
+            $conexao->bind_param("ss", $this->codigo_confirmacao, $this->email);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao->error);
+
+            }
+
+            /* $this->mandar_email("Olá <b>".$this->nome."</b><br>Esse é o seu código para ativação da conta no nosso app: <b>".$this->codigo_confirmacao."</b>", "Confirmação de email"); */
+            
+            return $this->retorna_json->retorna_json(null);
+
+        } catch (Exception $e) {
+
+            error_log("Classe Usuarios - Métodos: reenviar_email - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
+
+    }
     
 }
 

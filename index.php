@@ -1359,6 +1359,34 @@ if(isset($_GET["url"])){
 
                 break;
 
+                case "reenviar_email":
+
+                    if($_SERVER["REQUEST_METHOD"] === "POST"){
+
+                        if(isset($_POST["email"]) && isset($_POST["nome"])){
+
+                            $email = $_POST["email"];
+                            $nome = $_POST["nome"];
+
+                            $classeUsuarios->setEmailUsuarios($email);
+                            $classeUsuarios->setNome($nome);
+    
+                            echo $classeUsuarios->reenviar_email();
+
+                        }else{
+
+                            echo $classeRetornosJson->retornaErro("Você precisa informar email e nome como POST");
+
+                        }
+
+                    }else{
+
+                        echo $classeRetornosJson->retornaErro("Nessa rota você precisa informar email e nome como POST");
+
+                    }
+
+                break;
+
                 default:
 
                     echo $classeRetornosJson->retornaErro("Usuário não existe ou rota incorreta");
