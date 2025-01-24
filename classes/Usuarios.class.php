@@ -304,7 +304,7 @@ class Usuarios{
         
                     }
 
-                    //$this->mandar_email("Olá <b>".$this->nome."</b><br>Esse é o seu código para ativação da conta no nosso app: <b>".$this->codigo_confirmacao."</b>", "Confirmação de email");
+                    $this->mandar_email("Olá <b>".$this->nome."</b><br>Esse é o seu código para ativação da conta no nosso app: <b>".$this->codigo_confirmacao."</b>", "Confirmação de email");
 
                     $ultimo_id = $conexao->insert_id;
 

@@ -991,6 +991,55 @@ class Produtos extends Usuarios{
 
     }
 
+    /* Remove a etiqueta comprado, de um produto específico */
+    public function remover_etiqueta_comprado(){
+
+        try {
+
+            $conexao = $this->conn->prepare(
+
+                "UPDATE produtos
+                SET carrinho=?
+                WHERE id=?"
+
+            );
+
+            if($conexao === false){
+
+                throw new Exception("Erro de conexão: ".$this->conn->error);
+
+            }
+
+            $novo_carrinho = 0;
+
+            $conexao->bind_param("ii", $novo_carrinho, $this->id__prod);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao->error);
+
+            }
+
+            if ($conexao->affected_rows > 0) {
+
+                return $this->retorna_json->retorna_json(null);
+
+            } else {
+
+                return $this->retorna_json->retornaErro("Nenhum produto encontrado");
+
+            }
+            
+        } catch (Exception $e) {
+
+            error_log("Classe Produtos - Métodos: remover_etiqueta_comprado - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
+
+    }
+
 }
 
 ?>

@@ -1285,6 +1285,22 @@ if(isset($_GET["url"])){
 
                     break;
 
+                    case "remove_etiqueta_comprado":
+
+                        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["id"])) {
+                            
+                            $classeProdutos->setIdProduto($_POST["id"]);
+
+                            echo $classeProdutos->remover_etiqueta_comprado();
+
+                        }else{
+
+                            echo $classeRetornosJson->retornaErro("Para remover a etiqueta de um produto, insira os dados como POST: id");
+
+                        }
+
+                    break;
+
                     default:
 
                         echo $classeRetornosJson->retornaErro("A rota definida não existe");
