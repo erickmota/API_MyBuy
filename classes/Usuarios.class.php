@@ -895,6 +895,80 @@ class Usuarios{
         }
 
     }
+
+    public function apagar_conta(){
+
+        try {
+
+            $this->remover_img();
+
+            $conexao = $this->conn->prepare(
+
+                "SELECT senha FROM usuarios
+                WHERE id=?"
+
+            );
+
+            if($conexao === false){
+
+                throw new Exception("Erro de conexão: ".$this->conn->error);
+
+            }
+
+            $conexao->bind_param("i", $this->id);
+
+            if(!$conexao->execute()){
+
+                throw new Exception("Erro de execução: ".$conexao->error);
+
+            }
+
+            $sql = $conexao->get_result();
+
+            $result = $sql->fetch_assoc();
+            
+            $senha_bd = $result["senha"];
+
+            if(password_verify($this->senha, $senha_bd)){
+
+                $conexao2 = $this->conn->prepare(
+
+                    "DELETE FROM usuarios
+                    WHERE id=?"
+    
+                );
+    
+                if($conexao2 === false){
+    
+                    throw new Exception("Erro de conexão: ".$this->conn->error);
+    
+                }
+    
+                $conexao2->bind_param("i", $this->id);
+    
+                if(!$conexao2->execute()){
+    
+                    throw new Exception("Erro de execução: ".$conexao2->error);
+    
+                }
+
+                return $this->retorna_json->retorna_json(null);
+
+            }else{
+
+                return $this->retorna_json->retornaErro("Senha incorreta");
+
+            }
+            
+        } catch (Exception $e) {
+
+            error_log("Classe Usuarios - Métodos: apagar_conta - ".$e->getMessage()."\n", 3, 'erros.log');
+
+            return $this->retorna_json->retornaErro($e->getMessage());
+            
+        }
+
+    }
     
 }
 

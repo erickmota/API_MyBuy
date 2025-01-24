@@ -1268,6 +1268,23 @@ if(isset($_GET["url"])){
 
                     break;
 
+                    case "apagar_conta":
+
+                        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["senha"])) {
+                            
+                            $classeUsuarios->setIdUsuarios($explode[0]);
+                            $classeUsuarios->setSenhaUsuarios($_POST["senha"]);
+
+                            echo $classeUsuarios->apagar_conta();
+
+                        }else{
+
+                            echo $classeRetornosJson->retornaErro("Para remover o usuário, insira os dados como POST: senha");
+
+                        }
+
+                    break;
+
                     default:
 
                         echo $classeRetornosJson->retornaErro("A rota definida não existe");
